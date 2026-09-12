@@ -1,0 +1,322 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -------------------- ENUMS --------------------
+
+enum Papel {
+  gestor_local
+  secretario
+  coordenador
+  profissional
+}
+
+enum TipoEquipe {
+  ESF
+  EAP
+  EMULTI
+  ESB
+}
+
+enum TipoEquipeAlvo {
+  ESF_EAP
+  ESB
+  EMULTI
+}
+
+enum CategoriaIndicador {
+  boa_pratica_pontuada
+  indicador_proporcional
+  indicador_media
+}
+
+enum UnidadeMedida {
+  percentual
+  media
+}
+
+enum Polaridade {
+  maior_melhor
+  menor_melhor
+  neutra
+}
+
+enum Quadrimestre {
+  Q1
+  Q2
+  Q3
+}
+
+enum Classificacao {
+  otimo
+  bom
+  suficiente
+  regular
+}
+
+enum TipoSincronizacao {
+  manual
+  automatica
+}
+
+enum StatusSincronizacao {
+  em_andamento
+  concluida
+  erro
+  parcial
+}
+
+enum TipoRelatorio {
+  diario
+  semanal
+  quadrimestral
+}
+
+// -------------------- USUARIOS E AUTENTICACAO --------------------
+
+model Usuario {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome           String
+  email          String        @unique
+  senhaHash      String        @map("senha_hash")
+  telefone       String
+  papel          Papel
+  profissionalId String?       @map("profissional_id") @db.Uuid
+  profissional   Profissional? @relation(fields: [profissionalId], references: [id])
+  ativo          Boolean       @default(true)
+  criadoEm       DateTime      @default(now()) @map("criado_em") @db.Timestamptz(6)
+
+  sincronizacoes Sincronizacao[]
+
+  @@map("usuarios")
+}
+
+// -------------------- EQUIPES E PROFISSIONAIS --------------------
+
+model Equipe {
+  id                  String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nome                String
+  tipo                TipoEquipe
+  ine                 String?
+  equipeReferenciaId  String?    @map("equipe_referencia_id") @db.Uuid
+  equipeReferencia    Equipe?    @relation("EquipeReferencia", fields: [equipeReferenciaId], references: [id])
+  equipesVinculadas   Equipe[]   @relation("EquipeReferencia")
+  ativo               Boolean    @default(true)
+  // chave natural da linha de origem no e-SUS (co_seq_equipe), usada para upsert idempotente
+  // pela sincronização via FDW — ine sozinho não é confiável (equipes eMulti repetem o mesmo ine).
+  fonteId             BigInt?    @unique @map("fonte_id")
+  // carga horária semanal — usada pelas regras de vinculação eSB↔eSF/eAP dos indicadores
+  // B1-B6 (ex.: 2 eSB 20h dividem a população de 1 eSF 40h). Não vem do e-SUS de forma
+  // confiável; preenchida manualmente pelo coordenador junto com equipeReferenciaId.
+  cargaHorariaSemanal Int?       @map("carga_horaria_semanal")
+
+  profissionais               Profissional[]
+  cadastrosIndividuais        CadastroIndividual[]
+  cadastrosDomiciliares       CadastroDomiciliar[]
+  atendimentos                Atendimento[]
+  resultadosIndicadores       ResultadoIndicador[]
+  boasPraticasPontuacaoPessoa BoaPraticaPontuacaoPessoa[]
+
+  @@map("equipes")
+}
+
+model Profissional {
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  equipeId String  @map("equipe_id") @db.Uuid
+  equipe   Equipe  @relation(fields: [equipeId], references: [id])
+  nome     String
+  cns      String
+  cbo      String
+  ehAcs    Boolean @default(false) @map("eh_acs")
+  ativo    Boolean @default(true)
+  fonteId  BigInt? @unique @map("fonte_id")
+
+  usuarios              Usuario[]
+  cadastrosIndividuais  CadastroIndividual[]
+  cadastrosDomiciliares CadastroDomiciliar[]
+  atendimentos          Atendimento[]
+  alertas               Alerta[]
+
+  @@map("profissionais")
+}
+
+// -------------------- DADOS OPERACIONAIS --------------------
+
+model CadastroIndividual {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profissionalId String       @map("profissional_id") @db.Uuid
+  profissional   Profissional @relation(fields: [profissionalId], references: [id])
+  equipeId       String       @map("equipe_id") @db.Uuid
+  equipe         Equipe       @relation(fields: [equipeId], references: [id])
+  cidadaoCns     String       @map("cidadao_cns")
+  dataCadastro   DateTime     @map("data_cadastro") @db.Date
+  temErro        Boolean      @default(false) @map("tem_erro")
+  tipoErro       String?      @map("tipo_erro")
+  atualizadoEm   DateTime     @default(now()) @map("atualizado_em") @db.Timestamptz(6)
+  fonteId        BigInt?      @unique @map("fonte_id")
+
+  @@map("cadastros_individuais")
+}
+
+model CadastroDomiciliar {
+  id                 String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profissionalId     String       @map("profissional_id") @db.Uuid
+  profissional       Profissional @relation(fields: [profissionalId], references: [id])
+  equipeId           String       @map("equipe_id") @db.Uuid
+  equipe             Equipe       @relation(fields: [equipeId], references: [id])
+  enderecoReferencia String       @map("endereco_referencia")
+  dataCadastro       DateTime     @map("data_cadastro") @db.Date
+  temErro            Boolean      @default(false) @map("tem_erro")
+  tipoErro           String?      @map("tipo_erro")
+  atualizadoEm       DateTime     @default(now()) @map("atualizado_em") @db.Timestamptz(6)
+  fonteId            BigInt?      @unique @map("fonte_id")
+
+  @@map("cadastros_domiciliares")
+}
+
+model Atendimento {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  // Nullable: o fato do e-SUS usado para sincronizar atendimentos (tb_fat_atendimento_individual)
+  // resolve equipe/CBO com 100% de confiabilidade, mas não o profissional individual — ver
+  // docs/esus-fdw.md. Mantido obrigatório para atendimentos lançados manualmente na aplicação.
+  profissionalId  String?       @map("profissional_id") @db.Uuid
+  profissional    Profissional? @relation(fields: [profissionalId], references: [id])
+  equipeId        String        @map("equipe_id") @db.Uuid
+  equipe          Equipe        @relation(fields: [equipeId], references: [id])
+  dataAtendimento DateTime      @map("data_atendimento") @db.Date
+  tipoAtendimento String        @map("tipo_atendimento")
+  // CBO (6 dígitos, sem pontuação) do profissional executante — resolvido a partir do fato do
+  // e-SUS (tb_dim_cbo.nu_cbo, 100% confiável) e usado pelo motor de cálculo de C1-C7 para
+  // filtrar por CBO elegível conforme cada Nota Metodológica (ver docs/indicadores-qualidade.md).
+  cbo             String?
+  temErro         Boolean       @default(false) @map("tem_erro")
+  tipoErro        String?       @map("tipo_erro")
+  atualizadoEm    DateTime      @default(now()) @map("atualizado_em") @db.Timestamptz(6)
+  fonteId         BigInt?       @unique @map("fonte_id")
+
+  @@map("atendimentos")
+}
+
+// -------------------- INDICADORES DE QUALIDADE --------------------
+
+model IndicadorCatalogo {
+  id                     String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  codigo                 String             @unique
+  nome                   String
+  tipoEquipeAlvo         TipoEquipeAlvo     @map("tipo_equipe_alvo")
+  categoria              CategoriaIndicador
+  unidadeMedida          UnidadeMedida      @map("unidade_medida")
+  polaridade             Polaridade
+  parametroOtimoMin      Decimal?           @map("parametro_otimo_min")
+  parametroOtimoMax      Decimal?           @map("parametro_otimo_max")
+  parametroBomMin        Decimal?           @map("parametro_bom_min")
+  parametroBomMax        Decimal?           @map("parametro_bom_max")
+  parametroSuficienteMin Decimal?           @map("parametro_suficiente_min")
+  parametroSuficienteMax Decimal?           @map("parametro_suficiente_max")
+  anoReferencia          Int                @map("ano_referencia")
+
+  criterios        BoaPraticaCriterio[]
+  resultados       ResultadoIndicador[]
+  pontuacoesPessoa BoaPraticaPontuacaoPessoa[]
+  alertas          Alerta[]
+
+  @@map("indicadores_catalogo")
+}
+
+model BoaPraticaCriterio {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  indicadorId      String            @map("indicador_id") @db.Uuid
+  indicador        IndicadorCatalogo @relation(fields: [indicadorId], references: [id])
+  codigoCriterio   String            @map("codigo_criterio")
+  descricao        String
+  pontos           Decimal
+  janelaTempoMeses Int?              @map("janela_tempo_meses")
+
+  pontuacoesPessoa BoaPraticaPontuacaoPessoa[]
+
+  @@unique([indicadorId, codigoCriterio])
+  @@map("boas_praticas_criterios")
+}
+
+model ResultadoIndicador {
+  id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  equipeId       String            @map("equipe_id") @db.Uuid
+  equipe         Equipe            @relation(fields: [equipeId], references: [id])
+  indicadorId    String            @map("indicador_id") @db.Uuid
+  indicador      IndicadorCatalogo @relation(fields: [indicadorId], references: [id])
+  quadrimestre   Quadrimestre
+  ano            Int
+  numerador      Decimal
+  denominador    Decimal
+  valorCalculado Decimal           @map("valor_calculado")
+  classificacao  Classificacao
+  calculadoEm    DateTime          @default(now()) @map("calculado_em") @db.Timestamptz(6)
+
+  @@unique([equipeId, indicadorId, quadrimestre, ano])
+  @@map("resultados_indicadores")
+}
+
+model BoaPraticaPontuacaoPessoa {
+  id           String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  equipeId     String             @map("equipe_id") @db.Uuid
+  equipe       Equipe             @relation(fields: [equipeId], references: [id])
+  indicadorId  String             @map("indicador_id") @db.Uuid
+  indicador    IndicadorCatalogo  @relation(fields: [indicadorId], references: [id])
+  cidadaoCns   String             @map("cidadao_cns")
+  criterioId   String             @map("criterio_id") @db.Uuid
+  criterio     BoaPraticaCriterio @relation(fields: [criterioId], references: [id])
+  atingiu      Boolean
+  quadrimestre Quadrimestre
+  ano          Int
+
+  @@map("boas_praticas_pontuacao_pessoa")
+}
+
+// -------------------- ALERTAS E RELATORIOS --------------------
+
+model Alerta {
+  id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profissionalId String            @map("profissional_id") @db.Uuid
+  profissional   Profissional      @relation(fields: [profissionalId], references: [id])
+  indicadorId    String            @map("indicador_id") @db.Uuid
+  indicador      IndicadorCatalogo @relation(fields: [indicadorId], references: [id])
+  mensagem       String
+  enviadoSms     Boolean           @default(false) @map("enviado_sms")
+  enviadoEm      DateTime?         @map("enviado_em") @db.Timestamptz(6)
+  criadoEm       DateTime          @default(now()) @map("criado_em") @db.Timestamptz(6)
+
+  @@map("alertas")
+}
+
+model RelatorioGerado {
+  id                String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tipo              TipoRelatorio
+  periodoReferencia String        @map("periodo_referencia")
+  arquivoUrl        String?       @map("arquivo_url")
+  geradoEm          DateTime      @default(now()) @map("gerado_em") @db.Timestamptz(6)
+
+  @@map("relatorios_gerados")
+}
+
+// -------------------- SINCRONIZACAO MANUAL --------------------
+
+model Sincronizacao {
+  id            String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  disparadaPor  String              @map("disparada_por") @db.Uuid
+  usuario       Usuario             @relation(fields: [disparadaPor], references: [id])
+  tipo          TipoSincronizacao
+  status        StatusSincronizacao
+  etapaAtual    String?             @map("etapa_atual")
+  totalEstimado Int?                @map("total_estimado")
+  processados   Int                 @default(0)
+  iniciadoEm    DateTime            @default(now()) @map("iniciado_em") @db.Timestamptz(6)
+  concluidoEm   DateTime?           @map("concluido_em") @db.Timestamptz(6)
+  erroMensagem  String?             @map("erro_mensagem")
+
+  @@map("sincronizacoes")
+}

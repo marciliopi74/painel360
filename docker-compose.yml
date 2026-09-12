@@ -1,0 +1,67 @@
+services:
+  db:
+    build:
+      context: ./docker/postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: painel
+      POSTGRES_PASSWORD: painel
+      POSTGRES_DB: painel
+    command: ["postgres", "-c", "shared_preload_libraries=pg_cron", "-c", "cron.database_name=painel"]
+    volumes:
+      - painel_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U painel -d painel"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # requisito 5: o e-SUS roda na mesma máquina — em Linux, host.docker.internal não existe
+    # por padrão fora do Docker Desktop; este extra_hosts faz o apontamento para o host real.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    restart: unless-stopped
+    command: ["app"]
+    env_file: .env
+    environment:
+      DATABASE_URL: "postgresql://painel:painel@db:5432/painel?schema=public"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    volumes:
+      - painel_relatorios:/app/relatorios-gerados
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    restart: unless-stopped
+    command: ["worker"]
+    env_file: .env
+    environment:
+      DATABASE_URL: "postgresql://painel:painel@db:5432/painel?schema=public"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - painel_relatorios:/app/relatorios-gerados
+
+  avahi:
+    build:
+      context: ./docker/avahi
+    restart: unless-stopped
+    network_mode: host
+    # requisito 27: só é necessário se a rede local não tiver outro mecanismo de resolução
+    # (ex.: DNS interno) apontando previne.local para o IP do servidor.
+
+volumes:
+  painel_db_data:
+  painel_relatorios:
