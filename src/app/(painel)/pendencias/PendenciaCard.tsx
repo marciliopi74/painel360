@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { ROTULO_ERRO, SUGESTOES_ERRO } from "@/lib/data/erros";
 import type { Pendencia } from "@/lib/data/pendencias";
+import { formatarData } from "@/lib/ui/data";
 
 const CONFIG_ORIGEM: Record<Pendencia["origem"], { icone: string; rotulo: string; href: string }> = {
   individual: { icone: "person_alert", rotulo: "Cadastro Individual", href: "/cadastros" },
@@ -64,7 +65,7 @@ export function PendenciaCard({ pendencia }: { pendencia: Pendencia }) {
                 Equipe: <strong className="text-on-surface">{pendencia.equipeNome} ({pendencia.equipeTipo})</strong>
               </span>
               <span className="text-outline">•</span>
-              <span>Atualizado: {pendencia.data.toLocaleDateString("pt-BR")}</span>
+              <span>Atualizado: {formatarData(pendencia.data)}</span>
             </div>
           </div>
         </div>

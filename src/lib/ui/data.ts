@@ -8,3 +8,10 @@
 export function formatarDataHora(data: Date): string {
   return data.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 }
+
+// Mesmo cuidado de formatarDataHora, mas só a data (dia) — para quando um campo `@db.Timestamptz`
+// é exibido sem hora (ex.: "Atualizado em" na Central de Pendências, que usa `atualizado_em`).
+// Também não usar em campos `@db.Date`, pelo mesmo motivo do comentário acima.
+export function formatarData(data: Date): string {
+  return data.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" });
+}

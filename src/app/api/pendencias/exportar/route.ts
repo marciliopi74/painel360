@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { listarPendencias } from "@/lib/data/pendencias";
 import { ROTULO_ERRO } from "@/lib/data/erros";
+import { formatarDataHora } from "@/lib/ui/data";
 
 const LIMITE_LINHAS = 5000;
 
@@ -43,7 +44,7 @@ export async function GET(req: Request) {
       p.profissionalNome ?? "",
       p.equipeNome,
       p.equipeTipo,
-      p.data.toLocaleString("pt-BR"),
+      formatarDataHora(p.data),
     ]),
   ];
 
