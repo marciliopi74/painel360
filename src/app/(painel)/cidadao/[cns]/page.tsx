@@ -33,7 +33,7 @@ export default async function CidadaoPage({
     quadParam && ["Q1", "Q2", "Q3"].includes(quadParam) ? { quadrimestre: quadParam as Quadrimestre, ano: Number(anoParam) } : quadrimestreAtual();
 
   const [criterios, periodosDisponiveis] = await Promise.all([
-    listarCriteriosPrevine(cadastro.cidadaoCns, periodo.quadrimestre, periodo.ano),
+    cadastro.cidadaoCnsReal ? listarCriteriosPrevine(cadastro.cidadaoCnsReal, periodo.quadrimestre, periodo.ano) : Promise.resolve([]),
     listarPeriodosDisponiveis(),
   ]);
 
@@ -125,7 +125,12 @@ export default async function CidadaoPage({
           />
         </div>
 
-        {gruposIndicador.length === 0 ? (
+        {!cadastro.cidadaoCnsReal ? (
+          <p className="text-body-sm text-on-surface-variant">
+            Identidade não resolvida junto ao cadastro territorial do e-SUS (CNS real ainda não vinculado a este cadastro) — não é possível
+            buscar os critérios Previne Brasil desta pessoa.
+          </p>
+        ) : gruposIndicador.length === 0 ? (
           <p className="text-body-sm text-on-surface-variant">
             Nenhum critério de boa prática pontuada (C2-C7) registrado para esta pessoa em {rotuloQuadrimestre(periodo.quadrimestre, periodo.ano)}.
           </p>

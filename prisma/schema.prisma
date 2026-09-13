@@ -161,6 +161,15 @@ model CadastroIndividual {
   // — não usar este campo para cruzar com boas_praticas_pontuacao_pessoa.cidadao_cns ou qualquer
   // dado que venha de cidadaos_vinculados_equipe()/tb_cidadao (esses usam o CNS real).
   cidadaoCns     String       @map("cidadao_cns")
+  // CNS REAL do cidadão (tb_cidadao.nu_cns), resolvido via tb_cds_cad_individual.co_unico_ficha
+  // == tb_cidadao.co_unico_ultima_ficha — o GUID interno do e-SUS que identifica qual ficha
+  // atualizou por último aquele registro de cidadão. Isso NÃO é o mesmo join (impossível) por
+  // igualdade de CNS descrito acima — é uma chave exata, não uma heurística por nome. Fica NULL
+  // quando o cidadão não tem CNS real ainda (CADSUS pendente) ou quando uma ficha mais recente
+  // que não é este cadastro individual foi a última a tocar o registro em tb_cidadao (join não
+  // bate, tratado como "identidade não resolvida", nunca como match errado). Único uso: cruzar
+  // com boas_praticas_pontuacao_pessoa.cidadao_cns (ver /cidadao/[cns]).
+  cidadaoCnsReal String?      @map("cidadao_cns_real")
   // nome do cidadão (prioriza nome social) — vem de tb_cidadao via join por nu_cns na
   // sincronização; pode ser nulo em registros sincronizados antes desta coluna existir, até a
   // próxima sincronização atualizá-los.

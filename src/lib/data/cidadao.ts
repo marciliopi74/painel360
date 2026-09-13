@@ -29,6 +29,10 @@ export type CriterioPrevine = {
 
 // requisito 21: progresso real por critério do Previne Brasil (C2-C7) para esta pessoa —
 // mesma tabela usada no drill-down de /indicadores-qualidade, agora filtrada por cidadão.
+// ATENÇÃO: cns aqui precisa ser o CNS REAL (CadastroIndividual.cidadaoCnsReal), não
+// CadastroIndividual.cidadaoCns (que é o hash de tb_cds_cad_individual.nu_cns_cidadao, em outro
+// espaço de identificador — ver comentário no schema). boas_praticas_pontuacao_pessoa sempre usa
+// o CNS real, resolvido via cidadaos_vinculados_equipe()/tb_cidadao.nu_cns.
 export async function listarCriteriosPrevine(cns: string, quadrimestre: Quadrimestre, ano: number): Promise<CriterioPrevine[]> {
   const pontuacoes = await prisma.boaPraticaPontuacaoPessoa.findMany({
     where: { cidadaoCns: cns, quadrimestre, ano },

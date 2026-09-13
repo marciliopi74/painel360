@@ -42,6 +42,27 @@ teste/homologação — não dá pra saber sem comparar com uma segunda instala�
 for confirmado, tratar o indicador "cadastros com CNS inválido" no painel como potencialmente
 superestimado nesta instalação.
 
+## Resolvendo o CNS real a partir do hash de `nu_cns_cidadao` (2026-09-13)
+
+O hash de 32 caracteres descrito acima não é joinável por igualdade de CNS, mas existe uma chave
+exata (não uma heurística) para ligar um `tb_cds_cad_individual` ao `tb_cidadao` correspondente:
+**`tb_cds_cad_individual.co_unico_ficha` == `tb_cidadao.co_unico_ultima_ficha`**. `co_unico_ficha`
+é o GUID desta ficha específica; `co_unico_ultima_ficha` é o GUID da ficha mais recente que
+atualizou aquele registro de cidadão — quando a última ficha a tocar o cidadão foi este próprio
+cadastro individual, os dois batem exatamente. Confirmado 16/16 (100%) contra a instalação real,
+inclusive resolvendo corretamente para NULL o único cidadão sem CNS ainda validado (em vez de um
+match errado). `co_unico_ficha_origem` (ficha de origem, quando esta é uma versão/correção de outra)
+é uma segunda tentativa razoável quando `co_unico_ficha` não bate.
+
+Usado em `sql/03_sync_functions.sql` para popular `cadastros_individuais.cidadao_cns_real` durante
+a sincronização (via `LEFT JOIN LATERAL` com `LIMIT 1`, para nunca duplicar a linha do cadastro
+mesmo se os dois GUIDs batessem em pessoas diferentes). Esse é o único campo desta tabela seguro
+para cruzar com `boas_praticas_pontuacao_pessoa.cidadao_cns`/`cidadaos_vinculados_equipe()` — nunca
+o `cidadao_cns` (hash) puro. Quando `cidadao_cns_real` fica NULL, trate como "identidade não
+resolvida", não como "sem dado" — pode ser um cidadão cujo cadastro não foi a última ficha a
+atualizá-lo em `tb_cidadao` (ex.: uma visita domiciliar mais recente), não necessariamente ausência
+de CNS real.
+
 ## O que ainda pode variar entre instalações
 
 O teste foi contra uma única instalação (versão 9.6.13-4, dataset pequeno/de teste —
