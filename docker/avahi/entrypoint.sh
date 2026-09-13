@@ -4,6 +4,10 @@
 set -euo pipefail
 
 mkdir -p /var/run/dbus
+# pid files sobrevivem num `docker restart` (a camada gravável do container não é limpa, só num
+# recreate) - sem isso, depois do primeiro restart o dbus-daemon recusa subir pra sempre com
+# "pid file exists", e o `set -e` acima mata o container antes mesmo de tentar publicar o mDNS.
+rm -f /var/run/dbus/pid /run/avahi-daemon/pid
 dbus-daemon --system --fork
 avahi-daemon --daemonize --no-drop-root
 
