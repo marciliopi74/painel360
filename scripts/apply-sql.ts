@@ -7,6 +7,14 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { Client } from "pg";
 
+// Chave arbitrária e fixa pro advisory lock desta rotina (só precisa não colidir com outro uso de
+// pg_advisory_lock no banco — não há nenhum outro hoje). `app` e `worker` chamam este script no
+// boot dos dois containers quase ao mesmo tempo; sem serializar, o segundo pode pegar um
+// "tuple concurrently updated" no meio de um CREATE OR REPLACE FUNCTION do primeiro. Lock de
+// sessão (não de transação) porque o script roda vários statements/arquivos sequenciais fora de
+// uma transação só.
+const LOCK_KEY = 727_272_001;
+
 async function main() {
   const sqlDir = join(__dirname, "..", "sql");
   const arquivos = readdirSync(sqlDir)
@@ -15,6 +23,7 @@ async function main() {
 
   const client = new Client({ connectionString: process.env.DATABASE_URL });
   await client.connect();
+  await client.query("SELECT pg_advisory_lock($1)", [LOCK_KEY]);
 
   let houveFalha = false;
   try {
@@ -42,6 +51,7 @@ async function main() {
       }
     }
   } finally {
+    await client.query("SELECT pg_advisory_unlock($1)", [LOCK_KEY]);
     await client.end();
   }
 
