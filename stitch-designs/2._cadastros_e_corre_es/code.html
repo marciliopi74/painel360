@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cadastros e Território - SUS Brasil 360</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#dcf1fb",
+            "error": "#ba1a1a",
+            "primary": "#00626a",
+            "surface-variant": "#d0e6ef",
+            "on-surface": "#091e25",
+            "primary-fixed-dim": "#7cd4df",
+            "on-secondary-fixed": "#00210e",
+            "background": "#f2fbff",
+            "on-tertiary-fixed": "#2f1400",
+            "primary-container": "#0e7c86",
+            "on-secondary": "#ffffff",
+            "outline": "#6e797a",
+            "tertiary": "#85480c",
+            "on-primary": "#ffffff",
+            "secondary-container": "#75fca7",
+            "on-primary-container": "#ddfbff",
+            "on-background": "#091e25",
+            "inverse-on-surface": "#def4fe",
+            "secondary-fixed": "#75fca7",
+            "primary-fixed": "#98f0fb",
+            "secondary-fixed-dim": "#57df8d",
+            "tertiary-container": "#a35f24",
+            "on-tertiary-fixed-variant": "#6f3800",
+            "on-error-container": "#93000a",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#3e494a",
+            "surface-container-low": "#e4f7ff",
+            "surface-container-highest": "#d0e6ef",
+            "on-primary-fixed": "#001f23",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#ffb780",
+            "surface-container-high": "#d6ecf5",
+            "surface-bright": "#f2fbff",
+            "on-primary-fixed-variant": "#004f56",
+            "surface-tint": "#006972",
+            "on-secondary-container": "#00743f",
+            "on-secondary-fixed-variant": "#00522b",
+            "secondary": "#006d3b",
+            "inverse-surface": "#1f333a",
+            "outline-variant": "#bdc9ca",
+            "surface": "#f2fbff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#ffdcc4",
+            "inverse-primary": "#7cd4df",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#fff2eb",
+            "surface-dim": "#c8dee7"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "0.75rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex flex-col pb-24 md:pb-10">
+<!-- TopAppBar Component (from Shared Components JSON Blueprint) -->
+<header class="flex justify-between items-center w-full px-4 h-16 sticky top-0 z-40 bg-surface dark:bg-inverse-surface shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="local_hospital">local_hospital</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-headline-sm font-headline-sm text-primary font-bold tracking-tight">Cadastros e Território</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+            e-SUS Ativo
+          </span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Qualificação de Cadastros Individuais e Domiciliares</p>
+</div>
+</div>
+<!-- Right Controls: Quick Sync and Desktop Navigation Shortcut -->
+<div class="flex items-center gap-2">
+<!-- Sync Action Badge/Button -->
+<button class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-label-md transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined text-label-lg" data-icon="sync">sync</span>
+<span>Sincronizar e-SUS</span>
+</button>
+<button class="sm:hidden p-2 rounded-lg text-primary hover:bg-surface-container transition-colors duration-150 active:scale-95" title="Sincronizar">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+</button>
+</div>
+</header>
+<!-- Main Container -->
+<main class="w-full max-w-7xl mx-auto px-4 md:px-6 py-6 flex-1 flex flex-col gap-6">
+<!-- KPI & Telemetry Top Banner -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Card: Total -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/30 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Total de Cadastros</span>
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold mt-1">24.250</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">Território 100% mapeado</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="how_to_reg">how_to_reg</span>
+</div>
+</div>
+<!-- Card: Validados -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/30 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Cadastros Válidos</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-headline-lg text-headline-lg text-secondary font-bold">23.812</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">98.2%</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">Em conformidade SISAB</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-secondary-container/40 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+</div>
+</div>
+<!-- Card: Com Pendência -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-error/20 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Com Pendência / Inconsistência</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-headline-lg text-headline-lg text-error font-bold">438</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold">1.8%</span>
+</div>
+<span class="font-label-sm text-label-sm text-error mt-1 font-medium">Requer intervenção do ACS</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-error-container/40 flex items-center justify-center text-error">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</div>
+</div>
+</section>
+<!-- Interactive Filters Section -->
+<section class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/30 flex flex-col gap-4">
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+<!-- Search Field -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-outline-variant/60 bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent font-body-sm text-body-sm transition" placeholder="Buscar por cidadão, logradouro, CNS ou nome do ACS..." type="text"/>
+</div>
+<div class="flex flex-wrap sm:flex-nowrap items-center gap-3">
+<!-- Equipe Dropdown Filter -->
+<div class="w-full sm:w-56">
+<label class="sr-only" for="filter-equipe">Filtrar por Equipe</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-body-md" data-icon="groups">groups</span>
+<select class="w-full pl-9 pr-8 py-2.5 rounded-lg border border-outline-variant/60 bg-surface-container-lowest text-on-surface font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent appearance-none" id="filter-equipe">
+<option value="todas">Todas as Equipes</option>
+<option value="esf-esperanca">ESF Esperança I</option>
+<option value="esf-centro">ESF Centro</option>
+<option value="esf-alvorada">ESF Alvorada</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-body-md" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Extra Quick Export Action -->
+<button class="px-3.5 py-2.5 rounded-lg border border-outline-variant/60 hover:bg-surface-container text-on-surface-variant font-label-md text-label-md flex items-center gap-1.5 transition whitespace-nowrap">
+<span class="material-symbols-outlined text-body-md" data-icon="file_download">file_download</span>
+<span>Exportar Lote</span>
+</button>
+</div>
+</div>
+<!-- Filter Chips Segment -->
+<div class="flex items-center gap-2 overflow-x-auto pt-2 border-t border-outline-variant/20 scrollbar-none">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-semibold uppercase pr-2">Exibir:</span>
+<button class="px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container text-primary font-bold shadow-sm transition-all whitespace-nowrap">
+          Todos (24.250)
+        </button>
+<button class="px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-error-container text-on-error-container font-semibold hover:opacity-90 transition-all flex items-center gap-1.5 whitespace-nowrap">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+          Com Erro (438)
+        </button>
+<button class="px-3.5 py-1.5 rounded-full font-label-md text-label-md bg-surface-container-low hover:bg-surface-container text-secondary font-medium transition-all flex items-center gap-1.5 whitespace-nowrap">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+          Sem Erro (23.812)
+        </button>
+</div>
+</section>
+<!-- Fichas & Cards List -->
+<section class="flex flex-col gap-4">
+<!-- Card 1: Com Erro (Individual) -->
+<div class="bg-[#FEECEB] border-2 border-[#E5533C] rounded-xl p-5 shadow-sm transition hover:shadow-md">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-full bg-[#FDF0ED] border border-[#E5533C]/30 flex items-center justify-center text-error flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined" data-icon="person_alert">person_alert</span>
+</div>
+<div>
+<div class="flex flex-wrap items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Maria das Graças Silva</h3>
+<span class="px-2.5 py-0.5 rounded-full bg-[#FDF0ED] border border-[#E5533C]/40 text-[#B8321D] font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#E5533C]"></span>
+                  CPF/CNS Inválido ou Duplicado
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+<span class="font-semibold text-on-surface">CNS:</span> 7042.0009.1123.8810 • 
+                <span class="font-semibold text-on-surface">Tipo:</span> Cadastro Individual • 
+                <span class="font-semibold text-on-surface">Data de Registro:</span> 14/05/2025
+              </p>
+<div class="flex items-center gap-2 mt-2 font-label-md text-label-md text-on-surface-variant">
+<span class="material-symbols-outlined text-body-md text-primary" data-icon="badge">badge</span>
+<span>ACS: <strong class="text-on-surface">Marcos Vinicius</strong></span>
+<span class="text-outline">•</span>
+<span>Equipe: <strong class="text-on-surface">ESF Centro</strong></span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-2 self-end md:self-center flex-shrink-0">
+<button class="px-3.5 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/60 hover:bg-surface-container text-primary font-label-md text-label-md font-semibold transition active:scale-95 shadow-sm">
+              Ver no e-SUS
+            </button>
+<button class="px-4 py-2 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md font-semibold transition active:scale-95 shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-label-lg" data-icon="check_circle">check_circle</span>
+              Validar
+            </button>
+</div>
+</div>
+<!-- Suggestion Box -->
+<div class="mt-4 pt-3 border-t border-[#E5533C]/20 flex items-start gap-2.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="text-base leading-none select-none">💡</span>
+<div>
+<strong class="text-[#B8321D]">Sugestão de Correção:</strong>
+<span>Atualizar o número de CPF no e-SUS AB ou vincular à certidão de nascimento na aba 'Identificação do Cidadão'.</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Com Erro (Domiciliar) -->
+<div class="bg-[#FEECEB] border-2 border-[#E5533C] rounded-xl p-5 shadow-sm transition hover:shadow-md">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-full bg-[#FDF0ED] border border-[#E5533C]/30 flex items-center justify-center text-error flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined" data-icon="home_work">home_work</span>
+</div>
+<div>
+<div class="flex flex-wrap items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Rua das Flores, 142 - Bairro Alvorada</h3>
+<span class="px-2.5 py-0.5 rounded-full bg-[#FDF0ED] border border-[#E5533C]/40 text-[#B8321D] font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#E5533C]"></span>
+                  Sem responsável familiar definido
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+<span class="font-semibold text-on-surface">Tipo:</span> Cadastro Domiciliar e Territorial • 
+                <span class="font-semibold text-on-surface">Moradores Cadastrados:</span> 4 pessoas
+              </p>
+<div class="flex items-center gap-2 mt-2 font-label-md text-label-md text-on-surface-variant">
+<span class="material-symbols-outlined text-body-md text-primary" data-icon="badge">badge</span>
+<span>ACS: <strong class="text-on-surface">Joana Ribeiro</strong></span>
+<span class="text-outline">•</span>
+<span>Equipe: <strong class="text-on-surface">ESF Alvorada</strong></span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-2 self-end md:self-center flex-shrink-0">
+<button class="px-3.5 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/60 hover:bg-surface-container text-primary font-label-md text-label-md font-semibold transition active:scale-95 shadow-sm">
+              Ver no e-SUS
+            </button>
+<button class="px-4 py-2 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md font-semibold transition active:scale-95 shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-label-lg" data-icon="edit">edit</span>
+              Corrigir Ficha
+            </button>
+</div>
+</div>
+<!-- Suggestion Box -->
+<div class="mt-4 pt-3 border-t border-[#E5533C]/20 flex items-start gap-2.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="text-base leading-none select-none">💡</span>
+<div>
+<strong class="text-[#B8321D]">Sugestão de Correção:</strong>
+<span>Informar o CPF do chefe de família na aba Domicílio para garantir a integridade da composição familiar no SISAB.</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Sem Erro (Individual Validado) -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm transition hover:shadow-md">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-full bg-[#EAF8F1] border border-[#2FBF71]/30 flex items-center justify-center text-secondary flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<div class="flex flex-wrap items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Carlos Eduardo Oliveira</h3>
+<span class="px-2.5 py-0.5 rounded-full bg-[#EAF8F1] border border-[#2FBF71]/30 text-[#1E824C] font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+                  Validação e-SUS 100% Aprovada
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+<span class="font-semibold text-on-surface">CNS:</span> 8921.4420.9011.3301 • 
+                <span class="font-semibold text-on-surface">Tipo:</span> Cadastro Individual • 
+                <span class="font-semibold text-on-surface">Vínculo:</span> Territorial Ativo
+              </p>
+<div class="flex items-center gap-2 mt-2 font-label-md text-label-md text-on-surface-variant">
+<span class="material-symbols-outlined text-body-md text-primary" data-icon="badge">badge</span>
+<span>ACS: <strong class="text-on-surface">Patrícia Mendes</strong></span>
+<span class="text-outline">•</span>
+<span>Equipe: <strong class="text-on-surface">ESF Esperança I</strong></span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-2 self-end md:self-center flex-shrink-0">
+<span class="text-secondary flex items-center gap-1 font-label-md text-label-md font-semibold px-3 py-1.5 rounded-lg bg-[#EAF8F1]">
+<span class="material-symbols-outlined text-label-lg" data-icon="task_alt">task_alt</span>
+              Conforme
+            </span>
+<button class="p-2 rounded-lg hover:bg-surface-container text-on-surface-variant" title="Mais Opções">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 4: Sem Erro (Domiciliar Validado) -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm transition hover:shadow-md">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-full bg-[#EAF8F1] border border-[#2FBF71]/30 flex items-center justify-center text-secondary flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+</div>
+<div>
+<div class="flex flex-wrap items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Av. Brasil, 890 - Apto 201</h3>
+<span class="px-2.5 py-0.5 rounded-full bg-[#EAF8F1] border border-[#2FBF71]/30 text-[#1E824C] font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+                  Validado
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+<span class="font-semibold text-on-surface">Tipo:</span> Cadastro Domiciliar • 
+                <span class="font-semibold text-on-surface">Família Chefiada:</span> Sílvia Camargo • 
+                <span class="font-semibold text-on-surface">Condição:</span> Saneamento Completo
+              </p>
+<div class="flex items-center gap-2 mt-2 font-label-md text-label-md text-on-surface-variant">
+<span class="material-symbols-outlined text-body-md text-primary" data-icon="badge">badge</span>
+<span>ACS: <strong class="text-on-surface">Marcos Vinicius</strong></span>
+<span class="text-outline">•</span>
+<span>Equipe: <strong class="text-on-surface">ESF Centro</strong></span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-2 self-end md:self-center flex-shrink-0">
+<span class="text-secondary flex items-center gap-1 font-label-md text-label-md font-semibold px-3 py-1.5 rounded-lg bg-[#EAF8F1]">
+<span class="material-symbols-outlined text-label-lg" data-icon="task_alt">task_alt</span>
+              Conforme
+            </span>
+<button class="p-2 rounded-lg hover:bg-surface-container text-on-surface-variant" title="Mais Opções">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Compact Pagination -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-2">
+<div class="font-label-md text-label-md text-on-surface-variant">
+        Mostrando <strong class="text-on-surface">1–4</strong> de <strong class="text-on-surface">24.250</strong> registros
+      </div>
+<div class="flex items-center gap-1">
+<button class="p-2 rounded-lg border border-outline-variant/50 bg-surface-container-lowest text-outline hover:text-on-surface disabled:opacity-40 transition" disabled="">
+<span class="material-symbols-outlined text-body-md" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md font-bold flex items-center justify-center">
+          1
+        </button>
+<button class="w-8 h-8 rounded-lg bg-surface-container-lowest border border-outline-variant/40 hover:bg-surface-container font-label-md text-label-md text-on-surface flex items-center justify-center transition">
+          2
+        </button>
+<button class="w-8 h-8 rounded-lg bg-surface-container-lowest border border-outline-variant/40 hover:bg-surface-container font-label-md text-label-md text-on-surface flex items-center justify-center transition">
+          3
+        </button>
+<span class="px-1 text-outline font-label-md">...</span>
+<button class="w-8 h-8 rounded-lg bg-surface-container-lowest border border-outline-variant/40 hover:bg-surface-container font-label-md text-label-md text-on-surface flex items-center justify-center transition">
+          606
+        </button>
+<button class="p-2 rounded-lg border border-outline-variant/50 bg-surface-container-lowest text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition">
+<span class="material-symbols-outlined text-body-md" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Component (Executed strictly from Shared Components JSON) -->
+<!-- 'Cadastros' is active tab mapped autonomously per prompt context -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-2 bg-surface dark:bg-inverse-surface shadow-md">
+<!-- Item 0: Início -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95 hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Início</span>
+</a>
+<!-- Item 1: Cadastros (ACTIVE) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary-fixed dark:text-on-primary-fixed rounded-full px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="how_to_reg" data-weight="fill" style="font-variation-settings: 'FILL' 1;">how_to_reg</span>
+<span>Cadastros</span>
+</a>
+<!-- Item 2: Atendimentos -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95 hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="clinical_notes">clinical_notes</span>
+<span>Atendimentos</span>
+</a>
+<!-- Item 3: Indicadores -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95 hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Indicadores</span>
+</a>
+<!-- Item 4: Mais -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95 hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span>Mais</span>
+</a>
+</nav>
+</body></html>

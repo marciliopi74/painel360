@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SUS Brasil 360 - Indicadores de Qualidade</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#dcf1fb",
+            "error": "#ba1a1a",
+            "primary": "#00626a",
+            "surface-variant": "#d0e6ef",
+            "on-surface": "#091e25",
+            "primary-fixed-dim": "#7cd4df",
+            "on-secondary-fixed": "#00210e",
+            "background": "#f2fbff",
+            "on-tertiary-fixed": "#2f1400",
+            "primary-container": "#0e7c86",
+            "on-secondary": "#ffffff",
+            "outline": "#6e797a",
+            "tertiary": "#85480c",
+            "on-primary": "#ffffff",
+            "secondary-container": "#75fca7",
+            "on-primary-container": "#ddfbff",
+            "on-background": "#091e25",
+            "inverse-on-surface": "#def4fe",
+            "secondary-fixed": "#75fca7",
+            "primary-fixed": "#98f0fb",
+            "secondary-fixed-dim": "#57df8d",
+            "tertiary-container": "#a35f24",
+            "on-tertiary-fixed-variant": "#6f3800",
+            "on-error-container": "#93000a",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#3e494a",
+            "surface-container-low": "#e4f7ff",
+            "surface-container-highest": "#d0e6ef",
+            "on-primary-fixed": "#001f23",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#ffb780",
+            "surface-container-high": "#d6ecf5",
+            "surface-bright": "#f2fbff",
+            "on-primary-fixed-variant": "#004f56",
+            "surface-tint": "#006972",
+            "on-secondary-container": "#00743f",
+            "on-secondary-fixed-variant": "#00522b",
+            "secondary": "#006d3b",
+            "inverse-surface": "#1f333a",
+            "outline-variant": "#bdc9ca",
+            "surface": "#f2fbff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#ffdcc4",
+            "inverse-primary": "#7cd4df",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#fff2eb",
+            "surface-dim": "#c8dee7"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "0.75rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F7F9FA;
+      color: #091E25;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col antialiased pb-24 md:pb-12">
+<!-- TOP APP BAR -->
+<header class="flex justify-between items-center w-full px-4 h-16 sticky top-0 z-40 bg-surface shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="local_hospital">local_hospital</span>
+<div>
+<h1 class="font-headline-sm text-headline-sm text-primary font-bold tracking-tight">SUS Brasil 360</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Indicadores de Qualidade • Previne Brasil</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<!-- Period Selector Badge / Dropdown -->
+<div class="flex items-center bg-surface-container-lowest px-3 py-1.5 rounded-lg border border-outline-variant shadow-sm text-on-surface">
+<span class="material-symbols-outlined text-primary mr-1.5 text-base" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-md text-label-md font-bold text-primary">Q1 2025</span>
+<span class="material-symbols-outlined text-outline text-sm ml-1" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+<!-- Sync Button -->
+<button class="p-2 rounded-full hover:bg-surface-container text-primary transition-colors duration-150 active:scale-95 flex items-center justify-center" title="Sincronizar dados e-SUS">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+</button>
+</div>
+</header>
+<!-- MAIN VIEWPORT WRAPPER -->
+<main class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+<!-- SUBHEADER / CONTEXT FILTER -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Desempenho Municipal da Atenção Primária</h2>
+<span class="bg-surface-container px-2.5 py-0.5 rounded-full font-label-sm text-label-sm text-primary font-bold">Oficial MS</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5">Acompanhamento quadrimestral nominal para apuração do Índice Sintético Final (ISF).</p>
+</div>
+<!-- Segmented Control Tabs (Equipes) -->
+<div class="inline-flex p-1 bg-surface-container-high rounded-xl self-start md:self-auto border border-outline-variant/50">
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md font-bold bg-primary-container text-on-primary shadow-sm transition-all flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="groups">groups</span>
+          ESF / eAP (C2-C7)
+        </button>
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md font-medium text-on-surface-variant hover:text-on-surface transition-all flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="dentistry">dentistry</span>
+          Saúde Bucal - eSB (B1-B6)
+        </button>
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md font-medium text-on-surface-variant hover:text-on-surface transition-all flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="diversity_1">diversity_1</span>
+          eMulti (M1-M2)
+        </button>
+</div>
+</div>
+<!-- SUMMARY BANNER: ISF ESTIMADO -->
+<section class="bg-surface-container-lowest rounded-xl p-5 md:p-6 border border-outline-variant/60 shadow-sm relative overflow-hidden">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+<!-- ISF Score -->
+<div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-outline-variant/60 pb-4 lg:pb-0 lg:pr-6 flex flex-col justify-center">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium uppercase tracking-wider">ISF Estimado Provisório</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-secondary font-label-sm text-label-sm font-bold bg-secondary-container/40">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+              Ótimo
+            </span>
+</div>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="text-4xl font-headline-lg font-extrabold text-primary tracking-tight">8,42</span>
+<span class="text-lg font-headline-sm text-on-surface-variant font-semibold">/ 10,0</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">
+            Superou o piso de repasse financeiro integral (Meta municipal: 8,00). 
+          </p>
+</div>
+<!-- Telemetry Breakdown Miniatures -->
+<div class="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="p-3 bg-surface-container-low rounded-lg">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Metas Batidas</span>
+<span class="font-headline-sm text-headline-sm font-bold text-secondary">5 / 6</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium block mt-0.5">83% de êxito</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">População Monitorada</span>
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">14.820</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mt-0.5">7 UBS integradas</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Alerta de Inconsistência</span>
+<span class="font-headline-sm text-headline-sm font-bold text-tertiary">14 casos</span>
+<span class="font-label-sm text-label-sm text-tertiary block mt-0.5">Necessitam validação</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Fechamento SISAB</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary">22 dias</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant block mt-0.5">Até 30/04/2025</span>
+</div>
+</div>
+</div>
+</section>
+<!-- INDICATOR CARDS (C2 to C7) -->
+<div class="space-y-4">
+<div class="flex items-center justify-between pt-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="checklist">checklist</span>
+          Indicadores do Eixo ESF / eAP (C2 a C7)
+        </h3>
+<span class="font-label-md text-label-md text-on-surface-variant">Ponderação Oficial Portaria GM/MS</span>
+</div>
+<!-- CARD C2: DETALHADO COM DRILL-DOWN EXPANDIDO DEMONSTRATIVO -->
+<div class="bg-surface-container-lowest rounded-xl border-2 border-primary-container shadow-sm overflow-hidden transition-shadow duration-150">
+<div class="p-5">
+<!-- Top Row: Code & Badge -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded bg-primary text-on-primary font-label-md text-label-md font-bold">C2</span>
+<h4 class="font-label-lg text-label-lg text-on-surface font-semibold">
+                Proporção de gestantes com pelo menos 6 consultas pré-natal, sendo a 1ª até a 12ª semana
+              </h4>
+</div>
+<span class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-secondary font-label-sm text-label-sm font-bold bg-secondary-container/40">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+              Ótimo
+            </span>
+</div>
+<!-- Middle KPI & Benchmark -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-2">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Score Ponderado</span>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-headline-md font-bold text-primary">88</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">/ 100 pts</span>
+</div>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Percentual Alcançado</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-headline-md font-bold text-secondary">81%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">(Meta pactuada: 75%)</span>
+</div>
+</div>
+<div class="flex sm:justify-end">
+<button class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container text-primary font-label-md text-label-md font-bold hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="person_search">person_search</span>
+                Ver Lista Nominal / Drill-down (54 elegíveis)
+                <span class="material-symbols-outlined text-sm" data-icon="expand_less">expand_less</span>
+</button>
+</div>
+</div>
+<!-- Linear Progress Bar -->
+<div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden mt-3 mb-4">
+<div class="bg-secondary h-full rounded-full transition-all duration-500" style="width: 81%;"></div>
+</div>
+<!-- DEMO DRILL-DOWN EXPANDED SECTION -->
+<div class="mt-4 pt-4 border-t border-outline-variant/60 bg-surface-bright rounded-lg p-4">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base" data-icon="assignment_ind">assignment_ind</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">Amostragem Nominal de Gestantes Vinculadas</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mostrando 2 de 54 gestantes</span>
+</div>
+<div class="space-y-2">
+<!-- Paciente 1: Cumprido -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-surface-container-lowest rounded-lg border border-outline-variant/40 gap-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-xs">
+                    AC
+                  </div>
+<div>
+<span class="font-label-md text-label-md font-bold text-on-surface block">Aline Cristina M.</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">CNS: 708.2019.4410 • UBS Jardim Esperança</span>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-4 text-xs">
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-on-surface">
+<span class="font-medium text-on-surface-variant">Consultas:</span>
+<span class="font-bold text-secondary">6 realizadas</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-on-surface">
+<span class="font-medium text-on-surface-variant">1ª até 12ª sem:</span>
+<span class="font-bold text-secondary">Sim (9ª sem)</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+<span class="px-2.5 py-1 rounded font-label-sm text-label-sm font-bold bg-secondary-container/50 text-secondary">
+                    Cumprido
+                  </span>
+</div>
+</div>
+<!-- Paciente 2: Pendente -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-surface-container-lowest rounded-lg border border-tertiary/30 gap-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary font-bold text-xs">
+                    BF
+                  </div>
+<div>
+<span class="font-label-md text-label-md font-bold text-on-surface block">Beatriz Ferreira</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">CNS: 891.0024.1192 • UBS Central</span>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-4 text-xs">
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-on-surface">
+<span class="font-medium text-on-surface-variant">Consultas:</span>
+<span class="font-bold text-tertiary">4 realizadas</span>
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="warning">warning</span>
+</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-on-surface">
+<span class="font-medium text-on-surface-variant">1ª até 12ª sem:</span>
+<span class="font-bold text-secondary">Sim (11ª sem)</span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle" data-weight="fill">check_circle</span>
+</div>
+<span class="px-2.5 py-1 rounded font-label-sm text-label-sm font-bold bg-tertiary-container/20 text-tertiary">
+                    Faltam 2 consultas (DPA: 14/05)
+                  </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- CARD C3: EXAMES SÍFILIS E HIV -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-sm p-5 hover:border-primary-container transition-colors duration-150">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded bg-primary text-on-primary font-label-md text-label-md font-bold">C3</span>
+<h4 class="font-label-lg text-label-lg text-on-surface font-semibold">
+              Proporção de gestantes com realização de exames para Sífilis e HIV
+            </h4>
+</div>
+<span class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-secondary font-label-sm text-label-sm font-bold bg-secondary-container/40">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+            Ótimo
+          </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-2">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Score Ponderado</span>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-headline-md font-bold text-primary">95</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">/ 100 pts</span>
+</div>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Percentual Alcançado</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-headline-md font-bold text-secondary">86%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">(Meta pactuada: 80%)</span>
+</div>
+</div>
+<div class="flex sm:justify-end">
+<button class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container text-primary font-label-md text-label-md font-bold hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="person_search">person_search</span>
+              Ver Lista Nominal (54 elegíveis)
+              <span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden mt-3">
+<div class="bg-secondary h-full rounded-full" style="width: 86%;"></div>
+</div>
+</div>
+<!-- CARD C4: ATENDIMENTO ODONTOLÓGICO NA GESTAÇÃO -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-sm p-5 hover:border-primary-container transition-colors duration-150">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded bg-primary text-on-primary font-label-md text-label-md font-bold">C4</span>
+<h4 class="font-label-lg text-label-lg text-on-surface font-semibold">
+              Proporção de gestantes com atendimento odontológico realizado
+            </h4>
+</div>
+<span class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-primary font-label-sm text-label-sm font-bold bg-primary-fixed/40">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+            Bom
+          </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-2">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Score Ponderado</span>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-headline-md font-bold text-primary">76</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">/ 100 pts</span>
+</div>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Percentual Alcançado</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-headline-md font-bold text-primary">72%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">(Meta pactuada: 70%)</span>
+</div>
+</div>
+<div class="flex sm:justify-end">
+<button class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container text-primary font-label-md text-label-md font-bold hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="person_search">person_search</span>
+              Ver Lista Nominal (54 elegíveis)
+              <span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden mt-3">
+<div class="bg-primary-container h-full rounded-full" style="width: 72%;"></div>
+</div>
+</div>
+<!-- CARD C5: EXAME CITOPATOLÓGICO (REGULAR 62%) -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-sm p-5 hover:border-primary-container transition-colors duration-150">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded bg-primary text-on-primary font-label-md text-label-md font-bold">C5</span>
+<h4 class="font-label-lg text-label-lg text-on-surface font-semibold">
+              Proporção de mulheres com coleta de exame citopatológico na APS
+            </h4>
+</div>
+<span class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-tertiary font-label-sm text-label-sm font-bold bg-tertiary-fixed/60">
+<span class="w-2 h-2 rounded-full bg-tertiary inline-block"></span>
+            Regular (Atenção)
+          </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-2">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Score Ponderado</span>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-headline-md font-bold text-tertiary">58</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">/ 100 pts</span>
+</div>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Percentual Alcançado</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-headline-md font-bold text-tertiary">62%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">(Meta pactuada: 75%)</span>
+</div>
+</div>
+<div class="flex sm:justify-end">
+<button class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container text-primary font-label-md text-label-md font-bold hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="person_search">person_search</span>
+              Ver Lista Nominal (310 elegíveis)
+              <span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Linear Progress Bar (Laranja / Atenção) -->
+<div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden mt-3">
+<div class="bg-tertiary h-full rounded-full" style="width: 62%;"></div>
+</div>
+</div>
+<!-- CARD C6: VACINAÇÃO POLIOMIELITE E PENTA -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-sm p-5 hover:border-primary-container transition-colors duration-150">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded bg-primary text-on-primary font-label-md text-label-md font-bold">C6</span>
+<h4 class="font-label-lg text-label-lg text-on-surface font-semibold">
+              Proporção de crianças de 1 ano vacinadas contra Difteria, Tétano, Coqueluche, Hep B e Polio
+            </h4>
+</div>
+<span class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-secondary font-label-sm text-label-sm font-bold bg-secondary-container/40">
+<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+            Ótimo
+          </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-2">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Score Ponderado</span>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-headline-md font-bold text-primary">92</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">/ 100 pts</span>
+</div>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Percentual Alcançado</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-headline-md font-bold text-secondary">94%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">(Meta pactuada: 95%)</span>
+</div>
+</div>
+<div class="flex sm:justify-end">
+<button class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container text-primary font-label-md text-label-md font-bold hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="person_search">person_search</span>
+              Ver Lista Nominal (88 elegíveis)
+              <span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden mt-3">
+<div class="bg-secondary h-full rounded-full" style="width: 94%;"></div>
+</div>
+</div>
+<!-- CARD C7: HIPERTENSÃO E DIABETES -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-sm p-5 hover:border-primary-container transition-colors duration-150">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded bg-primary text-on-primary font-label-md text-label-md font-bold">C7</span>
+<h4 class="font-label-lg text-label-lg text-on-surface font-semibold">
+              Proporção de pessoas com hipertensão e diabetes com consulta e PA/Hemoglobina aferidas
+            </h4>
+</div>
+<span class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-primary font-label-sm text-label-sm font-bold bg-primary-fixed/40">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+            Bom
+          </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-2">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Score Ponderado</span>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-headline-md font-bold text-primary">79</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">/ 100 pts</span>
+</div>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Percentual Alcançado</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-headline-md font-bold text-primary">69%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">(Meta pactuada: 60%)</span>
+</div>
+</div>
+<div class="flex sm:justify-end">
+<button class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-surface-container text-primary font-label-md text-label-md font-bold hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="person_search">person_search</span>
+              Ver Lista Nominal (840 elegíveis)
+              <span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden mt-3">
+<div class="bg-primary-container h-full rounded-full" style="width: 69%;"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- SHARED COMPONENT: BottomNavBar (Fixed Shell, Indicadores ativo) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-2 bg-surface shadow-md border-0">
+<!-- Item 1: Início -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="dashboard">dashboard</span>
+<span>Início</span>
+</a>
+<!-- Item 2: Cadastros -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="how_to_reg">how_to_reg</span>
+<span>Cadastros</span>
+</a>
+<!-- Item 3: Atendimentos -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="clinical_notes">clinical_notes</span>
+<span>Atendimentos</span>
+</a>
+<!-- Item 4: Indicadores (ACTIVE STATE via style_active_navigation) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-3 py-1 font-label-sm text-label-sm shadow-sm transition-all" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="analytics" data-weight="fill" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span>Indicadores</span>
+</a>
+<!-- Item 5: Mais -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="more_horiz">more_horiz</span>
+<span>Mais</span>
+</a>
+</nav>
+</body></html>

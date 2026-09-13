@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prontuário do Cidadão - SUS Brasil 360</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-high": "#d6ecf5",
+            "on-surface": "#091e25",
+            "error-container": "#ffdad6",
+            "error": "#ba1a1a",
+            "on-primary-container": "#ddfbff",
+            "on-error": "#ffffff",
+            "secondary": "#006d3b",
+            "on-error-container": "#93000a",
+            "surface-variant": "#d0e6ef",
+            "inverse-primary": "#7cd4df",
+            "secondary-fixed-dim": "#57df8d",
+            "tertiary": "#85480c",
+            "surface-bright": "#f2fbff",
+            "surface-container-highest": "#d0e6ef",
+            "primary": "#00626a",
+            "surface-container-low": "#e4f7ff",
+            "inverse-surface": "#1f333a",
+            "secondary-container": "#75fca7",
+            "on-tertiary-container": "#fff2eb",
+            "primary-container": "#0e7c86",
+            "on-primary-fixed": "#001f23",
+            "tertiary-container": "#a35f24",
+            "background": "#f2fbff",
+            "on-secondary-fixed-variant": "#00522b",
+            "primary-fixed": "#98f0fb",
+            "tertiary-fixed-dim": "#ffb780",
+            "on-background": "#091e25",
+            "secondary-fixed": "#75fca7",
+            "inverse-on-surface": "#def4fe",
+            "on-tertiary": "#ffffff",
+            "surface": "#f2fbff",
+            "on-secondary": "#ffffff",
+            "outline-variant": "#bdc9ca",
+            "on-primary-fixed-variant": "#004f56",
+            "primary-fixed-dim": "#7cd4df",
+            "surface-tint": "#006972",
+            "on-secondary-fixed": "#00210e",
+            "on-tertiary-fixed-variant": "#6f3800",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#dcf1fb",
+            "outline": "#6e797a",
+            "on-secondary-container": "#00743f",
+            "on-tertiary-fixed": "#2f1400",
+            "tertiary-fixed": "#ffdcc4",
+            "on-primary": "#ffffff",
+            "surface-dim": "#c8dee7",
+            "on-surface-variant": "#3e494a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem",
+            "margin": "1.5rem",
+            "margin-mobile": "1rem",
+            "gutter-mobile": "0.75rem",
+            "space-md": "1rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-sm": ["Inter"]
+          },
+          "fontSize": {
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#F7F9FA] text-on-surface antialiased font-body-md text-body-md pb-28">
+<!-- TopAppBar (from Shared Components JSON - Mobile View with Back Navigation Context) -->
+<header class="flex justify-between items-center w-full px-4 h-16 sticky top-0 z-40 bg-surface shadow-sm">
+<div class="flex items-center gap-2">
+<button aria-label="Voltar para Cadastros" class="p-2 -ml-2 rounded-lg text-primary hover:bg-surface-container transition-colors duration-150 active:scale-95 flex items-center justify-center" type="button">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_hospital</span>
+          SUS Brasil 360
+        </span>
+<h1 class="text-headline-sm font-headline-sm text-primary font-bold leading-tight">Prontuário do Cidadão</h1>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150 active:scale-95 flex items-center justify-center" title="Sincronizar com e-SUS / SISAB" type="button">
+<span class="material-symbols-outlined">sync</span>
+</button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors duration-150 active:scale-95 flex items-center justify-center" title="Compartilhar registro" type="button">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto px-4 pt-3 space-y-4">
+<!-- Inconsistência Cadastral SISAB / Previne Brasil Callout -->
+<section class="rounded-lg bg-[#FDF0ED] border border-[#E5533C]/40 p-3.5 shadow-sm">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[#B8321D] text-[22px] shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div class="space-y-1.5 flex-1">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm font-bold text-[#B8321D] tracking-wide uppercase">Alerta SISAB Previne Brasil</span>
+<span class="inline-flex items-center gap-1 bg-[#ffdad6] text-[#93000a] text-label-sm font-label-sm px-1.5 py-0.5 rounded">
+              Prioridade Alta
+            </span>
+</div>
+<p class="text-body-sm font-body-sm text-[#732014] font-medium leading-snug">
+            Inconsistência SISAB Ativa: CPF duplicado ou com conflito no CADSUS com cadastro de outra UBS.
+          </p>
+<div class="pt-1 flex flex-wrap gap-2">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E5533C] text-white text-label-md font-label-md font-semibold hover:bg-[#cf422c] transition-colors duration-150 shadow-xs" type="button">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+              Corrigir Cadastro
+            </button>
+<button class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-surface-container-lowest border border-[#E5533C]/40 text-[#B8321D] text-label-md font-label-md font-medium hover:bg-[#FDF0ED] transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+              Ver espelho CADSUS
+            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Profile Header / Identificação Principal -->
+<section class="bg-surface-container-lowest border border-outline-variant/50 rounded-lg p-4 shadow-sm space-y-3.5">
+<div class="flex items-start gap-3">
+<!-- Avatar com Iniciais -->
+<div class="w-14 h-14 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-headline-sm font-headline-sm shrink-0 shadow-sm border border-primary/20">
+          MS
+        </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="text-headline-sm font-headline-sm text-on-surface font-bold truncate">Maria das Graças Silva</h2>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">
+            54 anos (12/04/1971) • Feminino
+          </p>
+<div class="mt-1 flex items-center gap-1.5">
+<span class="text-label-sm font-label-sm bg-surface-container-low text-primary px-2 py-0.5 rounded font-mono font-semibold">
+              CNS: 7042.0009.1123.8810
+            </span>
+<button class="text-primary hover:text-on-surface transition-colors p-0.5" id="copy-btn" onclick="navigator.clipboard?.writeText('7042.0009.1123.8810')" title="Copiar Cartão SUS" type="button">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Informações complementares & Território -->
+<div class="grid grid-cols-1 gap-2 pt-2 border-t border-[#EDF2F7] text-body-sm font-body-sm">
+<div class="flex items-center justify-between py-0.5">
+<span class="text-on-surface-variant text-label-md font-label-md">CPF:</span>
+<span class="font-medium text-on-surface font-mono">104.***.***-20</span>
+</div>
+<div class="flex items-center justify-between py-0.5">
+<span class="text-on-surface-variant text-label-md font-label-md">Nome da Mãe:</span>
+<span class="font-medium text-on-surface truncate text-right max-w-[200px]">Francisca das Graças Silva</span>
+</div>
+<div class="flex items-start justify-between py-0.5">
+<span class="text-on-surface-variant text-label-md font-label-md shrink-0">Vínculo / ESF:</span>
+<span class="font-medium text-on-surface text-right text-label-md font-label-md">
+            ESF Centro - MA 02 • Microárea 03<br/>
+<span class="text-primary font-medium">ACS: Marcos Vinicius</span>
+</span>
+</div>
+<div class="flex items-start justify-between py-0.5">
+<span class="text-on-surface-variant text-label-md font-label-md shrink-0">Endereço:</span>
+<span class="font-medium text-on-surface text-right truncate text-label-md font-label-md max-w-[210px]" title="Rua das Flores, 142 - Centro (Território Adscrito)">
+            Rua das Flores, 142 - Centro
+          </span>
+</div>
+</div>
+<!-- Condições e Rastreios Ativos (Badges) -->
+<div class="pt-2 border-t border-[#EDF2F7] flex flex-wrap gap-1.5">
+<span class="inline-flex items-center gap-1 bg-[#FEF6EE] text-[#B25E16] text-label-sm font-label-sm px-2.5 py-1 rounded-full font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F4A261]"></span>
+          Hipertensa (HAS)
+        </span>
+<span class="inline-flex items-center gap-1 bg-[#FEF6EE] text-[#B25E16] text-label-sm font-label-sm px-2.5 py-1 rounded-full font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F4A261]"></span>
+          Diabética (DM2)
+        </span>
+<span class="inline-flex items-center gap-1 bg-[#FDF0ED] text-[#B8321D] text-label-sm font-label-sm px-2.5 py-1 rounded-full font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#E5533C]"></span>
+          Citopatológico Pendente
+        </span>
+</div>
+</section>
+<!-- Tabbed Navigation -->
+<div class="flex border-b border-[#EDF2F7] bg-surface-container-lowest rounded-lg p-1 shadow-xs" role="tablist">
+<button class="flex-1 py-2 text-center rounded-lg font-label-md text-label-md transition-all text-primary font-bold bg-surface-container" id="tab-btn-clinico" onclick="switchTab('clinico')" type="button">
+        Histórico Clínico
+      </button>
+<button class="flex-1 py-2 text-center rounded-lg font-label-md text-label-md transition-all text-on-surface-variant hover:text-on-surface" id="tab-btn-visitas" onclick="switchTab('visitas')" type="button">
+        Visitas ACS
+      </button>
+<button class="flex-1 py-2 text-center rounded-lg font-label-md text-label-md transition-all text-on-surface-variant hover:text-on-surface flex items-center justify-center gap-1" id="tab-btn-previne" onclick="switchTab('previne')" type="button">
+<span>Previne</span>
+<span class="bg-[#ba1a1a] text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full leading-tight">3</span>
+</button>
+</div>
+<!-- TAB CONTENT 1: Histórico Clínico -->
+<div class="space-y-3" id="content-clinico">
+<!-- Card: Consulta Médica Recente -->
+<article class="bg-surface-container-lowest border border-[#EDF2F7] rounded-lg p-4 shadow-sm hover:border-outline-variant/60 transition-colors">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[20px]">stethoscope</span>
+<span class="font-label-lg text-label-lg text-on-surface">Consulta Médica</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded">
+            14/04/2025
+          </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+          Profissional: <span class="text-on-surface font-medium">Dr. Roberto Guimarães (CRM/ESF)</span>
+</p>
+<!-- Parâmetros Clínicos Rápidos -->
+<div class="grid grid-cols-2 gap-2 my-2.5 bg-surface-bright p-2.5 rounded-lg border border-outline-variant/30">
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">PA Aferida:</span>
+<p class="text-label-lg font-label-lg text-primary font-bold">130/85 mmHg</p>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Diagnóstico Ativo:</span>
+<p class="text-label-md font-label-md text-on-surface font-medium">CID I10 (Hipertensão)</p>
+</div>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant space-y-1">
+<p><span class="font-medium text-on-surface">Conduta:</span> Prescrição renovada (Losartana 50mg + Hidroclorotiazida 25mg). Solicitados exames laboratoriais de rotina.</p>
+</div>
+</article>
+<!-- Card: Atendimento de Enfermagem -->
+<article class="bg-surface-container-lowest border border-[#EDF2F7] rounded-lg p-4 shadow-sm hover:border-outline-variant/60 transition-colors">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[#006d3b] text-[20px]">vaccines</span>
+<span class="font-label-lg text-label-lg text-on-surface">Atendimento de Enfermagem</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded">
+            20/03/2025
+          </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+          Profissional: <span class="text-on-surface font-medium">Enf. Juliana Prado (COREN)</span>
+</p>
+<div class="my-2.5 bg-surface-bright p-2.5 rounded-lg border border-outline-variant/30 flex items-center justify-between">
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Glicemia Capilar:</span>
+<p class="text-label-lg font-label-lg text-[#B25E16] font-bold">142 mg/dL</p>
+</div>
+<span class="inline-flex items-center gap-1 bg-[#FEF6EE] text-[#B25E16] text-label-sm font-label-sm px-2 py-0.5 rounded">
+            Atenção pós-prandial
+          </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+<span class="font-medium text-on-surface">Evolução:</span> Avaliação de pés diabéticos sem úlceras. Reforçada adesão medicamentosa e orientada quanto ao rastreio citopatológico pendente.
+        </p>
+</article>
+<!-- Card: Odontologia (eSB) -->
+<article class="bg-surface-container-lowest border border-[#EDF2F7] rounded-lg p-4 shadow-sm hover:border-outline-variant/60 transition-colors">
+<div class="flex items-center justify-between mb-1.5">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[20px]">dentistry</span>
+<span class="font-label-lg text-label-lg text-on-surface">Saúde Bucal (eSB)</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded">
+            10/01/2025
+          </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+          Exame clínico estomatológico e profilaxia dental concluídos. Sem queixas de dor ou lesões orais ativas. Retorno anual programado.
+        </p>
+</article>
+</div>
+<!-- TAB CONTENT 2: Visitas Domiciliares (ACS) -->
+<div class="space-y-3 hidden" id="content-visitas">
+<div class="bg-surface-container-lowest border border-[#EDF2F7] rounded-lg p-4 shadow-sm">
+<div class="flex items-center justify-between mb-3 pb-2 border-b border-[#EDF2F7]">
+<div>
+<h3 class="font-label-lg text-label-lg text-on-surface">Registro de Acompanhamento Territorial</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">ACS Responsável: Marcos Vinicius</p>
+</div>
+<span class="inline-flex items-center gap-1 bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm px-2 py-1 rounded">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+            Território Ativo
+          </span>
+</div>
+<div class="space-y-3">
+<div class="p-3 bg-surface-bright rounded-lg border border-outline-variant/30">
+<div class="flex items-center justify-between text-label-sm font-label-sm text-on-surface-variant mb-1">
+<span class="font-semibold text-primary">Última Visita Realizada</span>
+<span class="font-mono">28/04/2025</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface">
+              Visita domiciliar mensal. Verificado uso correto da medicação anti-hipertensiva. Cadastro georreferenciado atualizado. Paciente informou ausência de queixas agudas.
+            </p>
+<div class="mt-2 flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[15px] text-primary">check_circle</span>
+<span>Desfecho: Visita realizada com sucesso</span>
+</div>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg border border-primary/20 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">event_upcoming</span>
+<div>
+<p class="text-label-md font-label-md font-bold text-primary">Próxima Visita Prevista</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Busca ativa e reforço de exames</p>
+</div>
+</div>
+<span class="text-label-lg font-label-lg font-bold text-on-surface font-mono">25/05/2025</span>
+</div>
+</div>
+</div>
+</div>
+<!-- TAB CONTENT 3: Pendências & Previne Brasil -->
+<div class="space-y-3 hidden" id="content-previne">
+<div class="bg-surface-container-lowest border border-[#EDF2F7] rounded-lg p-4 shadow-sm space-y-3.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<h3 class="font-label-lg text-label-lg text-on-surface">Metas Previne Brasil Vinculadas</h3>
+</div>
+<span class="bg-[#ffdad6] text-[#93000a] text-label-sm font-label-sm font-bold px-2 py-0.5 rounded">
+            2 Pendências Críticas
+          </span>
+</div>
+<!-- Indicador C6: Hipertensão -->
+<div class="p-3 bg-[#EAF8F1] rounded-lg border border-[#2FBF71]/30">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-[#1E824C]">IND 06 • HIPERTENSÃO</span>
+<p class="text-label-md font-label-md font-medium text-on-surface mt-0.5">Consulta e PA aferida no semestre</p>
+</div>
+<span class="inline-flex items-center gap-1 bg-white text-[#1E824C] text-label-sm font-label-sm px-2 py-0.5 rounded font-bold shadow-xs">
+<span class="material-symbols-outlined text-[14px]">check</span>
+              Cumprido
+            </span>
+</div>
+<div class="w-full bg-white/70 h-2 rounded-full mt-2 overflow-hidden">
+<div class="bg-[#2FBF71] h-full w-full"></div>
+</div>
+<p class="text-label-sm font-label-sm text-[#1E824C] mt-1.5">Última aferição em 14/04/2025 (Válida até 10/2025).</p>
+</div>
+<!-- Indicador C7: Diabetes -->
+<div class="p-3 bg-[#FEF6EE] rounded-lg border border-[#F4A261]/40">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-[#B25E16]">IND 07 • DIABETES</span>
+<p class="text-label-md font-label-md font-medium text-on-surface mt-0.5">Hemoglobina Glicada (HbA1c) semestral</p>
+</div>
+<span class="inline-flex items-center gap-1 bg-white text-[#B25E16] text-label-sm font-label-sm px-2 py-0.5 rounded font-bold shadow-xs">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+              Pendente
+            </span>
+</div>
+<div class="w-full bg-[#EDF2F7] h-2 rounded-full mt-2 overflow-hidden">
+<div class="bg-[#F4A261] h-full w-[35%]"></div>
+</div>
+<p class="text-label-sm font-label-sm text-[#B25E16] mt-1.5 font-medium">
+            Falta solicitação/resultado de HbA1c nos últimos 6 meses. Risco de queda no repasse.
+          </p>
+<button class="mt-2 text-label-sm font-label-sm font-semibold text-primary underline flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[14px]">assignment_add</span>
+            Inserir requisição de HbA1c
+          </button>
+</div>
+<!-- Indicador Rastreio Citopatológico -->
+<div class="p-3 bg-[#FDF0ED] rounded-lg border border-[#E5533C]/40">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-[#B8321D]">IND 04 • SAÚDE DA MULHER</span>
+<p class="text-label-md font-label-md font-medium text-on-surface mt-0.5">Exame Citopatológico (Colo de Útero)</p>
+</div>
+<span class="inline-flex items-center gap-1 bg-[#ffdad6] text-[#93000a] text-label-sm font-label-sm px-2 py-0.5 rounded font-bold">
+<span class="material-symbols-outlined text-[14px]">error</span>
+              Vencido (4m)
+            </span>
+</div>
+<p class="text-label-sm font-label-sm text-[#732014] mt-2 font-medium">
+            Último exame válido há mais de 36 meses. Necessidade imediata de Busca Ativa pela equipe de enfermagem/ACS.
+          </p>
+<div class="mt-2.5 flex items-center gap-2">
+<button class="px-2.5 py-1 rounded bg-[#E5533C] text-white text-label-sm font-label-sm font-semibold" type="button">
+              Agendar Coleta
+            </button>
+<button class="px-2 py-1 rounded border border-[#E5533C]/40 text-[#B8321D] text-label-sm font-label-sm" type="button">
+              Notificar ACS
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Seção de Ações Rápidas -->
+<section class="pt-2 pb-4 space-y-2">
+<button class="w-full h-11 bg-primary-container text-on-primary-container font-label-lg text-label-lg rounded-lg shadow-sm flex items-center justify-center gap-2 hover:bg-[#0B656D] active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+        Novo Atendimento / Encaminhar
+      </button>
+<button class="w-full h-11 bg-surface-container-lowest border border-primary text-primary font-label-lg text-label-lg rounded-lg shadow-xs flex items-center justify-center gap-2 hover:bg-surface-container-low active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+        Emitir Ficha de Visita ACS
+      </button>
+</section>
+</main>
+<!-- BottomNavBar (from Shared Components JSON: Destination Count 5, Active: 'Cadastros') -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-2 bg-surface shadow-md">
+<!-- Item 1: Início (inactive) -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:bg-surface-container-low transition-all duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Início</span>
+</button>
+<!-- Item 2: Cadastros (ACTIVE as requested for Citizen Record context) -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95 font-bold" type="button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">how_to_reg</span>
+<span>Cadastros</span>
+</button>
+<!-- Item 3: Atendimentos (inactive) -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:bg-surface-container-low transition-all duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined">clinical_notes</span>
+<span>Atendimentos</span>
+</button>
+<!-- Item 4: Indicadores (inactive) -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:bg-surface-container-low transition-all duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined">analytics</span>
+<span>Indicadores</span>
+</button>
+<!-- Item 5: Mais (inactive) -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:bg-surface-container-low transition-all duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined">more_horiz</span>
+<span>Mais</span>
+</button>
+</nav>
+<!-- Script para alternância interativa das abas móveis -->
+<script>
+    function switchTab(tabKey) {
+      // Content elements
+      const contentClinico = document.getElementById('content-clinico');
+      const contentVisitas = document.getElementById('content-visitas');
+      const contentPrevine = document.getElementById('content-previne');
+
+      // Tab buttons
+      const btnClinico = document.getElementById('tab-btn-clinico');
+      const btnVisitas = document.getElementById('tab-btn-visitas');
+      const btnPrevine = document.getElementById('tab-btn-previne');
+
+      // Hide all contents
+      contentClinico.classList.add('hidden');
+      contentVisitas.classList.add('hidden');
+      contentPrevine.classList.add('hidden');
+
+      // Reset button styles to inactive
+      const inactiveClass = ['text-on-surface-variant', 'hover:text-on-surface'];
+      const activeClass = ['text-primary', 'font-bold', 'bg-surface-container'];
+
+      [btnClinico, btnVisitas, btnPrevine].forEach(btn => {
+        btn.classList.remove(...activeClass);
+        btn.classList.add(...inactiveClass);
+      });
+
+      // Activate selected
+      if (tabKey === 'clinico') {
+        contentClinico.classList.remove('hidden');
+        btnClinico.classList.remove(...inactiveClass);
+        btnClinico.classList.add(...activeClass);
+      } else if (tabKey === 'visitas') {
+        contentVisitas.classList.remove('hidden');
+        btnVisitas.classList.remove(...inactiveClass);
+        btnVisitas.classList.add(...activeClass);
+      } else if (tabKey === 'previne') {
+        contentPrevine.classList.remove('hidden');
+        btnPrevine.classList.remove(...inactiveClass);
+        btnPrevine.classList.add(...activeClass);
+      }
+    }
+  </script>
+</body></html>

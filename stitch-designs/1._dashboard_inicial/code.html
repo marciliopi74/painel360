@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SUS Brasil 360 - Dashboard Inicial</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#dcf1fb",
+            "error": "#ba1a1a",
+            "primary": "#00626a",
+            "surface-variant": "#d0e6ef",
+            "on-surface": "#091e25",
+            "primary-fixed-dim": "#7cd4df",
+            "on-secondary-fixed": "#00210e",
+            "background": "#f2fbff",
+            "on-tertiary-fixed": "#2f1400",
+            "primary-container": "#0e7c86",
+            "on-primary": "#ffffff",
+            "secondary-container": "#75fca7",
+            "on-primary-container": "#ddfbff",
+            "on-background": "#091e25",
+            "inverse-on-surface": "#def4fe",
+            "secondary-fixed": "#75fca7",
+            "primary-fixed": "#98f0fb",
+            "secondary-fixed-dim": "#57df8d",
+            "tertiary-container": "#a35f24",
+            "on-tertiary-fixed-variant": "#6f3800",
+            "on-error-container": "#93000a",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#3e494a",
+            "surface-container-low": "#e4f7ff",
+            "surface-container-highest": "#d0e6ef",
+            "on-primary-fixed": "#001f23",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#ffb780",
+            "surface-container-high": "#d6ecf5",
+            "surface-bright": "#f2fbff",
+            "on-primary-fixed-variant": "#004f56",
+            "surface-tint": "#006972",
+            "on-secondary-container": "#00743f",
+            "on-secondary-fixed-variant": "#00522b",
+            "secondary": "#006d3b",
+            "inverse-surface": "#1f333a",
+            "outline-variant": "#bdc9ca",
+            "surface": "#f2fbff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#ffdcc4",
+            "inverse-primary": "#7cd4df",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#fff2eb",
+            "surface-dim": "#c8dee7"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "0.75rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+            "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+            "headline-sm": ["18px", {"lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600"}],
+            "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700"}],
+            "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+            "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+            "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .sync-spinning {
+      animation: spin-slow 1s linear infinite;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col pb-20 md:pb-8">
+<!-- TopAppBar via JSON Specification -->
+<header class="flex justify-between items-center w-full px-4 h-16 sticky top-0 z-40 bg-surface dark:bg-inverse-surface shadow-sm">
+<div class="flex items-center space-x-3">
+<div class="flex items-center justify-center w-10 h-10 rounded-lg bg-surface-container text-primary">
+<span class="material-symbols-outlined text-primary" data-icon="local_hospital">local_hospital</span>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<span class="text-headline-sm font-headline-sm text-primary dark:text-inverse-primary font-bold">SUS Brasil 360</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/40 text-secondary text-label-sm font-label-sm border border-secondary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+            Online
+          </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant hidden sm:block">SMS Saúde Municipal • Conectado ao e-SUS Local</p>
+</div>
+</div>
+<!-- Sincronização e Ações -->
+<div class="flex items-center space-x-3">
+<div class="hidden lg:flex flex-col items-end text-right mr-1">
+<div class="flex items-center gap-1.5 text-label-sm font-label-sm text-on-surface-variant">
+<span>Última sync: há 14 min</span>
+<span>•</span>
+<span class="text-secondary font-semibold">100% atualizado</span>
+</div>
+<div class="w-36 h-1.5 bg-surface-container rounded-full overflow-hidden mt-1">
+<div class="h-full bg-secondary rounded-full w-full"></div>
+</div>
+</div>
+<button class="inline-flex items-center space-x-2 bg-primary hover:bg-primary-container text-on-primary px-3.5 py-2 rounded-lg text-label-md font-label-md transition-colors duration-150 active:scale-95 shadow-sm" id="sync-button" onclick="triggerSync()">
+<span class="material-symbols-outlined text-label-lg" data-icon="sync" id="sync-icon">sync</span>
+<span class="hidden sm:inline">Sincronizar agora</span>
+</button>
+</div>
+</header>
+<!-- Container Principal -->
+<main class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-5 flex-1 flex flex-col space-y-6">
+<!-- Subtítulo e Status Mobile -->
+<div class="sm:hidden flex items-center justify-between p-3 rounded-lg bg-surface-container-lowest border border-outline-variant/40 shadow-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-body-md" data-icon="database">database</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">e-SUS APS Conectado</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Sync: há 14m (100%)</span>
+</div>
+<!-- Barra de Filtros Rápidos & Seletor de Quadrimestre -->
+<section class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-surface-container-lowest p-3.5 rounded-lg border border-outline-variant/40 shadow-sm">
+<!-- Chips de Tipo de Equipe -->
+<div class="flex items-center flex-wrap gap-1.5">
+<span class="text-label-sm font-label-sm text-on-surface-variant mr-1.5 font-bold uppercase">Equipes:</span>
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-primary text-on-primary font-bold transition-all shadow-sm">Todas</button>
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface hover:bg-surface-variant transition-colors">ESF</button>
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface hover:bg-surface-variant transition-colors">eAP</button>
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface hover:bg-surface-variant transition-colors">eMULTI</button>
+<button class="px-3 py-1 rounded-full text-label-sm font-label-sm bg-surface-container text-on-surface hover:bg-surface-variant transition-colors">eSB</button>
+</div>
+<!-- Seletor de Período -->
+<div class="flex items-center space-x-2 w-full sm:w-auto">
+<span class="material-symbols-outlined text-primary text-body-lg" data-icon="calendar_today">calendar_today</span>
+<div class="relative w-full sm:w-64">
+<select class="w-full h-10 pl-3 pr-8 rounded-lg bg-surface text-on-surface border border-outline-variant/60 text-label-md font-label-md focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container">
+<option selected="">Quadrimestre Q1 2025 / Maio</option>
+<option>Quadrimestre Q3 2024 / Dezembro</option>
+<option>Quadrimestre Q2 2024 / Agosto</option>
+<option>Quadrimestre Q1 2024 / Abril</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Banner de Meta Geral (Previne Brasil) -->
+<section class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-5 sm:p-6 shadow-sm">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary" data-icon="workspace_premium">workspace_premium</span>
+<span class="text-label-md font-label-md uppercase tracking-wider text-primary font-bold">Indicador Sintético Final (ISF) • Previne Brasil</span>
+</div>
+<h2 class="text-headline-lg font-headline-lg text-on-surface font-bold tracking-tight">84,2% das metas atingidas</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">Município elegível para o repasse total de cofinanciamento da Atenção Primária.</p>
+</div>
+<div class="flex flex-col sm:items-end justify-center">
+<div class="flex items-center gap-2 mb-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Meta Pactuada: <strong class="text-on-surface">80,0%</strong></span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-label-sm font-label-sm bg-secondary-container/40 text-secondary font-bold">
+              +4,2% acima
+            </span>
+</div>
+<div class="w-full md:w-72">
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant mb-1">
+<span>Progresso Atual</span>
+<span class="font-bold text-secondary">84,2%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden relative">
+<div class="h-full bg-secondary rounded-full" style="width: 84.2%;"></div>
+<!-- Marcador de meta 80% -->
+<div class="absolute top-0 bottom-0 w-0.5 bg-outline z-10" style="left: 80%;" title="Meta pactuada 80%"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Grid de 4 Cartões-resumo principais -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Card 1: Cadastros Individuais -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-4 sm:p-5 shadow-sm hover:border-primary-container/40 transition-colors flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-md font-label-md text-on-surface-variant">Cadastros Individuais</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-body-lg" data-icon="how_to_reg">how_to_reg</span>
+</div>
+</div>
+<div class="text-headline-lg font-headline-lg font-bold text-on-surface">18.420</div>
+<div class="flex items-center gap-1.5 mt-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-label-sm font-label-sm bg-secondary-container/40 text-secondary font-bold">
+              +420 no mês
+            </span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">92% da meta</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-surface-container">
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 92%;"></div>
+</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant mt-1.5">Meta: 20.000 cadastros</div>
+</div>
+</div>
+<!-- Card 2: Cadastros Domiciliares -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-4 sm:p-5 shadow-sm hover:border-primary-container/40 transition-colors flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-md font-label-md text-on-surface-variant">Cadastros Domiciliares</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-body-lg" data-icon="home_health">home_health</span>
+</div>
+</div>
+<div class="text-headline-lg font-headline-lg font-bold text-on-surface">5.830</div>
+<div class="flex items-center gap-1.5 mt-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-label-sm font-label-sm bg-secondary-container/40 text-secondary font-bold">
+              Regularizados
+            </span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">97% da meta</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-surface-container">
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 97%;"></div>
+</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant mt-1.5">Meta: 6.000 domicílios</div>
+</div>
+</div>
+<!-- Card 3: Atendimentos do Período -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-4 sm:p-5 shadow-sm hover:border-primary-container/40 transition-colors flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-md font-label-md text-on-surface-variant">Atendimentos no Período</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-body-lg" data-icon="clinical_notes">clinical_notes</span>
+</div>
+</div>
+<div class="text-headline-lg font-headline-lg font-bold text-on-surface">3.412</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant mt-2">
+            Consultas médicas e enfermagem realizadas no quadrimestre.
+          </div>
+</div>
+<div class="mt-4 pt-3 border-t border-surface-container flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Média diária</span>
+<span class="text-label-sm font-label-sm font-bold text-primary">114 atendimentos/dia</span>
+</div>
+</div>
+<!-- Card 4: Inconsistências / Alertas -->
+<div class="bg-surface-container-lowest border border-error/30 rounded-lg p-4 sm:p-5 shadow-sm hover:border-error transition-colors flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-md font-label-md text-error font-semibold">Inconsistências &amp; Alertas</span>
+<div class="w-8 h-8 rounded-lg bg-error-container text-error flex items-center justify-center">
+<span class="material-symbols-outlined text-body-lg" data-icon="warning">warning</span>
+</div>
+</div>
+<div class="text-headline-lg font-headline-lg font-bold text-error">48</div>
+<div class="flex items-center gap-1.5 mt-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-label-sm font-label-sm bg-error-container text-error font-bold">
+              Atenção imediata
+            </span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-surface-container flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Cadastros duplicados / CNS inválido</span>
+<button class="text-label-sm font-label-sm font-bold text-error hover:underline">Resolver</button>
+</div>
+</div>
+</section>
+<!-- Seção 'Desempenho por Tipo de Equipe' -->
+<section class="space-y-3">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="text-headline-sm font-headline-sm font-bold text-on-surface">Desempenho por Tipo de Equipe</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Acompanhamento operacional por modalidade de atenção básica municipal</p>
+</div>
+<button class="hidden sm:inline-flex items-center text-label-md font-label-md text-primary font-semibold hover:underline">
+          Ver detalhamento das equipes
+          <span class="material-symbols-outlined text-body-sm ml-1" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Card ESF -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-5 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="px-2.5 py-1 rounded bg-surface-container text-primary text-label-sm font-label-sm font-bold tracking-wider uppercase">ESF</span>
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm text-secondary font-bold">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                Ótimo
+              </span>
+</div>
+<h4 class="text-headline-sm font-headline-sm font-bold text-on-surface mt-2.5">Estratégia Saúde da Família</h4>
+<div class="flex items-center gap-2 mt-1 text-body-sm font-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-body-md" data-icon="groups">groups</span>
+<span>6 equipes ativas no município</span>
+</div>
+<div class="mt-4">
+<div class="flex justify-between items-baseline mb-1">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Meta Atingida</span>
+<span class="text-headline-sm font-headline-sm font-bold text-secondary">88%</span>
+</div>
+<div class="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 88%;"></div>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-3 border-t border-surface-container text-label-sm font-label-sm text-on-surface-variant flex justify-between">
+<span>População Coberta: <strong>16.200 hab</strong></span>
+<span>Meta ISF: <strong>80%</strong></span>
+</div>
+</div>
+<!-- Card eSB -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-5 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="px-2.5 py-1 rounded bg-surface-container text-primary text-label-sm font-label-sm font-bold tracking-wider uppercase">eSB</span>
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm text-tertiary-container font-bold">
+<span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+                Atenção
+              </span>
+</div>
+<h4 class="text-headline-sm font-headline-sm font-bold text-on-surface mt-2.5">Saúde Bucal</h4>
+<div class="flex items-center gap-2 mt-1 text-body-sm font-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-body-md" data-icon="dentistry">dentistry</span>
+<span>4 equipes ativas no município</span>
+</div>
+<div class="mt-4">
+<div class="flex justify-between items-baseline mb-1">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Meta Atingida</span>
+<span class="text-headline-sm font-headline-sm font-bold text-tertiary-container">79%</span>
+</div>
+<div class="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-container rounded-full" style="width: 79%;"></div>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-3 border-t border-surface-container text-label-sm font-label-sm text-on-surface-variant flex justify-between">
+<span>Escovação supervisionada: <strong>72%</strong></span>
+<span>Meta ISF: <strong>80%</strong></span>
+</div>
+</div>
+<!-- Card eMULTI -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg p-5 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="px-2.5 py-1 rounded bg-surface-container text-primary text-label-sm font-label-sm font-bold tracking-wider uppercase">eMULTI</span>
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm text-secondary font-bold">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                Ótimo
+              </span>
+</div>
+<h4 class="text-headline-sm font-headline-sm font-bold text-on-surface mt-2.5">Equipe Multiprofissional</h4>
+<div class="flex items-center gap-2 mt-1 text-body-sm font-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-body-md" data-icon="diversity_1">diversity_1</span>
+<span>2 equipes ativas no município</span>
+</div>
+<div class="mt-4">
+<div class="flex justify-between items-baseline mb-1">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Meta Atingida</span>
+<span class="text-headline-sm font-headline-sm font-bold text-secondary">91%</span>
+</div>
+<div class="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 91%;"></div>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-3 border-t border-surface-container text-label-sm font-label-sm text-on-surface-variant flex justify-between">
+<span>Ações Intersetoriais: <strong>38</strong></span>
+<span>Meta ISF: <strong>85%</strong></span>
+</div>
+</div>
+</div>
+</section>
+<!-- Resumo Rápido de Ações Recomendadas da Gestão -->
+<section class="bg-surface-container-low border border-outline-variant/40 rounded-lg p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex items-start gap-3">
+<div class="p-2 rounded-lg bg-primary-container text-on-primary-container mt-0.5">
+<span class="material-symbols-outlined" data-icon="assignment_late">assignment_late</span>
+</div>
+<div>
+<h4 class="text-label-lg font-label-lg font-bold text-on-surface">Próximos passos para homologação quadrimestral</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Verifique a sincronização de 48 fichas com inconsistência de CPF/CNS antes do fechamento do SISAB em 20 dias.</p>
+</div>
+</div>
+<button class="whitespace-nowrap px-4 py-2 bg-surface-container-lowest border border-primary text-primary hover:bg-surface-variant font-label-md text-label-md rounded-lg transition-colors">
+        Exportar Relatório SISAB
+      </button>
+</section>
+</main>
+<!-- BottomNavBar via JSON Specification (Mobile) -->
+<!-- Conforme especificação: Labels: ['Início', 'Cadastros', 'Atendimentos', 'Indicadores', 'Mais'], 'Início' ativo -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-2 bg-surface dark:bg-inverse-surface shadow-md">
+<!-- Início (Ativo) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary-fixed dark:text-on-primary-fixed rounded-full px-3 py-1 font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>Início</span>
+</a>
+<!-- Cadastros -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm hover:text-on-surface" href="#">
+<span class="material-symbols-outlined" data-icon="how_to_reg">how_to_reg</span>
+<span>Cadastros</span>
+</a>
+<!-- Atendimentos -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm hover:text-on-surface" href="#">
+<span class="material-symbols-outlined" data-icon="clinical_notes">clinical_notes</span>
+<span>Atendimentos</span>
+</a>
+<!-- Indicadores -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm hover:text-on-surface" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Indicadores</span>
+</a>
+<!-- Mais -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm hover:text-on-surface" href="#">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span>Mais</span>
+</a>
+</nav>
+<!-- Script de Micro-interação para botão Sincronizar -->
+<script>
+    function triggerSync() {
+      const icon = document.getElementById('sync-icon');
+      const btn = document.getElementById('sync-button');
+      if (icon) {
+        icon.classList.add('sync-spinning');
+        btn.setAttribute('disabled', 'true');
+        btn.classList.add('opacity-75');
+        setTimeout(() => {
+          icon.classList.remove('sync-spinning');
+          btn.removeAttribute('disabled');
+          btn.classList.remove('opacity-75');
+        }, 1200);
+      }
+    }
+  </script>
+</body></html>

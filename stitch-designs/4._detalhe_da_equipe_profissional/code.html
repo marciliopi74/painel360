@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Visão da Equipe &amp; Profissional - SUS Brasil 360</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#dcf1fb",
+            "error": "#ba1a1a",
+            "primary": "#00626a",
+            "surface-variant": "#d0e6ef",
+            "on-surface": "#091e25",
+            "primary-fixed-dim": "#7cd4df",
+            "on-secondary-fixed": "#00210e",
+            "background": "#f2fbff",
+            "on-tertiary-fixed": "#2f1400",
+            "primary-container": "#0e7c86",
+            "on-secondary": "#ffffff",
+            "outline": "#6e797a",
+            "tertiary": "#85480c",
+            "on-primary": "#ffffff",
+            "secondary-container": "#75fca7",
+            "on-primary-container": "#ddfbff",
+            "on-background": "#091e25",
+            "inverse-on-surface": "#def4fe",
+            "secondary-fixed": "#75fca7",
+            "primary-fixed": "#98f0fb",
+            "secondary-fixed-dim": "#57df8d",
+            "tertiary-container": "#a35f24",
+            "on-tertiary-fixed-variant": "#6f3800",
+            "on-error-container": "#93000a",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#3e494a",
+            "surface-container-low": "#e4f7ff",
+            "surface-container-highest": "#d0e6ef",
+            "on-primary-fixed": "#001f23",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#ffb780",
+            "surface-container-high": "#d6ecf5",
+            "surface-bright": "#f2fbff",
+            "on-primary-fixed-variant": "#004f56",
+            "surface-tint": "#006972",
+            "on-secondary-container": "#00743f",
+            "on-secondary-fixed-variant": "#00522b",
+            "secondary": "#006d3b",
+            "inverse-surface": "#1f333a",
+            "outline-variant": "#bdc9ca",
+            "surface": "#f2fbff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#ffdcc4",
+            "inverse-primary": "#7cd4df",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#fff2eb",
+            "surface-dim": "#c8dee7"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "0.75rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #bdc9ca;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<!-- TOP APP BAR (Shared Components JSON Anchor) -->
+<header class="flex justify-between items-center w-full px-4 h-16 sticky top-0 z-40 bg-surface shadow-sm">
+<div class="flex items-center gap-3">
+<button aria-label="Voltar para lista" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container text-primary transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]">local_hospital</span>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm text-primary font-bold tracking-tight">SUS Brasil 360</span>
+<span class="text-label-md font-label-md text-on-surface-variant leading-none hidden sm:inline-block">Visão da Equipe &amp; Profissional</span>
+</div>
+</div>
+</div>
+<!-- Right utility actions -->
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-primary text-label-sm font-label-sm hidden md:inline-flex">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+        Sincronizado e-SUS
+      </span>
+<button aria-label="Sincronizar dados" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container text-primary transition-colors duration-150 active:scale-95" title="Sincronizar com e-SUS APS" type="button">
+<span class="material-symbols-outlined">sync</span>
+</button>
+</div>
+</header>
+<!-- MAIN VIEWPORT CONTAINER -->
+<div class="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 md:pb-12 space-y-6">
+<!-- SELECTOR DE EQUIPE / PROFISSIONAL & CABEÇALHO CONTEXTUAL -->
+<section class="bg-surface-container-lowest rounded-xl p-4 sm:p-6 shadow-sm border border-outline-variant/30 flex flex-col md:flex-row md:items-center justify-between gap-5">
+<div class="space-y-2 flex-1">
+<div class="flex flex-wrap items-center gap-2">
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-on-surface-variant">Detalhamento Unificado</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container text-primary font-medium">
+<span class="material-symbols-outlined text-[14px]">verified</span> Ativa no CNES
+          </span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center gap-3">
+<div class="relative inline-block w-full sm:w-auto">
+<select aria-label="Selecione a equipe ou profissional" class="w-full sm:w-80 appearance-none bg-surface-container-low hover:bg-surface-container border border-outline-variant/50 rounded-lg py-2 pl-3 pr-10 text-headline-sm font-headline-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors cursor-pointer font-semibold">
+<option selected="" value="esf04">ESF 04 - Centro Saúde Viva</option>
+<option value="dra_juliana">Dra. Juliana Prado - Enfª</option>
+<option value="dr_ana">Dra. Ana Silveira - Médica MFC</option>
+<option value="esf02">ESF 02 - Jardim Esperança</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-primary">expand_more</span>
+</div>
+<div class="hidden sm:block h-6 w-px bg-outline-variant/40"></div>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-3 text-body-sm font-body-sm text-on-surface-variant">
+<span><strong>CNES:</strong> 2049102</span>
+<span>•</span>
+<span><strong>INE:</strong> 00014892</span>
+<span>•</span>
+<span>UBS Dr. Arnaldo</span>
+<span>•</span>
+<span class="inline-flex items-center gap-1 text-primary font-medium">
+<span class="material-symbols-outlined text-[16px]">group</span> 6 profissionais vinculados
+            </span>
+</div>
+</div>
+</div>
+<!-- Quick Action Buttons -->
+<div class="flex items-center gap-2 self-start md:self-center shrink-0">
+<button class="inline-flex items-center gap-1.5 px-3 py-2 text-label-lg font-label-lg rounded-lg border border-primary-container text-primary hover:bg-surface-container-low transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[18px]">print</span>
+<span class="hidden sm:inline">Exportar Relatório</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 text-label-lg font-label-lg rounded-lg bg-primary-container text-on-primary font-medium shadow-sm hover:bg-primary transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[18px]">add_task</span>
+<span>Nova Ação / Visita</span>
+</button>
+</div>
+</section>
+<!-- BENTO GRID: RESUMO PREVINE BRASIL & METAS GERAIS -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-5">
+<!-- Card Destaque: Score Geral Previne Brasil (4 cols desktop) -->
+<div class="md:col-span-4 bg-surface-container-lowest rounded-xl p-5 sm:p-6 border border-outline-variant/30 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-md font-label-md font-semibold text-on-surface-variant uppercase tracking-wider">Score Geral da Equipe</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-fixed/30 text-on-secondary-fixed font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Bom (Faixa 2)
+            </span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="text-[44px] leading-tight font-extrabold text-primary">86</span>
+<span class="text-headline-sm font-headline-sm text-on-surface-variant">/ 100</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+            Desempenho consolidado no 1º Quadrimestre (Q1). Meta de repasse integral atingida para a competência atual.
+          </p>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant/20">
+<div class="flex justify-between items-center text-label-sm font-label-sm mb-1.5">
+<span class="text-on-surface-variant">Progresso global da meta contratual</span>
+<span class="font-bold text-primary">86%</span>
+</div>
+<!-- Previne Brasil Progress Bar -->
+<div class="w-full h-3 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full transition-all duration-500" style="width: 86%;"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] text-on-surface-variant mt-1">
+<span>Meta Mínima: 70%</span>
+<span>Meta Excelência: 90%</span>
+</div>
+</div>
+</div>
+<!-- Card Produção & Atendimentos do Mês (4 cols desktop) -->
+<div class="md:col-span-4 bg-surface-container-lowest rounded-xl p-5 sm:p-6 border border-outline-variant/30 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-label-md font-label-md font-semibold text-on-surface-variant uppercase tracking-wider">Produção do Mês</span>
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm text-secondary font-semibold bg-secondary-fixed/20 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +12%
+            </span>
+</div>
+<div class="flex items-baseline gap-2 mb-1">
+<span class="text-[36px] font-bold text-on-surface">680</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">consultas &amp; procedimentos</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+            Volume superior ao mês anterior (+72 atendimentos).
+          </p>
+<!-- Discriminação por especialidade -->
+<div class="mt-4 space-y-2.5">
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-1">
+<span class="flex items-center gap-1.5 text-on-surface"><span class="w-2 h-2 rounded-full bg-primary"></span> Médico (Dra. Ana)</span>
+<span class="font-semibold text-on-surface">340 (50%)</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 50%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-1">
+<span class="flex items-center gap-1.5 text-on-surface"><span class="w-2 h-2 rounded-full bg-primary-fixed-dim"></span> Enfermagem (Enf. Juliana)</span>
+<span class="font-semibold text-on-surface">260 (38%)</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary-fixed-dim rounded-full" style="width: 38%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-1">
+<span class="flex items-center gap-1.5 text-on-surface"><span class="w-2 h-2 rounded-full bg-tertiary-container"></span> Odontologia (Dr. Paulo)</span>
+<span class="font-semibold text-on-surface">80 (12%)</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-container rounded-full" style="width: 12%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/20 flex items-center justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span>Média diária: 34 atendimentos</span>
+<a class="text-primary hover:underline font-semibold flex items-center gap-0.5" href="#">
+            Ver prontuários <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card Território e Cobertura Cadastral (4 cols desktop) -->
+<div class="md:col-span-4 bg-surface-container-lowest rounded-xl p-5 sm:p-6 border border-outline-variant/30 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-label-md font-label-md font-semibold text-on-surface-variant uppercase tracking-wider">Território &amp; Cadastros</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-primary-fixed/40 text-on-primary-fixed font-semibold">
+              96% Adscrição
+            </span>
+</div>
+<div class="flex items-baseline gap-2 mb-1">
+<span class="text-[36px] font-bold text-on-surface">3.840</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">cidadãos vinculados</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+            População estimada da microárea: 4.000 pessoas.
+          </p>
+<div class="grid grid-cols-2 gap-3 mt-4">
+<div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Famílias</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary">1.120</span>
+<span class="text-[11px] text-on-surface-variant block mt-0.5">5 microáreas ACS</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Atualizados (&lt; 4m)</span>
+<span class="text-headline-sm font-headline-sm font-bold text-secondary">89%</span>
+<span class="text-[11px] text-on-surface-variant block mt-0.5">Dentro da validade</span>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant/20 flex items-center justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-primary">pin_drop</span>
+            Microáreas 01 a 05
+          </span>
+<a class="text-primary hover:underline font-semibold flex items-center gap-0.5" href="#">
+            Mapa da UBS <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</div>
+</div>
+</section>
+<!-- METAS DE INDICADORES CHAVE DA EQUIPE (PREVINE BRASIL DETALHADO) -->
+<section class="bg-surface-container-lowest rounded-xl p-5 sm:p-6 border border-outline-variant/30 shadow-sm space-y-5">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-outline-variant/20 pb-4">
+<div>
+<h2 class="text-headline-md font-headline-md text-on-surface font-bold">Metas de Indicadores Chave da Equipe</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Monitoramento nominal e percentual para atingimento do Índice Sintético Final (ISF).</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Competência: <strong>2024 / Q1</strong></span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Indicador 01: Pré-natal (6+ consultas) -->
+<div class="p-4 rounded-xl border border-outline-variant/30 bg-surface hover:bg-surface-container-low transition-colors duration-150 flex flex-col justify-between space-y-3">
+<div class="flex items-start justify-between gap-2">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-primary uppercase tracking-wide">IND 01 • Gestantes</span>
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">Pré-natal (6 consultas + exames)</h3>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-fixed/30 text-on-secondary-fixed font-semibold shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Atingida
+            </span>
+</div>
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="text-headline-lg font-headline-lg font-extrabold text-primary">78%</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Meta: 75%</span>
+</div>
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 78%;"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-on-surface-variant mt-2">
+<span>39 de 50 gestantes</span>
+<span class="text-secondary font-medium">+3% acima da meta</span>
+</div>
+</div>
+</div>
+<!-- Indicador 02: Citopatológico (Preventivo) -->
+<div class="p-4 rounded-xl border border-outline-variant/30 bg-surface hover:bg-surface-container-low transition-colors duration-150 flex flex-col justify-between space-y-3">
+<div class="flex items-start justify-between gap-2">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-tertiary uppercase tracking-wide">IND 04 • Saúde da Mulher</span>
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">Cobertura Citopatológico (Preventivo)</h3>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-tertiary-fixed/50 text-on-tertiary-fixed font-semibold shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+              Regular
+            </span>
+</div>
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="text-headline-lg font-headline-lg font-extrabold text-tertiary-container">64%</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Meta: 70%</span>
+</div>
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-container rounded-full" style="width: 64%;"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-on-surface-variant mt-2">
+<span>420 de 656 mulheres (25-64 anos)</span>
+<span class="text-tertiary font-medium">Faltam 39 coletas</span>
+</div>
+</div>
+</div>
+<!-- Indicador 03: Vacinação Poliomielite e Penta -->
+<div class="p-4 rounded-xl border border-outline-variant/30 bg-surface hover:bg-surface-container-low transition-colors duration-150 flex flex-col justify-between space-y-3">
+<div class="flex items-start justify-between gap-2">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-primary uppercase tracking-wide">IND 05 • Imunização Infantil</span>
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">Vacinação Poliomielite e Penta</h3>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-fixed/30 text-on-secondary-fixed font-semibold shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Atingida
+            </span>
+</div>
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="text-headline-lg font-headline-lg font-extrabold text-primary">82%</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Meta: 80%</span>
+</div>
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 82%;"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-on-surface-variant mt-2">
+<span>41 de 50 crianças &lt; 1 ano</span>
+<span class="text-secondary font-medium">Cobertura segura</span>
+</div>
+</div>
+</div>
+<!-- Indicador 04: Consulta Hipertensos com PA aferida -->
+<div class="p-4 rounded-xl border border-outline-variant/30 bg-surface hover:bg-surface-container-low transition-colors duration-150 flex flex-col justify-between space-y-3">
+<div class="flex items-start justify-between gap-2">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-primary uppercase tracking-wide">IND 06 • Doenças Crônicas</span>
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">Consulta Hipertensos c/ PA Aferida</h3>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-fixed/30 text-on-secondary-fixed font-semibold shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Atingida
+            </span>
+</div>
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="text-headline-lg font-headline-lg font-extrabold text-secondary">71%</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Meta: 60%</span>
+</div>
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 71%;"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-on-surface-variant mt-2">
+<span>298 de 420 cadastrados</span>
+<span class="text-secondary font-medium">+11% sobre o pacto</span>
+</div>
+</div>
+</div>
+<!-- Indicador 05: Consulta Diabéticos com Hemoglobina -->
+<div class="p-4 rounded-xl border border-outline-variant/30 bg-surface hover:bg-surface-container-low transition-colors duration-150 flex flex-col justify-between space-y-3">
+<div class="flex items-start justify-between gap-2">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-tertiary uppercase tracking-wide">IND 07 • Doenças Crônicas</span>
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">Consulta Diabéticos c/ Hemoglobina</h3>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-tertiary-fixed/50 text-on-tertiary-fixed font-semibold shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+              Quase lá
+            </span>
+</div>
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="text-headline-lg font-headline-lg font-extrabold text-tertiary-container">58%</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Meta: 60%</span>
+</div>
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-container rounded-full" style="width: 58%;"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-on-surface-variant mt-2">
+<span>92 de 158 cadastrados</span>
+<span class="text-tertiary font-medium">Faltam 4 solicitações</span>
+</div>
+</div>
+</div>
+<!-- Card Resumo de Ação Imediata -->
+<div class="p-4 rounded-xl border border-dashed border-primary/40 bg-surface-container-low flex flex-col justify-between space-y-3">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-primary uppercase tracking-wide">Busca Ativa Recomendada</span>
+<h3 class="text-headline-sm font-headline-sm font-bold text-on-surface mt-1">43 cidadãos elegíveis pendentes</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">
+              Atingindo os 4 diabéticos e convocando 12 mulheres para o preventivo, a equipe alcança o Score Máximo de 94 pontos.
+            </p>
+</div>
+<button class="w-full py-2.5 px-3 rounded-lg bg-primary text-on-primary text-label-md font-label-md font-semibold hover:bg-primary-container transition-colors flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">list_alt</span>
+            Gerar Lista Nominal de Busca
+          </button>
+</div>
+</div>
+</section>
+<!-- MEMBROS DA EQUIPE & STATUS INDIVIDUAL -->
+<section class="bg-surface-container-lowest rounded-xl p-5 sm:p-6 border border-outline-variant/30 shadow-sm space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-outline-variant/20 pb-3">
+<div>
+<h2 class="text-headline-md font-headline-md text-on-surface font-bold">Profissionais da Equipe ESF 04</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Desempenho individual, vínculo ativo e microáreas atribuídas.</p>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">6 Membros Ativos</span>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse min-w-[700px]">
+<thead>
+<tr class="bg-surface border-b border-outline-variant/30 text-on-surface-variant text-label-sm font-label-sm uppercase">
+<th class="py-3 px-4">Profissional</th>
+<th class="py-3 px-3">Cargo / Especialidade</th>
+<th class="py-3 px-3">Microárea / Função</th>
+<th class="py-3 px-3">Produção (Mês)</th>
+<th class="py-3 px-3">Status e-SUS</th>
+<th class="py-3 px-4 text-right">Ação</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20 text-body-sm font-body-sm">
+<!-- Membro 1: Dra. Ana -->
+<tr class="hover:bg-surface-container-low transition-colors duration-100">
+<td class="py-3.5 px-4 font-semibold text-on-surface flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-label-md">
+                  AS
+                </div>
+<div>
+<div class="font-bold text-on-surface">Dra. Ana Silveira</div>
+<div class="text-[11px] text-on-surface-variant">CRM/SP 192834 • CNS 70291823</div>
+</div>
+</td>
+<td class="py-3.5 px-3 text-on-surface">Médica de Família e Comunidade</td>
+<td class="py-3.5 px-3 text-on-surface-variant">Atendimento Geral ESF</td>
+<td class="py-3.5 px-3 font-semibold text-on-surface">340 consultas</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-fixed/30 text-on-secondary-fixed font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Regular / Sincronizado
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="text-primary hover:text-primary-container font-semibold text-label-md font-label-md" type="button">
+                  Ver Perfil
+                </button>
+</td>
+</tr>
+<!-- Membro 2: Enfª Juliana -->
+<tr class="hover:bg-surface-container-low transition-colors duration-100 bg-surface-container-low/40">
+<td class="py-3.5 px-4 font-semibold text-on-surface flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-label-md">
+                  JP
+                </div>
+<div>
+<div class="font-bold text-on-surface">Enf. Juliana Prado</div>
+<div class="text-[11px] text-on-surface-variant">COREN/SP 482910 • CNS 89102938</div>
+</div>
+</td>
+<td class="py-3.5 px-3 text-on-surface">Enfermeira da Família</td>
+<td class="py-3.5 px-3 text-on-surface-variant">Coordenação Clínica &amp; Pré-natal</td>
+<td class="py-3.5 px-3 font-semibold text-on-surface">260 consultas</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-fixed/30 text-on-secondary-fixed font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Regular / Sincronizado
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="text-primary hover:text-primary-container font-semibold text-label-md font-label-md" type="button">
+                  Ver Perfil
+                </button>
+</td>
+</tr>
+<!-- Membro 3: ACS Marcos -->
+<tr class="hover:bg-surface-container-low transition-colors duration-100">
+<td class="py-3.5 px-4 font-semibold text-on-surface flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-bold text-label-md">
+                  MS
+                </div>
+<div>
+<div class="font-bold text-on-surface">Marcos Souza</div>
+<div class="text-[11px] text-on-surface-variant">Agente Comunitário • CNS 90281726</div>
+</div>
+</td>
+<td class="py-3.5 px-3 text-on-surface">Agente Comunitário de Saúde</td>
+<td class="py-3.5 px-3 text-on-surface-variant">Microárea 01 (720 hab)</td>
+<td class="py-3.5 px-3 font-semibold text-on-surface">194 visitas domiciliares</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-fixed/30 text-on-secondary-fixed font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> 100% Atualizado
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="text-primary hover:text-primary-container font-semibold text-label-md font-label-md" type="button">
+                  Ver Perfil
+                </button>
+</td>
+</tr>
+<!-- Membro 4: ACS Carla -->
+<tr class="hover:bg-surface-container-low transition-colors duration-100">
+<td class="py-3.5 px-4 font-semibold text-on-surface flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-bold text-label-md">
+                  CL
+                </div>
+<div>
+<div class="font-bold text-on-surface">Carla Lima</div>
+<div class="text-[11px] text-on-surface-variant">Agente Comunitário • CNS 78201948</div>
+</div>
+</td>
+<td class="py-3.5 px-3 text-on-surface">Agente Comunitário de Saúde</td>
+<td class="py-3.5 px-3 text-on-surface-variant">Microárea 02 (810 hab)</td>
+<td class="py-3.5 px-3 font-semibold text-on-surface">210 visitas domiciliares</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-tertiary-fixed/50 text-on-tertiary-fixed font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span> 82% Atualizado
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="text-primary hover:text-primary-container font-semibold text-label-md font-label-md" type="button">
+                  Ver Perfil
+                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- BOTTOM NAV BAR (Shared Components JSON Anchor & Execution) -->
+<!-- Responsive Rule: md:hidden for mobile touch ergonomics, using tokens directly from JSON -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-2 bg-surface shadow-md md:hidden">
+<!-- Item 1: Início -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Início</span>
+</a>
+<!-- Item 2: Cadastros -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">how_to_reg</span>
+<span>Cadastros</span>
+</a>
+<!-- Item 3: Atendimentos -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">clinical_notes</span>
+<span>Atendimentos</span>
+</a>
+<!-- Item 4: Indicadores (ACTIVE STATE - Exactly matched to the focus of team Previne indicators) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span>Indicadores</span>
+</a>
+<!-- Item 5: Mais -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+<span>Mais</span>
+</a>
+</nav>
+</body></html>

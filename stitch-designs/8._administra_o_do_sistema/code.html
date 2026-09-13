@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SUS Brasil 360 - Administração &amp; Servidor Local</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#dcf1fb",
+            "error": "#ba1a1a",
+            "primary": "#00626a",
+            "surface-variant": "#d0e6ef",
+            "on-surface": "#091e25",
+            "primary-fixed-dim": "#7cd4df",
+            "on-secondary-fixed": "#00210e",
+            "background": "#f2fbff",
+            "on-tertiary-fixed": "#2f1400",
+            "primary-container": "#0e7c86",
+            "on-secondary": "#ffffff",
+            "outline": "#6e797a",
+            "tertiary": "#85480c",
+            "on-primary": "#ffffff",
+            "secondary-container": "#75fca7",
+            "on-primary-container": "#ddfbff",
+            "on-background": "#091e25",
+            "inverse-on-surface": "#def4fe",
+            "secondary-fixed": "#75fca7",
+            "primary-fixed": "#98f0fb",
+            "secondary-fixed-dim": "#57df8d",
+            "tertiary-container": "#a35f24",
+            "on-tertiary-fixed-variant": "#6f3800",
+            "on-error-container": "#93000a",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#3e494a",
+            "surface-container-low": "#e4f7ff",
+            "surface-container-highest": "#d0e6ef",
+            "on-primary-fixed": "#001f23",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#ffb780",
+            "surface-container-high": "#d6ecf5",
+            "surface-bright": "#f2fbff",
+            "on-primary-fixed-variant": "#004f56",
+            "surface-tint": "#006972",
+            "on-secondary-container": "#00743f",
+            "on-secondary-fixed-variant": "#00522b",
+            "secondary": "#006d3b",
+            "inverse-surface": "#1f333a",
+            "outline-variant": "#bdc9ca",
+            "surface": "#f2fbff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#ffdcc4",
+            "inverse-primary": "#7cd4df",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#fff2eb",
+            "surface-dim": "#c8dee7"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "0.75rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen pb-20 md:pb-6 flex flex-col">
+<!-- TopAppBar conforme Shared Components JSON -->
+<header class="flex justify-between items-center w-full px-4 h-16 sticky top-0 z-40 bg-surface shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="local_hospital">local_hospital</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-headline-sm font-headline-sm text-primary font-bold">SUS Brasil 360</span>
+<span class="hidden sm:inline-block text-outline-variant">•</span>
+<span class="text-label-md font-label-md text-on-surface font-semibold hidden sm:inline-block">Administração &amp; Servidor Local</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-primary text-label-sm font-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+            Perfil: Gestor Local / Admin
+          </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<!-- Trailing Icon / Sync Info -->
+<button class="p-2 rounded-lg text-primary hover:bg-surface-container transition-colors duration-150 active:scale-95 flex items-center gap-1.5" title="Sincronizar manual" type="button">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+<span class="text-label-md font-label-md font-medium hidden md:inline">Sincronismo</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container font-label-md flex items-center justify-center font-bold">
+        AD
+      </div>
+</div>
+</header>
+<!-- Container Geral -->
+<main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+<!-- Subheader com breadcrumb e status operacional -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-surface-container-high pb-4">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Administração &amp; Servidor Local</h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Controle operacional e-SUS APS municipal, integridade de dados locais e acessos governamentais.</p>
+</div>
+<div class="flex items-center gap-2 self-start md:self-auto">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm">
+<span class="w-2 h-2 rounded-full bg-[#2FBF71] animate-pulse"></span>
+          Daemon e-SUS Ativo
+        </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container text-on-surface text-label-sm font-label-sm border border-outline-variant/30">
+<span class="material-symbols-outlined text-[16px]" data-icon="dns">dns</span>
+          Servidor Municipal #01
+        </span>
+</div>
+</div>
+<!-- Bento Grid Top: Card de Status do Servidor Local & Banco e-SUS -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Card Primário de Status e Banco -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl border border-surface-container-high p-5 shadow-sm space-y-4">
+<div class="flex flex-wrap items-center justify-between gap-2 border-b border-surface-container-high pb-3">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-on-surface">Status do Servidor Local e Banco e-SUS</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Conexão On-Premise direta com PostgreSQL</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm font-semibold">
+<span class="w-2 h-2 rounded-full bg-[#2FBF71]"></span>
+            Banco e-SUS Conectado (127.0.0.1:5432 / esus_ab)
+          </span>
+</div>
+<!-- Telemetria Rápida em Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+<div class="p-3 rounded-lg bg-surface-container-low border border-surface-container-high/60">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Latência da Leitura</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="text-headline-sm font-headline-sm font-bold text-secondary">12ms</span>
+<span class="text-label-sm font-label-sm text-[#1E824C]">Excelente</span>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low border border-surface-container-high/60">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Versão do e-SUS APS</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="text-headline-sm font-headline-sm font-bold text-primary">v5.3.18</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Oficial</span>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low border border-surface-container-high/60">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Integridade do Buffer</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface">99.8%</span>
+<span class="text-label-sm font-label-sm text-primary">0 falhas</span>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low border border-surface-container-high/60">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Última Sincronização</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface">Há 14 min</span>
+</div>
+</div>
+</div>
+<!-- Barra de Progresso e Ação de Forçar Sincronização -->
+<div class="bg-surface p-4 rounded-xl border border-surface-container space-y-3">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<span class="text-label-lg font-label-lg text-on-surface block font-semibold">Rotina de Sincronização Automática</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Verificação de fichas CDS, PEC e cadastros individuais a cada 30 minutos.</span>
+</div>
+<!-- Botão de Ação em Destaque -->
+<button class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary-container text-on-primary font-label-lg hover:bg-primary transition-colors duration-150 active:scale-95 shadow-sm whitespace-nowrap" type="button">
+<span class="material-symbols-outlined" data-icon="autorenew">autorenew</span>
+              Forçar Sincronização Completa
+            </button>
+</div>
+<!-- Progress Bar Previne Brasil Style -->
+<div class="space-y-1.5 pt-1">
+<div class="flex justify-between text-label-sm font-label-sm">
+<span class="text-on-surface-variant">Próxima leitura programada: 16 minutos</span>
+<span class="text-primary font-bold">47% da janela cumprida</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 47%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Card Lateral: Resumo de Saúde do Node Municipal -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-container-high p-5 shadow-sm flex flex-col justify-between space-y-4">
+<div>
+<div class="flex items-center justify-between border-b border-surface-container-high pb-3">
+<h3 class="text-label-lg font-label-lg text-on-surface font-semibold">Parâmetros do Host Local</h3>
+<span class="material-symbols-outlined text-outline" data-icon="memory">memory</span>
+</div>
+<div class="mt-4 space-y-3">
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Serviço PostgreSQL:</span>
+<span class="font-medium text-on-surface">Porta 5432 (Ativa)</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Uso de Memória RAM:</span>
+<span class="font-medium text-on-surface">3.4 GB / 16.0 GB</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Espaço em Disco (/pgdata):</span>
+<span class="font-medium text-on-surface">142 GB livres</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-on-surface-variant">Driver JDBC:</span>
+<span class="font-medium text-on-surface">org.postgresql.Driver</span>
+</div>
+</div>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg border border-surface-container flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5" data-icon="verified_user">verified_user</span>
+<div class="text-label-sm font-label-sm text-on-surface">
+<strong>Certificado Local Válido</strong>: Conexão interna cifrada em conformidade com as diretrizes do DATASUS e LGPD.
+          </div>
+</div>
+</div>
+</div>
+<!-- Gerenciamento de Usuários do Painel -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-container-high p-5 shadow-sm space-y-4">
+<!-- Cabeçalho da Seção de Usuários -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<div class="flex items-center gap-2">
+<h2 class="text-headline-sm font-headline-sm text-on-surface">Usuários do Sistema (8 cadastrados)</h2>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-primary text-label-sm font-label-sm font-bold">5 ativos</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Definição de papéis técnicos, níveis de privacidade e permissões municipais.</p>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-on-primary font-label-lg hover:bg-[#0B656D] transition-colors duration-150 active:scale-95 shadow-sm self-start sm:self-auto" type="button">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+          + Novo Usuário
+        </button>
+</div>
+<!-- Filtros Rápidos -->
+<div class="flex flex-wrap items-center gap-2 pt-1 border-b border-surface-container pb-3">
+<button class="px-3 py-1 rounded-full bg-primary-container text-on-primary text-label-sm font-label-sm" type="button">Todos (8)</button>
+<button class="px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant text-label-sm font-label-sm hover:bg-surface-container" type="button">Gestores &amp; Coordenação (3)</button>
+<button class="px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant text-label-sm font-label-sm hover:bg-surface-container" type="button">Equipes de Campo / ACS (3)</button>
+<button class="px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant text-label-sm font-label-sm hover:bg-surface-container" type="button">Suporte / TI (2)</button>
+</div>
+<!-- Tabela / Micro-Lista de Usuários -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface text-on-surface-variant text-label-sm font-label-sm uppercase tracking-wider border-b border-surface-container-high">
+<th class="py-3 px-4 font-semibold">Usuário / Identificação</th>
+<th class="py-3 px-4 font-semibold">Papel Institucional</th>
+<th class="py-3 px-4 font-semibold">Nível de Acesso</th>
+<th class="py-3 px-4 font-semibold">Status</th>
+<th class="py-3 px-4 font-semibold text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high text-body-sm">
+<!-- 1. Dr. Carlos Drumond -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary-container text-on-primary-container font-label-md font-bold flex items-center justify-center">
+                    CD
+                  </div>
+<div>
+<span class="font-semibold text-on-surface block text-body-md">Dr. Carlos Drumond</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">carlos.drumond@saude.gov.br</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 text-on-surface font-medium">
+                Secretário Municipal de Saúde
+              </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-container text-primary font-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[15px]" data-icon="admin_panel_settings">admin_panel_settings</span>
+                  Total
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+                  Ativo
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" title="Opções" type="button">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- 2. Mariana Fagundes -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-high text-primary font-label-md font-bold flex items-center justify-center">
+                    MF
+                  </div>
+<div>
+<span class="font-semibold text-on-surface block text-body-md">Mariana Fagundes</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">mariana.atencao@saude.gov.br</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 text-on-surface font-medium">
+                Coordenadora da Atenção Básica
+              </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-container-low text-on-surface-variant font-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[15px]" data-icon="shield">shield</span>
+                  Municipal (Geral)
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+                  Ativo
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" title="Opções" type="button">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- 3. Marcos Vinicius -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-[#FEF6EE] text-[#B25E16] font-label-md font-bold flex items-center justify-center">
+                    MV
+                  </div>
+<div>
+<span class="font-semibold text-on-surface block text-body-md">Marcos Vinicius</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">marcos.acs@saude.gov.br</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 text-on-surface font-medium">
+                Agente Comunitário (ACS)
+              </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#FEF6EE] text-[#B25E16] font-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[15px]" data-icon="home_pin">home_pin</span>
+                  Somente sua Microárea
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+                  Ativo
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" title="Opções" type="button">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- 4. Dra. Camila Torres -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container text-primary font-label-md font-bold flex items-center justify-center">
+                    CT
+                  </div>
+<div>
+<span class="font-semibold text-on-surface block text-body-md">Dra. Camila Torres</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">camila.odonto@saude.gov.br</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 text-on-surface font-medium">
+                Dentista / Equipe eSB
+              </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-container-low text-on-surface-variant font-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[15px]" data-icon="medical_services">medical_services</span>
+                  UBS Central e Zona Rural
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+                  Ativo
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" title="Opções" type="button">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- 5. José Silveira -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-surface-container-low/20">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-high text-outline font-label-md font-bold flex items-center justify-center">
+                    JS
+                  </div>
+<div>
+<span class="font-semibold text-on-surface-variant block text-body-md">José Silveira</span>
+<span class="text-outline text-label-sm font-label-sm">ti.silveira@saude.gov.br</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 text-on-surface-variant font-medium">
+                Suporte TI Municipal
+              </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-container-high text-outline font-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[15px]" data-icon="settings">settings</span>
+                  Manutenção On-Premise
+                </span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FDF0ED] text-[#B8321D] text-label-sm font-label-sm font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-[#E5533C]"></span>
+                  Inativo
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" title="Opções" type="button">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Card de Histórico das Últimas Sincronizações -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-container-high p-5 shadow-sm space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-surface-container-high pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="history">history</span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface">Histórico das Últimas Sincronizações</h2>
+</div>
+<button class="text-primary text-label-md font-label-md font-semibold hover:underline flex items-center gap-1" type="button">
+          Ver log detalhado completo (syslog)
+          <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="space-y-3">
+<!-- Sincronização 1 -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-lg bg-surface-container-low/60 border border-surface-container hover:bg-surface-container-low transition-colors gap-3">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-[#EAF8F1] text-[#1E824C] flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-semibold text-on-surface text-body-md">Sincronização 1</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">• 15/05/2025 às 14:32</span>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant flex items-center gap-3 mt-0.5">
+<span>Duração: <strong>1m 12s</strong></span>
+<span>•</span>
+<span class="text-primary font-medium">18.420 fichas lidas</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 self-end sm:self-center">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+              Status: Sucesso
+            </span>
+<button class="p-1 rounded text-outline hover:text-on-surface" title="Visualizar resumo" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="receipt_long">receipt_long</span>
+</button>
+</div>
+</div>
+<!-- Sincronização 2 -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-lg bg-surface-container-low/60 border border-surface-container hover:bg-surface-container-low transition-colors gap-3">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-[#EAF8F1] text-[#1E824C] flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-semibold text-on-surface text-body-md">Sincronização 2</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">• 15/05/2025 às 10:00</span>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant flex items-center gap-3 mt-0.5">
+<span>Duração: <strong>1m 08s</strong></span>
+<span>•</span>
+<span class="text-on-surface-variant">4.120 novas entradas</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 self-end sm:self-center">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+              Status: Sucesso
+            </span>
+<button class="p-1 rounded text-outline hover:text-on-surface" title="Visualizar resumo" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="receipt_long">receipt_long</span>
+</button>
+</div>
+</div>
+<!-- Sincronização 3 -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-lg bg-surface-container-low/60 border border-surface-container hover:bg-surface-container-low transition-colors gap-3">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-[#EAF8F1] text-[#1E824C] flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-semibold text-on-surface text-body-md">Sincronização 3</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">• 14/05/2025 às 22:00</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary text-label-sm font-label-sm">Rotina Noturna</span>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant flex items-center gap-3 mt-0.5">
+<span>Duração: <strong>4m 30s</strong></span>
+<span>•</span>
+<span class="text-on-surface-variant">Reindexação e Varredura Total</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 self-end sm:self-center">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+              Status: Sucesso
+            </span>
+<button class="p-1 rounded text-outline hover:text-on-surface" title="Visualizar resumo" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="receipt_long">receipt_long</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar conforme Shared Components JSON com aba "Mais" ativa -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-2 bg-surface shadow-md">
+<!-- Item 1: Início (Inativo) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:bg-surface-container-low transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Início</span>
+</a>
+<!-- Item 2: Cadastros (Inativo) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:bg-surface-container-low transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="how_to_reg">how_to_reg</span>
+<span>Cadastros</span>
+</a>
+<!-- Item 3: Atendimentos (Inativo) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:bg-surface-container-low transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="clinical_notes">clinical_notes</span>
+<span>Atendimentos</span>
+</a>
+<!-- Item 4: Indicadores (Inativo) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm hover:bg-surface-container-low transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Indicadores</span>
+</a>
+<!-- Item 5: Mais (Admin - ATIVO conforme Contextual State & JSON) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span>Mais</span>
+</a>
+</nav>
+</body></html>

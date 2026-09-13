@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SUS Brasil 360 - Central de Relatórios e Exportação</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#dcf1fb",
+            "error": "#ba1a1a",
+            "primary": "#00626a",
+            "surface-variant": "#d0e6ef",
+            "on-surface": "#091e25",
+            "primary-fixed-dim": "#7cd4df",
+            "on-secondary-fixed": "#00210e",
+            "background": "#f2fbff",
+            "on-tertiary-fixed": "#2f1400",
+            "primary-container": "#0e7c86",
+            "on-secondary": "#ffffff",
+            "outline": "#6e797a",
+            "tertiary": "#85480c",
+            "on-primary": "#ffffff",
+            "secondary-container": "#75fca7",
+            "on-primary-container": "#ddfbff",
+            "on-background": "#091e25",
+            "inverse-on-surface": "#def4fe",
+            "secondary-fixed": "#75fca7",
+            "primary-fixed": "#98f0fb",
+            "secondary-fixed-dim": "#57df8d",
+            "tertiary-container": "#a35f24",
+            "on-tertiary-fixed-variant": "#6f3800",
+            "on-error-container": "#93000a",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#3e494a",
+            "surface-container-low": "#e4f7ff",
+            "surface-container-highest": "#d0e6ef",
+            "on-primary-fixed": "#001f23",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#ffb780",
+            "surface-container-high": "#d6ecf5",
+            "surface-bright": "#f2fbff",
+            "on-primary-fixed-variant": "#004f56",
+            "surface-tint": "#006972",
+            "on-secondary-container": "#00743f",
+            "on-secondary-fixed-variant": "#00522b",
+            "secondary": "#006d3b",
+            "inverse-surface": "#1f333a",
+            "outline-variant": "#bdc9ca",
+            "surface": "#f2fbff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#ffdcc4",
+            "inverse-primary": "#7cd4df",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#fff2eb",
+            "surface-dim": "#c8dee7"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "0.75rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col antialiased selection:bg-primary-fixed selection:text-on-primary-fixed pb-24 md:pb-10">
+<!-- TopAppBar Component (from JSON specification) -->
+<header class="flex justify-between items-center w-full px-4 h-16 sticky top-0 z-40 bg-surface dark:bg-inverse-surface shadow-sm dark:shadow-none">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center w-10 h-10 rounded-lg bg-surface-container text-primary">
+<span class="material-symbols-outlined" data-icon="local_hospital">local_hospital</span>
+</div>
+<div>
+<span class="text-headline-sm font-headline-sm text-primary dark:text-inverse-primary font-bold tracking-tight block leading-tight">SUS Brasil 360</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Gestão Municipal &amp; Auditoria</span>
+</div>
+</div>
+<!-- Desktop Navigation Anchors -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Início</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Cadastros</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Atendimentos</a>
+<a class="text-label-md font-label-md text-primary font-bold border-b-2 border-primary py-4" href="#">Relatórios &amp; Documentos</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Indicadores</a>
+</nav>
+<!-- Header Actions -->
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-2 px-3 py-2 text-label-md font-label-md text-primary hover:bg-surface-container rounded-lg transition-colors duration-150 active:scale-95" title="Sincronizar base SISAB / e-SUS">
+<span class="material-symbols-outlined text-[20px]" data-icon="sync">sync</span>
+<span class="hidden sm:inline">Sincronizar</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors duration-150" title="Filtragem Rápida">
+<span class="material-symbols-outlined text-[20px]" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas Container -->
+<main class="w-full max-w-[1440px] mx-auto px-4 md:px-8 py-6 space-y-6">
+<!-- Page Context Title & Subtitle -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-outline-variant/30">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface tracking-tight">Central de Relatórios e Exportação</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1">Emissão, agendamento e download de relatórios operacionais para gestores municipais e fiscais do SUS.</p>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-label-sm font-label-sm bg-surface-container text-primary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+          Conexão e-SUS PEC: Ativa
+        </span>
+</div>
+</div>
+<!-- Filters Section: Bento style filter deck -->
+<section class="bg-surface-container-lowest border border-[#EDF2F7] rounded-xl p-4 md:p-6 shadow-sm">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+<!-- Period Selector -->
+<div class="lg:col-span-4 space-y-1.5">
+<label class="block text-label-md font-label-md text-on-surface-variant" for="period-select">Período de Referência</label>
+<div class="relative">
+<select class="w-full h-11 pl-3 pr-10 bg-surface-container-lowest border border-[#EDF2F7] rounded-lg text-body-md font-body-md text-on-surface focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all appearance-none cursor-pointer" id="period-select">
+<option value="q1">Quadrimestre Q1 2025 (Jan - Abr)</option>
+<option selected="" value="30d">Últimos 30 dias</option>
+<option value="custom">Personalizado (Intervalo de Datas)</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Filter Chips: Report Category -->
+<div class="lg:col-span-8 space-y-1.5">
+<label class="block text-label-md font-label-md text-on-surface-variant">Categoria do Relatório</label>
+<div class="flex flex-wrap items-center gap-2">
+<button class="px-3 py-2 rounded-full text-label-md font-label-md bg-primary-container text-on-primary-container shadow-sm transition-all duration-150 active:scale-95 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+              Todos
+            </button>
+<button class="px-3.5 py-2 rounded-full text-label-md font-label-md bg-surface-container-low text-on-surface hover:bg-surface-container border border-[#EDF2F7] transition-all duration-150 active:scale-95">
+              Produção Ambulatorial
+            </button>
+<button class="px-3.5 py-2 rounded-full text-label-md font-label-md bg-surface-container-low text-on-surface hover:bg-surface-container border border-[#EDF2F7] transition-all duration-150 active:scale-95">
+              Consistência e-SUS
+            </button>
+<button class="px-3.5 py-2 rounded-full text-label-md font-label-md bg-surface-container-low text-on-surface hover:bg-surface-container border border-[#EDF2F7] transition-all duration-150 active:scale-95">
+              SISAB / Financiamento
+            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid Showcase: Featured Quick Generation Action & Telemetry Snapshot -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Featured Card: Quick Export SISAB / Previne Brasil -->
+<section class="lg:col-span-8 bg-gradient-to-br from-primary-container to-primary text-on-primary rounded-xl p-6 shadow-md relative overflow-hidden flex flex-col justify-between">
+<div class="relative z-10 space-y-3">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-on-primary/15 text-white backdrop-blur-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="verified">verified</span>
+              Homologação Oficial SISAB
+            </span>
+<span class="text-label-sm font-label-sm text-on-primary-container/80">Fechamento da Competência</span>
+</div>
+<h2 class="text-headline-md font-headline-md text-white tracking-tight">Exportar Lote SISAB / Previne Brasil</h2>
+<p class="text-body-md font-body-md text-on-primary-container max-w-2xl">
+            Gere o pacote consolidado de auditoria com fichas nominais, consistências de CPF/CNS e espelho de cálculo do ISF (Indicador Sintético Final) para fins de prestação de contas.
+          </p>
+</div>
+<div class="relative z-10 pt-6 flex flex-wrap items-center gap-3">
+<button class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-surface-container-lowest text-primary text-label-lg font-label-lg hover:bg-surface-container-low shadow-sm transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined text-[20px]" data-icon="description">description</span>
+            Gerar Relatório Oficial (PDF / XLSX)
+          </button>
+<button class="inline-flex items-center gap-1.5 px-4 py-3 rounded-lg bg-on-primary/10 hover:bg-on-primary/20 text-white text-label-md font-label-md transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="schedule">schedule</span>
+            Agendar Remessa
+          </button>
+</div>
+<!-- Decorative Watermark Icon -->
+<span class="material-symbols-outlined absolute -right-6 -bottom-6 text-[180px] text-white/5 pointer-events-none select-none" data-icon="analytics">analytics</span>
+</section>
+<!-- Secondary Telemetry / Indicator Mini Card -->
+<section class="lg:col-span-4 bg-surface-container-lowest border border-[#EDF2F7] rounded-xl p-6 shadow-sm flex flex-col justify-between">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Previne Brasil • ISF Meta</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-label-sm font-label-sm bg-[#EAF8F1] text-[#1E824C]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+              Ótimo
+            </span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-[32px] font-bold tracking-tight text-on-surface leading-none">8.42</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">de 10.0 (Nota Geral)</span>
+</div>
+<!-- Progress Bar (Telemetry token) -->
+<div class="space-y-1">
+<div class="w-full h-3 bg-[#EDF2F7] rounded-full overflow-hidden">
+<div class="h-full bg-[#2FBF71] rounded-full" style="width: 84%;"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span>Meta Municipal: 8.0</span>
+<span>84% Atingido</span>
+</div>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-[#EDF2F7] flex items-center justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="info">info</span>
+            4 relatórios vinculados
+          </span>
+<a class="text-primary hover:underline font-semibold" href="#">Ver detalhes</a>
+</div>
+</section>
+</div>
+<!-- Section Header: Recent Generated Reports -->
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]" data-icon="folder_shared">folder_shared</span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface tracking-tight">Relatórios Gerados Recentemente</h2>
+</div>
+<span class="text-label-md font-label-md text-on-surface-variant">Mostrando 4 de 28 emissões</span>
+</div>
+<!-- Clean Data Cards List (High Scannability & Operational Ergonomics) -->
+<div class="space-y-3">
+<!-- Item 1: Relatório Nominal de Gestantes Pendentes - Q1 -->
+<article class="bg-surface-container-lowest border border-[#EDF2F7] rounded-xl p-4 md:p-5 shadow-sm hover:border-primary-container/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="flex items-center justify-center w-11 h-11 rounded-lg bg-surface-container-low text-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]" data-icon="pregnant_woman">pregnant_woman</span>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Relatório Nominal de Gestantes Pendentes - Q1</h3>
+<!-- Micro badge: Pronto -->
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#EAF8F1] text-[#1E824C]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+                Pronto para download
+              </span>
+</div>
+<!-- Metadata line -->
+<div class="flex flex-wrap items-center gap-y-1 gap-x-3 text-body-sm font-body-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="category">category</span>
+                Tipo: Ficha de Busca Ativa
+              </span>
+<span>•</span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="schedule">schedule</span>
+                Gerado: Hoje às 08:30
+              </span>
+<span>•</span>
+<span class="inline-flex items-center gap-1 font-semibold text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-error" data-icon="picture_as_pdf">picture_as_pdf</span>
+                PDF (1.2 MB)
+              </span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-[#EDF2F7] hover:bg-surface-container-low text-on-surface text-label-md font-label-md transition-colors duration-150 active:scale-95" title="Visualizar documento em tela">
+<span class="material-symbols-outlined text-[18px]" data-icon="visibility">visibility</span>
+            Visualizar
+          </button>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-[#0B656D] text-label-md font-label-lg shadow-sm transition-colors duration-150 active:scale-95" title="Baixar arquivo PDF">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+            Baixar
+          </button>
+</div>
+</article>
+<!-- Item 2: Inconsistências Cadastrais e Duplicidades e-SUS -->
+<article class="bg-surface-container-lowest border border-[#EDF2F7] rounded-xl p-4 md:p-5 shadow-sm hover:border-primary-container/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="flex items-center justify-center w-11 h-11 rounded-lg bg-[#FEF6EE] text-[#B25E16] shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]" data-icon="warning">warning</span>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Inconsistências Cadastrais e Duplicidades e-SUS</h3>
+<!-- Chip Atenção/Inconsistência -->
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#FEF6EE] text-[#B25E16]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F4A261]"></span>
+                Atenção: 142 cadastros irregulares
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-3 text-body-sm font-body-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="manage_search">manage_search</span>
+                Tipo: Auditoria de Dados
+              </span>
+<span>•</span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="group">group</span>
+                Destino: Coordenadores de ACS e Equipes ESF
+              </span>
+<span>•</span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="schedule">schedule</span>
+                Gerado: Ontem às 18:00
+              </span>
+<span>•</span>
+<span class="inline-flex items-center gap-1 font-semibold text-secondary">
+<span class="material-symbols-outlined text-[16px]" data-icon="table_view">table_view</span>
+                XLSX (480 KB)
+              </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-[#EDF2F7] hover:bg-surface-container-low text-on-surface text-label-md font-label-md transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="visibility">visibility</span>
+            Visualizar
+          </button>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-[#0B656D] text-label-md font-label-lg shadow-sm transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+            Baixar
+          </button>
+</div>
+</article>
+<!-- Item 3: Boletim Semanal de Produção por Profissional -->
+<article class="bg-surface-container-lowest border border-[#EDF2F7] rounded-xl p-4 md:p-5 shadow-sm hover:border-primary-container/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="flex items-center justify-center w-11 h-11 rounded-lg bg-surface-container-low text-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]" data-icon="badge">badge</span>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Boletim Semanal de Produção por Profissional</h3>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#E8F4F5] text-primary">
+                Consolidado UBS
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-3 text-body-sm font-body-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="clinical_notes">clinical_notes</span>
+                Tipo: Produção Ambulatorial
+              </span>
+<span>•</span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="calendar_today">calendar_today</span>
+                Gerado: 12/05/2025
+              </span>
+<span>•</span>
+<span class="inline-flex items-center gap-1 font-semibold text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-error" data-icon="picture_as_pdf">picture_as_pdf</span>
+                PDF (3.4 MB)
+              </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-[#EDF2F7] hover:bg-surface-container-low text-on-surface text-label-md font-label-md transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="visibility">visibility</span>
+            Visualizar
+          </button>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-[#0B656D] text-label-md font-label-lg shadow-sm transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+            Baixar
+          </button>
+</div>
+</article>
+<!-- Item 4: Espelho Consolidado de Repasse Financeiro - Previne Brasil -->
+<article class="bg-surface-container-lowest border border-[#EDF2F7] rounded-xl p-4 md:p-5 shadow-sm hover:border-primary-container/40 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="flex items-center justify-center w-11 h-11 rounded-lg bg-surface-container-low text-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]" data-icon="payments">payments</span>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Espelho Consolidado de Repasse Financeiro - Previne Brasil</h3>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#EAF8F1] text-[#1E824C]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71]"></span>
+                Auditado FNS
+              </span>
+</div>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-3 text-body-sm font-body-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="account_balance">account_balance</span>
+                Tipo: Financeiro / Fundo Municipal de Saúde
+              </span>
+<span>•</span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="event">event</span>
+                Competência: Maio / 2025
+              </span>
+<span>•</span>
+<span class="inline-flex items-center gap-1 font-semibold text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-error" data-icon="picture_as_pdf">picture_as_pdf</span>
+                PDF (2.1 MB)
+              </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-[#EDF2F7] hover:bg-surface-container-low text-on-surface text-label-md font-label-md transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="visibility">visibility</span>
+            Visualizar
+          </button>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-[#0B656D] text-label-md font-label-lg shadow-sm transition-colors duration-150 active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+            Baixar
+          </button>
+</div>
+</article>
+</div>
+<!-- Bottom Action Ribbon: Novo Relatório Personalizado -->
+<div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 bg-surface-container-low/60 border border-[#EDF2F7] rounded-xl p-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[28px]" data-icon="post_add">post_add</span>
+<div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Precisa de um cruzamento epidemiológico customizado?</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Selecione filtros granulares por microárea de ACS, CID-10, ou tipo de procedimento SIA/SIASUS.</p>
+</div>
+</div>
+<button class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary-container text-on-primary-container text-label-lg font-label-lg hover:bg-primary transition-all duration-150 active:scale-95 shadow-sm shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="add_circle">add_circle</span>
+        Novo Relatório Personalizado
+      </button>
+</div>
+</main>
+<!-- Floating Action Button for Mobile Quick Query -->
+<aside class="md:hidden fixed bottom-20 right-4 z-40">
+<button aria-label="Novo Relatório" class="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-on-primary shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[28px]" data-icon="add">add</span>
+</button>
+</aside>
+<!-- BottomNavBar Component (from JSON specification) -->
+<!-- Contextual Active: 'Relatórios' falls under 'Indicadores' or primary telemetry tracking. Active class applied to 'Indicadores' -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-2 bg-surface dark:bg-inverse-surface shadow-md dark:shadow-none md:hidden">
+<!-- Item 1: Início -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[22px]" data-icon="dashboard">dashboard</span>
+<span>Início</span>
+</a>
+<!-- Item 2: Cadastros -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[22px]" data-icon="how_to_reg">how_to_reg</span>
+<span>Cadastros</span>
+</a>
+<!-- Item 3: Atendimentos -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[22px]" data-icon="clinical_notes">clinical_notes</span>
+<span>Atendimentos</span>
+</a>
+<!-- Item 4: Indicadores (Active State per semantic destination) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary-fixed dark:text-on-primary-fixed rounded-full px-3 py-1 font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[22px]" data-icon="analytics" data-weight="fill" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span>Indicadores</span>
+</a>
+<!-- Item 5: Mais -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined text-[22px]" data-icon="more_horiz">more_horiz</span>
+<span>Mais</span>
+</a>
+</nav>
+<!-- Interactive script for quick chips toggling -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Small interactivity for chip filters
+      const filterButtons = document.querySelectorAll('section button');
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          if (this.parentElement.classList.contains('flex-wrap')) {
+            const siblings = this.parentElement.querySelectorAll('button');
+            siblings.forEach(s => {
+              s.className = 'px-3.5 py-2 rounded-full text-label-md font-label-md bg-surface-container-low text-on-surface hover:bg-surface-container border border-[#EDF2F7] transition-all duration-150 active:scale-95';
+              const icon = s.querySelector('.material-symbols-outlined');
+              if (icon && icon.textContent.trim() === 'check') {
+                icon.remove();
+              }
+            });
+            this.className = 'px-3 py-2 rounded-full text-label-md font-label-md bg-primary-container text-on-primary-container shadow-sm transition-all duration-150 active:scale-95 flex items-center gap-1.5';
+            if (!this.querySelector('.material-symbols-outlined')) {
+              const check = document.createElement('span');
+              check.className = 'material-symbols-outlined text-[16px]';
+              check.setAttribute('data-icon', 'check');
+              check.textContent = 'check';
+              this.prepend(check);
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body></html>

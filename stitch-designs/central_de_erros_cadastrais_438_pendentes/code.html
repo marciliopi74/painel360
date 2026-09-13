@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Central de Pendências &amp; Erros Cadastrais | SUS Brasil 360</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed-dim": "#57df8d",
+            "on-secondary": "#ffffff",
+            "surface-container": "#dcf1fb",
+            "secondary-container": "#75fca7",
+            "surface-container-low": "#e4f7ff",
+            "surface-tint": "#006972",
+            "on-primary-fixed-variant": "#004f56",
+            "background": "#f2fbff",
+            "on-secondary-fixed-variant": "#00522b",
+            "surface-dim": "#c8dee7",
+            "surface-variant": "#d0e6ef",
+            "inverse-primary": "#7cd4df",
+            "primary": "#00626a",
+            "on-tertiary-fixed": "#2f1400",
+            "on-secondary-fixed": "#00210e",
+            "secondary": "#006d3b",
+            "on-surface": "#091e25",
+            "tertiary-fixed": "#ffdcc4",
+            "on-surface-variant": "#3e494a",
+            "outline-variant": "#bdc9ca",
+            "primary-container": "#0e7c86",
+            "on-error": "#ffffff",
+            "tertiary-container": "#a35f24",
+            "on-primary-container": "#ddfbff",
+            "tertiary-fixed-dim": "#ffb780",
+            "secondary-fixed": "#75fca7",
+            "error": "#ba1a1a",
+            "inverse-surface": "#1f333a",
+            "on-background": "#091e25",
+            "on-tertiary-fixed-variant": "#6f3800",
+            "surface-container-highest": "#d0e6ef",
+            "surface-bright": "#f2fbff",
+            "primary-fixed": "#98f0fb",
+            "on-tertiary": "#ffffff",
+            "on-secondary-container": "#00743f",
+            "surface-container-lowest": "#ffffff",
+            "outline": "#6e797a",
+            "on-tertiary-container": "#fff2eb",
+            "inverse-on-surface": "#def4fe",
+            "surface-container-high": "#d6ecf5",
+            "on-error-container": "#93000a",
+            "on-primary-fixed": "#001f23",
+            "primary-fixed-dim": "#7cd4df",
+            "tertiary": "#85480c",
+            "error-container": "#ffdad6",
+            "surface": "#f2fbff",
+            "on-primary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "gutter-mobile": "0.75rem",
+            "margin-mobile": "1rem",
+            "margin": "1.5rem",
+            "gutter": "1rem",
+            "space-xl": "2rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "headline-lg": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex flex-col pb-20 md:pb-6">
+<!-- TOP APP BAR (Shared Component Anchor) -->
+<header class="flex justify-between items-center w-full px-4 h-16 sticky top-0 z-40 bg-surface shadow-sm transition-colors duration-150">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="local_hospital">local_hospital</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center space-x-2">
+<span class="text-headline-sm font-headline-sm text-primary font-bold tracking-tight">SUS Brasil 360</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-secondary-container text-on-secondary-container">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary mr-1.5 animate-pulse"></span>
+            e-SUS Ativo (v5.2.14)
+          </span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Secretaria Municipal de Saúde • CNES: 2381900</span>
+</div>
+</div>
+<!-- Web Navigation Links Cluster -->
+<nav class="hidden md:flex items-center space-x-6 text-label-md font-label-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-150" href="#">Início</a>
+<a class="text-primary font-bold flex items-center gap-1.5 relative py-1 border-b-2 border-primary" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="how_to_reg">how_to_reg</span>
+        Cadastros
+        <span class="ml-1 px-1.5 py-0.2 bg-error-container text-on-error-container rounded-full text-label-sm font-bold">438</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-150" href="#">Atendimentos</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-150" href="#">Indicadores</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-150" href="#">Mais</a>
+</nav>
+<div class="flex items-center space-x-2">
+<button class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-label-md hover:bg-surface-container-high transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-lg animate-spin" data-icon="sync" style="animation-duration: 4s;">sync</span>
+<span>Sincronizar SISAB</span>
+</button>
+<button aria-label="Sincronização" class="w-10 h-10 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+</button>
+<div class="w-9 h-9 rounded-full bg-primary text-on-primary font-bold text-label-md flex items-center justify-center shadow-sm">
+        ES
+      </div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-1 max-w-[1440px] w-full mx-auto px-3 sm:px-6 py-4 space-y-5">
+<!-- CRITICAL ALERT HERO BANNER (Fundo suave de alerta #FEECEB) -->
+<section class="bg-[#FEECEB] border border-red-200 rounded-xl p-4 sm:p-6 shadow-sm relative overflow-hidden">
+<div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-red-900">
+<span class="material-symbols-outlined text-[180px]" data-icon="warning">warning</span>
+</div>
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 relative z-10">
+<div class="space-y-1.5 max-w-3xl">
+<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-red-100 text-red-800 text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-base text-[#E5533C]" data-icon="error">error</span>
+            Auditoria Contínua do SISAB / e-SUS APS
+          </div>
+<h1 class="text-headline-md sm:text-headline-lg font-headline-lg text-[#93000a] tracking-tight">
+            Central de Pendências &amp; Erros Cadastrais (438 Registros)
+          </h1>
+<p class="text-body-md text-red-900 leading-relaxed font-body-md">
+<strong>Fila Crítica de Inconsistências:</strong> 438 cadastros com erro de validação SISAB/e-SUS. Regularize antes do fechamento do quadrimestre para evitar glosa financeira no Previne Brasil.
+          </p>
+</div>
+<!-- Botões de Ação Imediata -->
+<div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+<button class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-lowest border border-red-300 text-red-900 text-label-md font-label-md hover:bg-red-50 active:scale-95 transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="file_download">file_download</span>
+            Exportar Fila para ACS (PDF/XLSX)
+          </button>
+<button class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary-container text-on-primary-container text-label-md font-label-md hover:bg-[#0B656D] active:scale-95 transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="done_all">done_all</span>
+            Validar em Lote
+          </button>
+</div>
+</div>
+<!-- Quick Metrics Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-4 border-t border-red-200/80">
+<div class="bg-surface-container-lowest/90 backdrop-blur-sm p-3 rounded-lg border border-red-100">
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center justify-between">
+<span>Total Pendentes</span>
+<span class="material-symbols-outlined text-sm text-[#E5533C]" data-icon="pending_actions">pending_actions</span>
+</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface mt-0.5">438</div>
+<div class="text-label-sm text-red-700 font-medium">100% da fila ativa</div>
+</div>
+<div class="bg-surface-container-lowest/90 backdrop-blur-sm p-3 rounded-lg border border-red-100">
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center justify-between">
+<span>Incompletos</span>
+<span class="material-symbols-outlined text-sm text-[#F4A261]" data-icon="edit_document">edit_document</span>
+</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface mt-0.5">182</div>
+<div class="text-label-sm text-amber-700 font-medium">41.5% do montante</div>
+</div>
+<div class="bg-surface-container-lowest/90 backdrop-blur-sm p-3 rounded-lg border border-red-100">
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center justify-between">
+<span>CNS/CPF Duplicado</span>
+<span class="material-symbols-outlined text-sm text-[#ba1a1a]" data-icon="content_copy">content_copy</span>
+</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface mt-0.5">144</div>
+<div class="text-label-sm text-red-700 font-medium font-semibold">Risco alto de glosa</div>
+</div>
+<div class="bg-surface-container-lowest/90 backdrop-blur-sm p-3 rounded-lg border border-red-100">
+<div class="text-label-sm font-label-sm text-on-surface-variant flex items-center justify-between">
+<span>Endereço / Microárea</span>
+<span class="material-symbols-outlined text-sm text-primary-container" data-icon="pin_drop">pin_drop</span>
+</div>
+<div class="text-headline-sm font-headline-sm font-bold text-on-surface mt-0.5">112</div>
+<div class="text-label-sm text-primary font-medium">Ajuste de território</div>
+</div>
+</div>
+</section>
+<!-- SEARCH & FILTER BAR -->
+<div class="bg-surface-container-lowest rounded-xl p-3.5 sm:p-4 border border-[#EDF2F7] shadow-sm flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+<div class="flex-1 relative">
+<span class="absolute left-3.5 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-xl" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-surface rounded-lg border border-[#EDF2F7] text-body-md text-on-surface focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all placeholder:text-outline" placeholder="Buscar por Nome do Cidadão, CNS (15 dígitos) ou CPF..." type="text" value=""/>
+</div>
+<div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+<div class="w-full sm:w-48">
+<select class="w-full py-2.5 px-3 bg-surface rounded-lg border border-[#EDF2F7] text-label-md font-label-md text-on-surface focus:outline-none focus:border-primary-container">
+<option selected="">Todas as Equipes (ESF)</option>
+<option>ESF Centro</option>
+<option>ESF Alvorada</option>
+<option>ESF Esperança I</option>
+</select>
+</div>
+<div class="w-full sm:w-44">
+<select class="w-full py-2.5 px-3 bg-surface rounded-lg border border-[#EDF2F7] text-label-md font-label-md text-on-surface focus:outline-none focus:border-primary-container">
+<option selected="">Todos os ACS</option>
+<option>Marcos Vinicius</option>
+<option>Patrícia Mendes</option>
+<option>Joana Ribeiro</option>
+<option>Carla Lima</option>
+</select>
+</div>
+<button class="px-3 py-2.5 rounded-lg border border-[#EDF2F7] text-on-surface-variant hover:bg-surface flex items-center gap-1.5 text-label-md font-label-md" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="filter_list">filter_list</span>
+<span>Filtros</span>
+</button>
+</div>
+</div>
+<!-- SPLIT-SCREEN WORKSPACE: SIDEBAR CATEGORIAS + DATA TABLE -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+<!-- COLUMN 1: Category Selector (3 cols on large screen) -->
+<aside class="lg:col-span-3 bg-surface-container-lowest rounded-xl p-3 border border-[#EDF2F7] shadow-sm space-y-2">
+<div class="px-3 py-2 text-label-sm font-label-sm uppercase tracking-wider text-on-surface-variant font-bold border-b border-[#EDF2F7]">
+          Filtrar por Tipologia
+        </div>
+<!-- Item 1: Todos os Erros (Ativo) -->
+<button class="w-full text-left p-3 rounded-lg bg-surface-container-low border border-primary/20 flex flex-col gap-1 transition-all" type="button">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="category">category</span>
+<span class="font-label-lg text-label-lg text-primary font-bold">Todos os Erros</span>
+</div>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-bold bg-primary-container text-on-primary-container">438</span>
+</div>
+<span class="text-label-sm text-on-surface-variant pl-7">Visão unificada da auditoria</span>
+</button>
+<!-- Item 2: Dados Incompletos -->
+<button class="w-full text-left p-3 rounded-lg hover:bg-surface border border-transparent hover:border-[#EDF2F7] flex flex-col gap-1 transition-all group" type="button">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-700 text-xl" data-icon="edit_document">edit_document</span>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-primary font-semibold">Dados Incompletos</span>
+</div>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-bold bg-amber-100 text-amber-900">182</span>
+</div>
+<div class="flex items-center justify-between pl-7">
+<span class="text-label-sm text-on-surface-variant">Mãe / D. Nasc ausente</span>
+<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Atenção</span>
+</div>
+</button>
+<!-- Item 3: CNS / CPF Duplicado -->
+<button class="w-full text-left p-3 rounded-lg hover:bg-surface border border-transparent hover:border-[#EDF2F7] flex flex-col gap-1 transition-all group" type="button">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#E5533C] text-xl" data-icon="fingerprint">fingerprint</span>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-primary font-semibold">CNS / CPF Duplicado</span>
+</div>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-bold bg-red-100 text-red-900">144</span>
+</div>
+<div class="flex items-center justify-between pl-7">
+<span class="text-label-sm text-on-surface-variant">Conflito CADSUS</span>
+<span class="text-[10px] px-1.5 py-0.5 rounded bg-red-50 text-red-800 border border-red-200 font-semibold">Risco de Glosa</span>
+</div>
+</button>
+<!-- Item 4: Divergência de Endereço -->
+<button class="w-full text-left p-3 rounded-lg hover:bg-surface border border-transparent hover:border-[#EDF2F7] flex flex-col gap-1 transition-all group" type="button">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-xl" data-icon="location_off">location_off</span>
+<span class="font-label-md text-label-md text-on-surface group-hover:text-primary font-semibold">Divergência Endereço</span>
+</div>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-bold bg-teal-100 text-teal-900">112</span>
+</div>
+<div class="flex items-center justify-between pl-7">
+<span class="text-label-sm text-on-surface-variant">Fora da Microárea ACS</span>
+<span class="text-[10px] px-1.5 py-0.5 rounded bg-teal-50 text-teal-800 border border-teal-200">Territorial</span>
+</div>
+</button>
+<!-- Mini Bloco de Dica e-SUS -->
+<div class="mt-4 p-3 bg-surface rounded-lg border border-[#EDF2F7] space-y-1 text-label-sm">
+<div class="flex items-center gap-1.5 text-primary font-bold">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+            Regra SISAB 2024
+          </div>
+<p class="text-on-surface-variant leading-relaxed">
+            Cadastros sem CPF ou sem CNS válido são automaticamente rejeitados e não pontuam no rateio de recursos federais.
+          </p>
+</div>
+</aside>
+<!-- COLUMN 2: Data Panel & Records List (9 cols on large screen) -->
+<section class="lg:col-span-9 space-y-3">
+<div class="bg-surface-container-lowest rounded-xl border border-[#EDF2F7] shadow-sm overflow-hidden">
+<!-- Table Header / Toolbar -->
+<div class="px-4 py-3 bg-[#F7F9FA] border-b border-[#EDF2F7] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Fila de Correção Prioritária</span>
+<span class="px-2 py-0.5 text-label-sm font-label-sm bg-red-100 text-red-800 rounded-md">Ordenado por Risco</span>
+</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant">
+              Exibindo <strong>1-5</strong> de <strong>438</strong> pendências
+            </div>
+</div>
+<!-- LIST / TABLE VIEW -->
+<div class="divide-y divide-[#EDF2F7]">
+<!-- RECORD 1: Maria das Graças Silva -->
+<article class="p-4 bg-[#FEECEB]/30 hover:bg-[#FEECEB]/60 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-full bg-red-100 text-red-700 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-xl" data-icon="person_alert">person_alert</span>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<h2 class="text-body-lg font-headline-sm text-on-surface font-bold">Maria das Graças Silva</h2>
+<span class="px-2 py-0.5 rounded text-label-sm font-bold bg-[#FDF0ED] text-[#B8321D] border border-red-200 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#E5533C]"></span>
+                      Gravidade: Alta
+                    </span>
+<span class="px-2 py-0.5 rounded text-label-sm font-medium bg-red-50 text-red-900 border border-red-200">
+                      CPF Duplicado / Inválido
+                    </span>
+</div>
+<div class="text-body-sm text-on-surface-variant flex flex-wrap items-center gap-y-1 gap-x-3">
+<span>CNS: <strong class="text-on-surface">7042.0009.1123.8810</strong></span>
+<span>•</span>
+<span>CPF: <strong class="text-on-surface">104.***.***-20</strong></span>
+<span>•</span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="badge">badge</span>
+                      ACS: Marcos Vinicius (ESF Centro - MA 02)
+                    </span>
+</div>
+<div class="text-label-sm text-red-800 flex items-center gap-1 pt-0.5">
+<span class="material-symbols-outlined text-xs" data-icon="warning">warning</span>
+                    Conflito de homônimo no CADSUS com registro da UBS Alvorada. Bloqueia faturamento de consultas.
+                  </div>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+<button class="px-3.5 py-2 rounded-lg bg-primary-container text-on-primary-container text-label-md font-label-md hover:bg-[#0B656D] active:scale-95 transition-all shadow-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="build_circle">build_circle</span>
+                  Corrigir
+                </button>
+<button class="px-3 py-2 rounded-lg border border-[#0E7C86] text-primary-container text-label-md font-label-md hover:bg-surface transition-all flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+                  Ver Detalhes
+                </button>
+</div>
+</article>
+<!-- RECORD 2: Francisca de Assis Lima -->
+<article class="p-4 bg-surface-container-lowest hover:bg-surface transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-xl" data-icon="error_outline">error_outline</span>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<h2 class="text-body-lg font-headline-sm text-on-surface font-bold">Francisca de Assis Lima</h2>
+<span class="px-2 py-0.5 rounded text-label-sm font-bold bg-[#FDF0ED] text-[#B8321D] border border-red-200 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#E5533C]"></span>
+                      Gravidade: Alta
+                    </span>
+<span class="px-2 py-0.5 rounded text-label-sm font-medium bg-[#FEF6EE] text-[#B25E16] border border-amber-200">
+                      Dados Incompletos (Sem Nome Mãe/D.Nasc)
+                    </span>
+</div>
+<div class="text-body-sm text-on-surface-variant flex flex-wrap items-center gap-y-1 gap-x-3">
+<span>CNS: <strong class="text-on-surface">8921.4420.3301.2001</strong></span>
+<span>•</span>
+<span>DN: <span class="text-red-700 italic font-medium">Não Informada</span></span>
+<span>•</span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="badge">badge</span>
+                      ACS: Patrícia Mendes (ESF Esperança I - MA 04)
+                    </span>
+</div>
+<div class="text-label-sm text-on-surface-variant flex items-center gap-1 pt-0.5">
+<span class="material-symbols-outlined text-xs" data-icon="info">info</span>
+                    Campos obrigatórios pelo layout 4.2 do e-SUS AB. Pendência de visita domiciliar de retificação.
+                  </div>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+<button class="px-3.5 py-2 rounded-lg bg-primary-container text-on-primary-container text-label-md font-label-md hover:bg-[#0B656D] active:scale-95 transition-all shadow-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="build_circle">build_circle</span>
+                  Corrigir
+                </button>
+<button class="px-3 py-2 rounded-lg border border-[#0E7C86] text-primary-container text-label-md font-label-md hover:bg-surface transition-all flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+                  Ver Detalhes
+                </button>
+</div>
+</article>
+<!-- RECORD 3: João Batista Pereira -->
+<article class="p-4 bg-surface-container-lowest hover:bg-surface transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-xl" data-icon="wrong_location">wrong_location</span>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<h2 class="text-body-lg font-headline-sm text-on-surface font-bold">João Batista Pereira</h2>
+<span class="px-2 py-0.5 rounded text-label-sm font-bold bg-[#FEF6EE] text-[#B25E16] border border-amber-200 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F4A261]"></span>
+                      Gravidade: Média
+                    </span>
+<span class="px-2 py-0.5 rounded text-label-sm font-medium bg-[#E8F4F5] text-[#0E7C86] border border-teal-200">
+                      Endereço Fora de Microárea
+                    </span>
+</div>
+<div class="text-body-sm text-on-surface-variant flex flex-wrap items-center gap-y-1 gap-x-3">
+<span>CNS: <strong class="text-on-surface">7001.0928.4411.0023</strong></span>
+<span>•</span>
+<span>CEP: <strong>14800-210</strong> (Fora do Perímetro UBS)</span>
+<span>•</span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="badge">badge</span>
+                      ACS: Joana Ribeiro (ESF Alvorada - MA 01)
+                    </span>
+</div>
+<div class="text-label-sm text-on-surface-variant flex items-center gap-1 pt-0.5">
+<span class="material-symbols-outlined text-xs" data-icon="info">info</span>
+                    Geolocalização aponta logradouro sob responsabilidade da equipe ESF Centro. Necessário remanejamento.
+                  </div>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+<button class="px-3.5 py-2 rounded-lg bg-primary-container text-on-primary-container text-label-md font-label-md hover:bg-[#0B656D] active:scale-95 transition-all shadow-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="sync_alt">sync_alt</span>
+                  Transferir
+                </button>
+<button class="px-3 py-2 rounded-lg border border-[#0E7C86] text-primary-container text-label-md font-label-md hover:bg-surface transition-all flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+                  Ver Detalhes
+                </button>
+</div>
+</article>
+<!-- RECORD 4: Raimundo Nonato Castro -->
+<article class="p-4 bg-[#FEECEB]/30 hover:bg-[#FEECEB]/60 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-full bg-red-100 text-red-700 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-xl" data-icon="badge_alert">switch_account</span>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<h2 class="text-body-lg font-headline-sm text-on-surface font-bold">Raimundo Nonato Castro</h2>
+<span class="px-2 py-0.5 rounded text-label-sm font-bold bg-[#FDF0ED] text-[#B8321D] border border-red-200 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#E5533C]"></span>
+                      Gravidade: Alta
+                    </span>
+<span class="px-2 py-0.5 rounded text-label-sm font-medium bg-red-50 text-red-900 border border-red-200">
+                      CNS Não Localizado no CADSUS
+                    </span>
+</div>
+<div class="text-body-sm text-on-surface-variant flex flex-wrap items-center gap-y-1 gap-x-3">
+<span>CNS Informado: <strong class="text-red-700">8900.1234.5678.9012</strong></span>
+<span>•</span>
+<span>CPF: <strong>032.***.***-91</strong></span>
+<span>•</span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="badge">badge</span>
+                      ACS: Marcos Vinicius (ESF Centro - MA 03)
+                    </span>
+</div>
+<div class="text-label-sm text-red-800 flex items-center gap-1 pt-0.5">
+<span class="material-symbols-outlined text-xs" data-icon="warning">warning</span>
+                    Retorno SISAB: Cartão SUS temporário expirado ou com dígitos verificadores inconsistentes.
+                  </div>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+<button class="px-3.5 py-2 rounded-lg bg-primary-container text-on-primary-container text-label-md font-label-md hover:bg-[#0B656D] active:scale-95 transition-all shadow-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="build_circle">build_circle</span>
+                  Corrigir
+                </button>
+<button class="px-3 py-2 rounded-lg border border-[#0E7C86] text-primary-container text-label-md font-label-md hover:bg-surface transition-all flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+                  Ver Detalhes
+                </button>
+</div>
+</article>
+<!-- RECORD 5: Tereza Cristina Santos -->
+<article class="p-4 bg-surface-container-lowest hover:bg-surface transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-xl" data-icon="family_restroom">family_restroom</span>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-2">
+<h2 class="text-body-lg font-headline-sm text-on-surface font-bold">Tereza Cristina Santos</h2>
+<span class="px-2 py-0.5 rounded text-label-sm font-bold bg-[#FEF6EE] text-[#B25E16] border border-amber-200 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F4A261]"></span>
+                      Gravidade: Média
+                    </span>
+<span class="px-2 py-0.5 rounded text-label-sm font-medium bg-orange-50 text-amber-900 border border-orange-200">
+                      Sem Responsável Familiar
+                    </span>
+</div>
+<div class="text-body-sm text-on-surface-variant flex flex-wrap items-center gap-y-1 gap-x-3">
+<span>CNS: <strong class="text-on-surface">7060.0123.9988.4455</strong></span>
+<span>•</span>
+<span>Menor de Idade: <strong>14 anos</strong></span>
+<span>•</span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="badge">badge</span>
+                      ACS: Carla Lima (ESF Alvorada - MA 02)
+                    </span>
+</div>
+<div class="text-label-sm text-on-surface-variant flex items-center gap-1 pt-0.5">
+<span class="material-symbols-outlined text-xs" data-icon="info">info</span>
+                    Cadastro individual desvinculado do Cadastro Domiciliar e Familiar nº 3891002.
+                  </div>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+<button class="px-3.5 py-2 rounded-lg bg-primary-container text-on-primary-container text-label-md font-label-md hover:bg-[#0B656D] active:scale-95 transition-all shadow-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="link">link</span>
+                  Vincular
+                </button>
+<button class="px-3 py-2 rounded-lg border border-[#0E7C86] text-primary-container text-label-md font-label-md hover:bg-surface transition-all flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+                  Ver Detalhes
+                </button>
+</div>
+</article>
+</div>
+<!-- TABLE FOOTER & PAGINATION -->
+<div class="px-4 py-3.5 bg-[#F7F9FA] border-t border-[#EDF2F7] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="text-label-md font-label-md text-on-surface-variant">
+              Exibindo <strong>1 - 5</strong> de <strong>438</strong> registros cadastrais
+            </div>
+<div class="inline-flex items-center space-x-1.5">
+<button class="px-2.5 py-1.5 rounded-lg border border-[#EDF2F7] text-outline text-label-md font-label-md bg-surface-container-lowest cursor-not-allowed opacity-60" disabled="" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-primary-container text-on-primary-container font-label-md font-bold text-label-md" type="button">1</button>
+<button class="px-3 py-1.5 rounded-lg border border-[#EDF2F7] hover:bg-surface text-on-surface text-label-md font-label-md" type="button">2</button>
+<button class="px-3 py-1.5 rounded-lg border border-[#EDF2F7] hover:bg-surface text-on-surface text-label-md font-label-md" type="button">3</button>
+<span class="px-1 text-on-surface-variant">...</span>
+<button class="px-3 py-1.5 rounded-lg border border-[#EDF2F7] hover:bg-surface text-on-surface text-label-md font-label-md" type="button">88</button>
+<button class="px-2.5 py-1.5 rounded-lg border border-[#EDF2F7] text-on-surface hover:bg-surface text-label-md font-label-md" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- RESOLUTION PROGRESS WIDGET -->
+<div class="p-4 bg-surface-container-lowest rounded-xl border border-[#EDF2F7] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<div class="text-label-lg font-label-lg text-on-surface">Meta de Correção Quadrimestral (Q1 - 2025)</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant">Meta municipal: Menos de 50 pendências até 30 de Abril. Atual: 438 inconsistências.</div>
+</div>
+</div>
+<div class="w-full sm:w-56">
+<div class="flex justify-between text-label-sm font-semibold mb-1">
+<span>Taxa de Resolução</span>
+<span class="text-primary">64%</span>
+</div>
+<div class="w-full bg-[#EDF2F7] h-2.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 64%;"></div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BOTTOM NAVBAR (Shared Component Anchor - Active on "Cadastros") -->
+<!-- Strict semantic mapping: "Cadastros" maps directly to active state -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-2 bg-surface shadow-md">
+<!-- Item 1: Início (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="dashboard">dashboard</span>
+<span class="mt-0.5">Início</span>
+</a>
+<!-- Item 2: Cadastros (ACTIVE: style_active_navigation verbatim classes) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95 shadow-sm" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="how_to_reg">how_to_reg</span>
+<span class="mt-0.5">Cadastros</span>
+</a>
+<!-- Item 3: Atendimentos (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="clinical_notes">clinical_notes</span>
+<span class="mt-0.5">Atendimentos</span>
+</a>
+<!-- Item 4: Indicadores (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="analytics">analytics</span>
+<span class="mt-0.5">Indicadores</span>
+</a>
+<!-- Item 5: Mais (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="more_horiz">more_horiz</span>
+<span class="mt-0.5">Mais</span>
+</a>
+</nav>
+</body></html>

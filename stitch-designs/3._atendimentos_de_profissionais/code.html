@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SUS Brasil 360 - Atendimentos Clínicos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#dcf1fb",
+            "error": "#ba1a1a",
+            "primary": "#00626a",
+            "surface-variant": "#d0e6ef",
+            "on-surface": "#091e25",
+            "primary-fixed-dim": "#7cd4df",
+            "on-secondary-fixed": "#00210e",
+            "background": "#f2fbff",
+            "on-tertiary-fixed": "#2f1400",
+            "primary-container": "#0e7c86",
+            "on-secondary": "#ffffff",
+            "outline": "#6e797a",
+            "tertiary": "#85480c",
+            "on-primary": "#ffffff",
+            "secondary-container": "#75fca7",
+            "on-primary-container": "#ddfbff",
+            "on-background": "#091e25",
+            "inverse-on-surface": "#def4fe",
+            "secondary-fixed": "#75fca7",
+            "primary-fixed": "#98f0fb",
+            "secondary-fixed-dim": "#57df8d",
+            "tertiary-container": "#a35f24",
+            "on-tertiary-fixed-variant": "#6f3800",
+            "on-error-container": "#93000a",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#3e494a",
+            "surface-container-low": "#e4f7ff",
+            "surface-container-highest": "#d0e6ef",
+            "on-primary-fixed": "#001f23",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#ffb780",
+            "surface-container-high": "#d6ecf5",
+            "surface-bright": "#f2fbff",
+            "on-primary-fixed-variant": "#004f56",
+            "surface-tint": "#006972",
+            "on-secondary-container": "#00743f",
+            "on-secondary-fixed-variant": "#00522b",
+            "secondary": "#006d3b",
+            "inverse-surface": "#1f333a",
+            "outline-variant": "#bdc9ca",
+            "surface": "#f2fbff",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#ffdcc4",
+            "inverse-primary": "#7cd4df",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#fff2eb",
+            "surface-dim": "#c8dee7"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "0.75rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased min-h-screen pb-24 selection:bg-surface-container selection:text-primary">
+<!-- Desktop Lateral & Top Navigation Shell Anchor -->
+<header class="flex justify-between items-center w-full px-4 h-16 sticky top-0 z-40 bg-surface dark:bg-inverse-surface shadow-sm dark:shadow-none">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="local_hospital">local_hospital</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-headline-sm font-headline-sm text-primary dark:text-inverse-primary font-bold">SUS Brasil 360</span>
+<span class="hidden sm:inline-block px-2 py-0.5 rounded-full bg-surface-container text-primary text-label-sm font-label-sm">Versão e-SUS APS 5.2</span>
+</div>
+<p class="text-label-md font-label-md text-on-surface-variant">Secretaria Municipal de Saúde • Monitoramento Clínico</p>
+</div>
+</div>
+<!-- Right Controls: Status & Export -->
+<div class="flex items-center gap-2 sm:gap-3">
+<div class="hidden md:flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded-lg border border-outline-variant/30">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="text-label-sm font-label-sm text-on-surface">Base Sincronizada: Hoje 11:42</span>
+</div>
+<button class="transition-colors duration-150 active:scale-95 hover:bg-surface-container text-primary flex items-center gap-1.5 px-3 py-2 rounded-lg border border-primary/20 bg-surface-container-lowest text-label-md font-label-md" type="button">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="sync">sync</span>
+<span class="hidden sm:inline">Sincronizar</span>
+</button>
+<button class="transition-colors duration-150 active:scale-95 bg-primary-container text-on-primary-container hover:bg-primary flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-label-md font-label-md shadow-sm" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="file_download">file_download</span>
+<span>Exportar BPA/RAAS</span>
+</button>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
+<!-- Page Context Title Area -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-outline-variant/30 pb-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm">Quadrimestre Atual - Q1</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">• Janeiro a Abril / Vigente 2025</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface tracking-tight">Atendimentos Clínicos</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-0.5">
+          Auditoria contínua de prontuários eletrônicos (PEC), metas do Previne Brasil e consistência de envio SIA/SIAB.
+        </p>
+</div>
+<!-- Quick Action Pill Group -->
+<div class="flex items-center gap-2 self-start md:self-auto">
+<span class="inline-flex items-center px-3 py-1.5 rounded-full bg-secondary-container/40 text-on-secondary-container text-label-sm font-label-sm border border-secondary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary mr-2"></span>
+          Conectividade RNDS Ativa
+        </span>
+</div>
+</div>
+<!-- Bento Section: Filters Panel -->
+<section class="bg-surface-container-lowest rounded-xl p-4 sm:p-5 border border-outline-variant/40 shadow-sm">
+<div class="flex items-center justify-between mb-3.5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="tune">tune</span>
+<h2 class="text-label-lg font-label-lg text-on-surface">Filtros Operacionais</h2>
+</div>
+<button class="text-label-sm font-label-sm text-primary hover:underline flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="restart_alt">restart_alt</span>
+          Redefinir Filtros
+        </button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+<!-- Filter 1: Equipe -->
+<div class="flex flex-col gap-1">
+<label class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="groups">groups</span>
+            Equipe de Saúde da Família (eSF/eSB)
+          </label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border border-outline-variant/60 rounded-lg text-body-sm font-body-sm text-on-surface py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary-container appearance-none pr-8">
+<option value="todas">Todas as Equipes</option>
+<option selected="" value="centro">ESF Centro</option>
+<option value="esb_unidade_1">eSB Unidade 1</option>
+<option value="esperanca_1">ESF Esperança I</option>
+<option value="emulti">eMULTI Interdisciplinar</option>
+</select>
+<span class="material-symbols-outlined text-on-surface-variant absolute right-2.5 top-2.5 pointer-events-none text-base" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Filter 2: Categoria / Profissional -->
+<div class="flex flex-col gap-1">
+<label class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="badge">badge</span>
+            Categoria Profissional
+          </label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border border-outline-variant/60 rounded-lg text-body-sm font-body-sm text-on-surface py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary-container appearance-none pr-8">
+<option selected="" value="todos">Todos os Profissionais</option>
+<option value="medicos">Médicos (Clínica / MFC)</option>
+<option value="enfermeiros">Enfermeiros</option>
+<option value="cirurgioes_dentistas">Cirurgiões Dentistas</option>
+<option value="multiprofissional">Multiprofissional (eMULTI)</option>
+</select>
+<span class="material-symbols-outlined text-on-surface-variant absolute right-2.5 top-2.5 pointer-events-none text-base" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Filter 3: Período -->
+<div class="flex flex-col gap-1">
+<label class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="calendar_month">calendar_month</span>
+            Janela Temporal
+          </label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border border-outline-variant/60 rounded-lg text-body-sm font-body-sm text-on-surface py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary-container appearance-none pr-8">
+<option selected="" value="mes_vigente">Mês Vigente (Maio)</option>
+<option value="q1_total">Q1 Completo (Jan - Abr)</option>
+<option value="ultimos_30">Últimos 30 dias corridos</option>
+<option value="abril">Competência Anterior (Abril)</option>
+</select>
+<span class="material-symbols-outlined text-on-surface-variant absolute right-2.5 top-2.5 pointer-events-none text-base" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Filter 4: Inconsistência status -->
+<div class="flex flex-col gap-1">
+<label class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="rule">rule</span>
+            Filtro de Conformidade e-SUS
+          </label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border border-outline-variant/60 rounded-lg text-body-sm font-body-sm text-on-surface py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-primary-container appearance-none pr-8">
+<option selected="" value="todos">Com e sem pendências</option>
+<option value="somente_erros">Somente com Inconsistências (62)</option>
+<option value="sem_erros">Registros 100% Válidos</option>
+</select>
+<span class="material-symbols-outlined text-on-surface-variant absolute right-2.5 top-2.5 pointer-events-none text-base" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid Section: Resumo de Produção Geral & Telemetria e-SUS -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+<!-- Card Resumo de Produção Geral (Col 8) -->
+<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl p-5 sm:p-6 border border-outline-variant/40 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+<div class="flex items-center gap-2">
+<span class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg" data-icon="clinical_notes">clinical_notes</span>
+</span>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-on-surface">Produção Clínica Consolidada</h2>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Atendimento individualizado e procedimentos da atenção primária</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-low text-primary text-label-sm font-label-sm border border-primary/20">
+              Meta Quadrimestral: 4.000
+            </span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 my-3">
+<span class="text-4xl font-bold tracking-tight text-on-surface">3.412</span>
+<span class="text-body-md font-body-md text-on-surface-variant">atendimentos realizados no período</span>
+<span class="sm:ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-[#EAF8F1] text-[#1E824C] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71] mr-1.5"></span>
+              85% da Meta Atingida
+            </span>
+</div>
+<!-- Linear Telemetry Progress Bar with Benchmark Marker -->
+<div class="mt-4 mb-2">
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant mb-1.5">
+<span>Progresso Atual (3.412)</span>
+<span class="font-semibold text-primary">85.3%</span>
+<span>Alvo: 4.000</span>
+</div>
+<div class="relative w-full h-3 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full transition-all duration-500" style="width: 85.3%;"></div>
+<!-- Meta Target Marker line at 80% -->
+<div class="absolute top-0 bottom-0 left-[80%] w-0.5 bg-on-surface/40 z-10"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-outline mt-1.5">
+<span>0</span>
+<span class="text-primary font-medium">Marcador de Ritmo Esperado: 3.200 (80%)</span>
+<span>4.000</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 mt-4 border-t border-outline-variant/30 text-center sm:text-left">
+<div class="p-2.5 rounded-lg bg-surface-container-low/50">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Consultas Médicas</span>
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface">1.540</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low/50">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Consultas Enfermagem</span>
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface">1.120</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low/50">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Odontologia (eSB)</span>
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface">480</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low/50">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Multiprofissional</span>
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface">272</span>
+</div>
+</div>
+</div>
+<!-- Card Taxa de Inconsistências & Qualidade e-SUS (Col 4) -->
+<div class="lg:col-span-4 bg-surface-container-lowest rounded-xl p-5 sm:p-6 border border-outline-variant/40 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-sm font-label-sm font-bold uppercase tracking-wider text-outline">Auditoria e-SUS</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FEF6EE] text-[#B25E16] text-label-sm font-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F4A261]"></span>
+              Atenção
+            </span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Inconsistências Cadastrais</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">
+            Fichas que correm risco de glosa ou anulação nos indicadores do Previne Brasil.
+          </p>
+<div class="mt-4 p-4 rounded-xl bg-[#FDF0ED] border border-[#E5533C]/20">
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-[#B8321D]">1,8%</span>
+<span class="text-label-md font-label-md text-on-surface-variant">taxa de erro</span>
+</div>
+<p class="text-body-sm font-body-sm text-[#B8321D] font-medium mt-1">
+              62 atendimentos com pendência crítica no e-SUS
+            </p>
+</div>
+<div class="mt-4 space-y-2 text-label-sm font-label-sm">
+<div class="flex items-center justify-between py-1 border-b border-outline-variant/20">
+<span class="text-on-surface-variant">Falta de CID/CIAP-2 vinculado</span>
+<span class="font-bold text-on-surface">34 fichas</span>
+</div>
+<div class="flex items-center justify-between py-1 border-b border-outline-variant/20">
+<span class="text-on-surface-variant">Ausência de DUM em Pré-natal</span>
+<span class="font-bold text-on-surface">17 fichas</span>
+</div>
+<div class="flex items-center justify-between py-1">
+<span class="text-on-surface-variant">Procedimento SIA não parametrizado</span>
+<span class="font-bold text-on-surface">11 fichas</span>
+</div>
+</div>
+</div>
+<button class="mt-4 w-full py-2.5 px-3 rounded-lg bg-surface-container-high hover:bg-surface-container text-primary font-label-md text-label-md flex items-center justify-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-base" data-icon="search_check">search_check</span>
+          Abrir Fila de Correção Imediata
+        </button>
+</div>
+</section>
+<!-- Professional Performance Section Title -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2">
+<div>
+<h2 class="text-headline-sm font-headline-sm text-on-surface">Desempenho por Profissional de Saúde</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Acompanhamento individualizado de produção, cumprimento de cotas e integridade dos registros clínicos.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Ordenação:</span>
+<select class="bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-label-sm font-label-sm text-on-surface py-1 px-2.5 focus:outline-none">
+<option>Maior taxa de inconsistência</option>
+<option>Maior volume de atendimentos</option>
+<option>Menor meta atingida</option>
+</select>
+</div>
+</div>
+<!-- Cards Grid: Professional Performance Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<!-- CARD 1: Dr. Roberto Guimarães -->
+<article class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/40 shadow-sm flex flex-col justify-between hover:border-primary/40 transition-all duration-150">
+<div>
+<!-- Header Profile -->
+<div class="flex items-start justify-between gap-3 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-surface-container text-primary flex items-center justify-center font-bold text-headline-sm">
+                RG
+              </div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Dr. Roberto Guimarães</h3>
+</div>
+<div class="flex items-center gap-1.5 text-label-md font-label-md text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="stethoscope">stethoscope</span>
+<span>Médico de Família e Comunidade</span>
+<span>•</span>
+<span class="font-medium text-on-surface">ESF Centro</span>
+</div>
+<span class="text-label-sm font-label-sm text-outline">CRM/UF: 104829 • CNS: 704.908.1234.0001</span>
+</div>
+</div>
+<!-- Classification Badge -->
+<span class="inline-flex items-center px-2.5 py-1 rounded-full bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm font-semibold shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71] mr-1.5"></span>
+              Meta Superada
+            </span>
+</div>
+<!-- Production Stats -->
+<div class="p-3.5 rounded-lg bg-surface-container-low/40 border border-outline-variant/20 mb-4">
+<div class="flex items-baseline justify-between mb-1.5">
+<div class="flex items-baseline gap-1.5">
+<span class="text-2xl font-bold text-on-surface">420</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">atendimentos no período</span>
+</div>
+<span class="text-label-md font-label-md text-[#1E824C] font-bold">105% atingida</span>
+</div>
+<div class="w-full h-2.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-[#2FBF71] rounded-full transition-all duration-300" style="width: 100%;"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant mt-1.5">
+<span>Meta contratual: 400 consultas</span>
+<span class="text-secondary font-medium">+20 consultas acima do alvo</span>
+</div>
+</div>
+<!-- Inconsistencies Status Box -->
+<div class="rounded-lg p-3 bg-[#EAF8F1]/60 border border-[#2FBF71]/30 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1E824C] text-xl" data-icon="check_circle">check_circle</span>
+<div>
+<span class="text-label-md font-label-md font-bold text-[#1E824C] block">0 inconsistências registradas</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">100% dos prontuários validados pelo validador e-SUS</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[#1E824C] text-base" data-icon="verified">verified</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 mt-4 border-t border-outline-variant/20">
+<span class="text-label-sm font-label-sm text-outline">Último fechamento: Hoje, 10:15</span>
+<button class="text-label-md font-label-md text-primary hover:text-primary-container font-semibold flex items-center gap-1" type="button">
+            Histórico Mensal
+            <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</article>
+<!-- CARD 2: Enfª Juliana Prado -->
+<article class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/40 shadow-sm flex flex-col justify-between hover:border-error/40 transition-all duration-150">
+<div>
+<!-- Header Profile -->
+<div class="flex items-start justify-between gap-3 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-surface-container text-primary flex items-center justify-center font-bold text-headline-sm">
+                JP
+              </div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Enfª Juliana Prado</h3>
+</div>
+<div class="flex items-center gap-1.5 text-label-md font-label-md text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="medical_services">medical_services</span>
+<span>Enfermeira da Família</span>
+<span>•</span>
+<span class="font-medium text-on-surface">ESF Esperança I</span>
+</div>
+<span class="text-label-sm font-label-sm text-outline">COREN: 342.190-ENF • CNS: 700.114.9921.0003</span>
+</div>
+</div>
+<!-- Classification Badge -->
+<span class="inline-flex items-center px-2.5 py-1 rounded-full bg-[#FEF6EE] text-[#B25E16] text-label-sm font-label-sm font-semibold shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F4A261] mr-1.5"></span>
+              Atenção (Erros)
+            </span>
+</div>
+<!-- Production Stats -->
+<div class="p-3.5 rounded-lg bg-surface-container-low/40 border border-outline-variant/20 mb-4">
+<div class="flex items-baseline justify-between mb-1.5">
+<div class="flex items-baseline gap-1.5">
+<span class="text-2xl font-bold text-on-surface">310</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">atendimentos realizados</span>
+</div>
+<span class="text-label-md font-label-md text-primary font-bold">88% atingida</span>
+</div>
+<div class="w-full h-2.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full transition-all duration-300" style="width: 88.5%;"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant mt-1.5">
+<span>Meta quadrimestral: 350 atendimentos</span>
+<span>Faltam 40 para atingir a meta</span>
+</div>
+</div>
+<!-- Erros Encontrados nos Registros -->
+<div class="rounded-lg p-3 bg-[#FDF0ED] border border-[#E5533C]/30 space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-[#B8321D] font-bold text-label-md font-label-md">
+<span class="material-symbols-outlined text-base" data-icon="error">error</span>
+<span>2 pendências críticas detectadas (3 registros afetados)</span>
+</div>
+<span class="px-2 py-0.2 rounded bg-white text-[#B8321D] text-label-sm font-label-sm font-bold">Ação Pendente</span>
+</div>
+<ul class="space-y-1.5 pt-1 text-label-sm font-label-sm text-on-surface">
+<li class="flex items-start gap-2 bg-white/70 p-2 rounded border border-[#E5533C]/15">
+<span class="material-symbols-outlined text-[#E5533C] text-sm mt-0.5" data-icon="warning">warning</span>
+<div>
+<span class="font-semibold text-on-surface">2 atendimentos sem registro de CID/CIAP-2</span>
+<p class="text-on-surface-variant text-label-sm">Fichas #8819 e #8824 sem hipótese diagnóstica vinculada.</p>
+</div>
+</li>
+<li class="flex items-start gap-2 bg-white/70 p-2 rounded border border-[#E5533C]/15">
+<span class="material-symbols-outlined text-[#E5533C] text-sm mt-0.5" data-icon="warning">warning</span>
+<div>
+<span class="font-semibold text-on-surface">1 atendimento pré-natal sem DUM registrada</span>
+<p class="text-on-surface-variant text-label-sm">Paciente Maria Santos (CNS 702...1) sem Idade Gestacional válida.</p>
+</div>
+</li>
+</ul>
+<button class="w-full mt-2 py-1.5 px-3 rounded bg-white hover:bg-surface-container-lowest text-[#B8321D] font-label-md text-label-md font-bold border border-[#E5533C]/30 flex items-center justify-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span>
+              Ver detalhes dos 3 registros
+            </button>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 mt-4 border-t border-outline-variant/20">
+<span class="text-label-sm font-label-sm text-outline">Último envio PEC: Ontem, 17:40</span>
+<button class="text-label-md font-label-md text-primary hover:text-primary-container font-semibold flex items-center gap-1" type="button">
+            Notificar Profissional
+            <span class="material-symbols-outlined text-sm" data-icon="send">send</span>
+</button>
+</div>
+</article>
+<!-- CARD 3: Drª Camila Torres -->
+<article class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/40 shadow-sm flex flex-col justify-between hover:border-primary/40 transition-all duration-150">
+<div>
+<!-- Header Profile -->
+<div class="flex items-start justify-between gap-3 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-surface-container text-primary flex items-center justify-center font-bold text-headline-sm">
+                CT
+              </div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Drª Camila Torres</h3>
+</div>
+<div class="flex items-center gap-1.5 text-label-md font-label-md text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="dentistry">dentistry</span>
+<span>Cirurgiã Dentista</span>
+<span>•</span>
+<span class="font-medium text-on-surface">eSB Centro</span>
+</div>
+<span class="text-label-sm font-label-sm text-outline">CRO: 19.340-SP • CNS: 708.223.1190.0002</span>
+</div>
+</div>
+<!-- Classification Badge -->
+<span class="inline-flex items-center px-2.5 py-1 rounded-full bg-[#FEF6EE] text-[#B25E16] text-label-sm font-label-sm font-semibold shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F4A261] mr-1.5"></span>
+              Regular / Alerta
+            </span>
+</div>
+<!-- Production Stats -->
+<div class="p-3.5 rounded-lg bg-surface-container-low/40 border border-outline-variant/20 mb-4">
+<div class="flex items-baseline justify-between mb-1.5">
+<div class="flex items-baseline gap-1.5">
+<span class="text-2xl font-bold text-on-surface">185</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">procedimentos e atendimentos</span>
+</div>
+<span class="text-label-md font-label-md text-primary font-bold">84% atingida</span>
+</div>
+<div class="w-full h-2.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full transition-all duration-300" style="width: 84%;"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant mt-1.5">
+<span>Meta quadrimestral: 220 procedimentos</span>
+<span>Faltam 35 atendimentos</span>
+</div>
+</div>
+<!-- Erro de Procedimento SIA/SUS -->
+<div class="rounded-lg p-3 bg-[#FDF0ED] border border-[#E5533C]/30 space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-[#B8321D] font-bold text-label-md font-label-md">
+<span class="material-symbols-outlined text-base" data-icon="report_problem">report_problem</span>
+<span>Inconsistência de Faturamento SUS</span>
+</div>
+<span class="px-2 py-0.2 rounded bg-white text-[#B8321D] text-label-sm font-label-sm font-bold">SIGTAP</span>
+</div>
+<div class="bg-white/70 p-2.5 rounded border border-[#E5533C]/15 flex items-start gap-2">
+<span class="material-symbols-outlined text-[#E5533C] text-sm mt-0.5" data-icon="priority_high">priority_high</span>
+<div>
+<p class="text-label-sm font-label-sm font-semibold text-on-surface">4 atendimentos sem código de procedimento SIA/SUS</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-0.5">Procedimentos odontológicos preventivos salvos sem vinculação à Tabela Unificada SIGTAP.</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="w-full py-1.5 px-2.5 rounded bg-white hover:bg-surface-container-lowest text-[#B8321D] font-label-md text-label-md font-semibold border border-[#E5533C]/30 flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="build">build</span>
+                Vincular Códigos SIA
+              </button>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 mt-4 border-t border-outline-variant/20">
+<span class="text-label-sm font-label-sm text-outline">Último fechamento: Hoje, 09:30</span>
+<button class="text-label-md font-label-md text-primary hover:text-primary-container font-semibold flex items-center gap-1" type="button">
+            Ver Fichas de Procedimentos
+            <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</article>
+<!-- CARD 4: Fisioterapeuta Lucas Nogueira -->
+<article class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/40 shadow-sm flex flex-col justify-between hover:border-primary/40 transition-all duration-150">
+<div>
+<!-- Header Profile -->
+<div class="flex items-start justify-between gap-3 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-surface-container text-primary flex items-center justify-center font-bold text-headline-sm">
+                LN
+              </div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Lucas Nogueira</h3>
+</div>
+<div class="flex items-center gap-1.5 text-label-md font-label-md text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="accessibility_new">accessibility_new</span>
+<span>Fisioterapeuta</span>
+<span>•</span>
+<span class="font-medium text-on-surface">eMULTI Interdisciplinar</span>
+</div>
+<span class="text-label-sm font-label-sm text-outline">CREFITO: 88.940-F • CNS: 703.111.4509.0004</span>
+</div>
+</div>
+<!-- Classification Badge -->
+<span class="inline-flex items-center px-2.5 py-1 rounded-full bg-[#EAF8F1] text-[#1E824C] text-label-sm font-label-sm font-semibold shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2FBF71] mr-1.5"></span>
+              Ótimo Desempenho
+            </span>
+</div>
+<!-- Production Stats -->
+<div class="p-3.5 rounded-lg bg-surface-container-low/40 border border-outline-variant/20 mb-4">
+<div class="flex items-baseline justify-between mb-1.5">
+<div class="flex items-baseline gap-1.5">
+<span class="text-2xl font-bold text-on-surface">95</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">atendimentos domiciliares e coletivos</span>
+</div>
+<span class="text-label-md font-label-md text-[#1E824C] font-bold">95% da meta</span>
+</div>
+<div class="w-full h-2.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-[#2FBF71] rounded-full transition-all duration-300" style="width: 95%;"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant mt-1.5">
+<span>Meta quadrimestral: 100 atendimentos</span>
+<span class="text-secondary font-medium">Meta próxima da conclusão</span>
+</div>
+</div>
+<!-- Inconsistencies Status Box -->
+<div class="rounded-lg p-3 bg-[#EAF8F1]/60 border border-[#2FBF71]/30 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#1E824C] text-xl" data-icon="verified_user">verified_user</span>
+<div>
+<span class="text-label-md font-label-md font-bold text-[#1E824C] block">0 inconsistências nos registros</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Atividades coletivas e fichas domiciliares aprovadas</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-white text-[#1E824C] font-bold text-label-sm">Conforme</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 mt-4 border-t border-outline-variant/20">
+<span class="text-label-sm font-label-sm text-outline">Último envio: Hoje, 08:15</span>
+<button class="text-label-md font-label-md text-primary hover:text-primary-container font-semibold flex items-center gap-1" type="button">
+            Ver Grupos e Visitas
+            <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</article>
+</div>
+<!-- Additional Information Banner / Alert for Sanitary Audit -->
+<div class="rounded-xl p-4 bg-surface-container border border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="notification_important">notification_important</span>
+</div>
+<div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Fechamento da Competência do Mês</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant">O lote de exportação para o Ministério da Saúde será gerado em 5 dias úteis. Corrija as inconsistências pendentes para garantir a pontuação integral no ISF.</p>
+</div>
+</div>
+<button class="px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container text-label-md font-label-md font-semibold shrink-0 transition-colors" type="button">
+        Exportar Lote de Teste
+      </button>
+</div>
+</main>
+<!-- BottomNavBar: Fixed bottom navigation shell with 'Atendimentos' ACTIVE -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-2 bg-surface dark:bg-inverse-surface shadow-md dark:shadow-none border-t border-outline-variant/30">
+<!-- Início -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95 hover:text-on-surface" href="#inicio">
+<span class="material-symbols-outlined text-2xl" data-icon="dashboard">dashboard</span>
+<span>Início</span>
+</a>
+<!-- Cadastros -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95 hover:text-on-surface" href="#cadastros">
+<span class="material-symbols-outlined text-2xl" data-icon="how_to_reg">how_to_reg</span>
+<span>Cadastros</span>
+</a>
+<!-- Atendimentos (ACTIVE TAB) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary-fixed dark:text-on-primary-fixed rounded-full px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95 shadow-sm" href="#atendimentos">
+<span class="material-symbols-outlined text-2xl" data-icon="clinical_notes" style="font-variation-settings: 'FILL' 1;">clinical_notes</span>
+<span>Atendimentos</span>
+</a>
+<!-- Indicadores -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95 hover:text-on-surface" href="#indicadores">
+<span class="material-symbols-outlined text-2xl" data-icon="analytics">analytics</span>
+<span>Indicadores</span>
+</a>
+<!-- Mais -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-3 py-1 font-label-sm text-label-sm transition-all duration-150 active:scale-95 hover:text-on-surface" href="#mais">
+<span class="material-symbols-outlined text-2xl" data-icon="more_horiz">more_horiz</span>
+<span>Mais</span>
+</a>
+</nav>
+</body></html>

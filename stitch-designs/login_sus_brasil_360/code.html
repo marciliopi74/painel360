@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - SUS Brasil 360</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Inter Google Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface": "#091e25",
+            "outline-variant": "#bdc9ca",
+            "surface-container-low": "#e4f7ff",
+            "surface-bright": "#f2fbff",
+            "tertiary-container": "#a35f24",
+            "background": "#f2fbff",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-fixed-dim": "#ffb780",
+            "surface": "#f2fbff",
+            "surface-dim": "#c8dee7",
+            "on-primary-container": "#ddfbff",
+            "on-secondary-fixed-variant": "#00522b",
+            "surface-container-highest": "#d0e6ef",
+            "secondary-fixed-dim": "#57df8d",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed": "#001f23",
+            "error": "#ba1a1a",
+            "tertiary-fixed": "#ffdcc4",
+            "inverse-primary": "#7cd4df",
+            "surface-variant": "#d0e6ef",
+            "on-background": "#091e25",
+            "on-primary-fixed-variant": "#004f56",
+            "on-secondary-fixed": "#00210e",
+            "surface-container": "#dcf1fb",
+            "error-container": "#ffdad6",
+            "secondary": "#006d3b",
+            "primary": "#00626a",
+            "on-secondary": "#ffffff",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "outline": "#6e797a",
+            "primary-fixed": "#98f0fb",
+            "secondary-fixed": "#75fca7",
+            "on-error-container": "#93000a",
+            "inverse-surface": "#1f333a",
+            "surface-container-high": "#d6ecf5",
+            "on-tertiary-container": "#fff2eb",
+            "on-surface-variant": "#3e494a",
+            "tertiary": "#85480c",
+            "inverse-on-surface": "#def4fe",
+            "primary-container": "#0e7c86",
+            "surface-tint": "#006972",
+            "on-tertiary-fixed": "#2f1400",
+            "on-tertiary-fixed-variant": "#6f3800",
+            "on-secondary-container": "#00743f",
+            "secondary-container": "#75fca7",
+            "primary-fixed-dim": "#7cd4df"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "margin": "1.5rem",
+            "margin-mobile": "1rem",
+            "gutter-mobile": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2rem",
+            "gutter": "1rem"
+          },
+          "fontFamily": {
+            "body-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-lg": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body-md text-on-surface min-h-screen flex flex-col justify-between selection:bg-primary-fixed selection:text-on-primary-fixed antialiased">
+<!-- Top Institutional Bar (Executing Shared Component TopAppBar Blueprint) -->
+<header class="flex justify-between items-center w-full px-4 h-16 sticky top-0 z-40 bg-surface dark:bg-inverse-surface shadow-sm dark:shadow-none">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="local_hospital">local_hospital</span>
+</div>
+<div>
+<h1 class="text-headline-sm font-headline-sm text-primary dark:text-inverse-primary font-bold tracking-tight">SUS Brasil 360</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant leading-none">Atenção Primária à Saúde</p>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<button class="p-2 rounded-lg text-primary dark:text-inverse-primary hover:bg-surface-container transition-colors duration-150 active:scale-95 flex items-center justify-center" title="Sincronizar dados locais" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="sync">sync</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas Container (Centered ergonomic mobile-first view bounded for public health operators) -->
+<main class="flex-grow flex items-center justify-center p-4 sm:p-6 md:p-8">
+<div class="w-full max-w-md mx-auto space-y-4">
+<!-- Server & Local Database Status Chip -->
+<div class="flex items-center justify-center">
+<div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-surface-container border border-outline-variant/40 shadow-sm">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-fixed opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+</span>
+<span class="text-label-md font-label-md text-on-surface-variant font-medium">Servidor Local On-Premise</span>
+<span class="text-outline text-label-sm font-label-sm">•</span>
+<span class="text-label-md font-label-md text-secondary font-semibold">e-SUS Conectado</span>
+</div>
+</div>
+<!-- Authentication Card (Level 1 Elevation) -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 p-5 sm:p-6 shadow-sm">
+<!-- Header / Scope Introduction -->
+<div class="mb-5 text-center">
+<div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-surface-container-low text-primary mb-3 ring-1 ring-primary/10">
+<span class="material-symbols-outlined text-3xl" data-icon="verified_user">verified_user</span>
+</div>
+<h2 class="text-headline-md font-headline-md text-on-surface font-bold">Acesso ao Painel SUS Brasil 360</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">
+            Monitoramento e auditoria em tempo real do e-SUS APS e Previne Brasil
+          </p>
+</div>
+<!-- Profile / Access Segmented Control -->
+<div class="mb-5 bg-surface-container p-1 rounded-lg flex items-center gap-1 border border-outline-variant/20" role="tablist">
+<button aria-selected="true" class="flex-1 py-2 px-3 rounded-lg text-label-md font-label-md font-semibold transition-all duration-150 flex items-center justify-center gap-1.5 bg-surface-container-lowest text-primary shadow-sm ring-1 ring-black/5" id="tab-acs" onclick="switchTab('acs')" role="tab" type="button">
+<span class="material-symbols-outlined text-base" data-icon="badge">badge</span>
+<span>Profissional / ACS</span>
+</button>
+<button aria-selected="false" class="flex-1 py-2 px-3 rounded-lg text-label-md font-label-md font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all duration-150 flex items-center justify-center gap-1.5" id="tab-gestor" onclick="switchTab('gestor')" role="tab" type="button">
+<span class="material-symbols-outlined text-base" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span>Gestor / Coordenação</span>
+</button>
+</div>
+<!-- Form Element -->
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<!-- Identification Field (CPF/CNS or Email) -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface font-semibold mb-1" for="credential-input" id="label-credential">
+              CPF ou CNS
+            </label>
+<div class="relative rounded-lg shadow-sm">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-xl" data-icon="person" id="icon-credential">person</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-on-surface text-body-md font-body-md placeholder:text-outline-variant focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-colors" id="credential-input" placeholder="000.000.000-00 ou Cartão SUS" required="" type="text"/>
+</div>
+<p class="mt-1 text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1" id="helper-credential">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+              Informe os 11 dígitos do CPF ou 15 dígitos do Cartão Nacional de Saúde
+            </p>
+</div>
+<!-- Password Field with Toggle -->
+<div>
+<div class="flex items-center justify-between mb-1">
+<label class="block text-label-md font-label-md text-on-surface font-semibold" for="password-input">
+                Senha de Acesso
+              </label>
+</div>
+<div class="relative rounded-lg shadow-sm">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-xl" data-icon="lock">lock</span>
+</div>
+<input class="block w-full pl-10 pr-10 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-on-surface text-body-md font-body-md placeholder:text-outline-variant focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-colors" id="password-input" placeholder="••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3 flex items-center text-outline hover:text-on-surface transition-colors" onclick="togglePasswordVisibility()" title="Mostrar ou ocultar senha" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="visibility" id="eye-icon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Municipality / CNES Unit Selector Context -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface font-semibold mb-1" for="unit-select">
+              Município / CNES Vinculado
+            </label>
+<div class="relative rounded-lg shadow-sm">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-xl" data-icon="apartment">apartment</span>
+</div>
+<select class="block w-full pl-10 pr-9 py-2.5 bg-surface-container-lowest border border-outline-variant/50 rounded-lg text-on-surface text-body-md font-body-md focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 appearance-none transition-colors cursor-pointer" id="unit-select">
+<option value="cnes-sms">Secretaria Municipal de Saúde • CNES 2381900</option>
+<option value="cnes-ubs1">UBS Central Dra. Zilda Arns • CNES 2382109</option>
+<option value="cnes-ubs2">ESF Vila Nova Esperança • CNES 2382451</option>
+<option value="cnes-ubs3">UBS Rural São Bento (Ponto Itinerante) • CNES 2382990</option>
+</select>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-xl" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Remember Me & Forgot Password Actions -->
+<div class="flex items-center justify-between pt-1">
+<label class="flex items-center space-x-2 cursor-pointer">
+<input class="h-4 w-4 rounded border-outline-variant text-primary-container focus:ring-primary-container focus:ring-offset-0 transition-colors" type="checkbox"/>
+<span class="text-label-md font-label-md text-on-surface">Lembrar identificação</span>
+</label>
+<a class="text-label-md font-label-md text-primary font-semibold hover:underline decoration-1 underline-offset-2" href="#">
+              Esqueci minha senha
+            </a>
+</div>
+<!-- Primary Submit Button -->
+<div class="pt-2">
+<button class="w-full h-11 bg-primary-container text-on-primary font-label-lg text-label-lg rounded-lg shadow-sm hover:bg-primary transition-all duration-150 active:scale-[0.98] flex items-center justify-center space-x-2" type="submit">
+<span>Entrar no Sistema</span>
+<span class="material-symbols-outlined text-xl" data-icon="login">login</span>
+</button>
+</div>
+</form>
+<!-- Gov.br / e-SUS PEC Single Sign-On Divider & Button -->
+<div class="mt-5 pt-4 border-t border-outline-variant/30">
+<button class="w-full h-11 bg-surface-container-lowest border border-outline text-on-surface font-label-md text-label-md rounded-lg hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.98] flex items-center justify-center space-x-2.5" type="button">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="account_balance">account_balance</span>
+<span class="font-semibold">Entrar com credencial e-SUS PEC (Gov.br)</span>
+</button>
+</div>
+</div>
+<!-- Institutional Security & PostgreSQL Architecture Notice (Level 0/1 Micro-Card) -->
+<div class="bg-surface-container-high/40 rounded-lg p-3.5 border border-outline-variant/30 text-on-surface-variant flex items-start space-x-3">
+<span class="material-symbols-outlined text-primary-container text-xl mt-0.5 shrink-0" data-icon="lock_clock">lock_clock</span>
+<div class="text-body-sm font-body-sm">
+<p class="font-semibold text-on-surface text-label-sm font-label-sm uppercase tracking-wide">
+            Ambiente Seguro Local Oficial
+          </p>
+<p class="mt-0.5 text-label-sm font-label-sm leading-relaxed">
+            Conexão cifrada direta com banco de dados PostgreSQL do e-SUS APS. Versão 5.3.18 Oficial homologada pelo Ministério da Saúde e aderente à LGPD.
+          </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Legal & Municipal Support Footer -->
+<footer class="w-full px-4 py-4 border-t border-outline-variant/20 bg-surface-container-lowest text-center">
+<div class="max-w-md mx-auto space-y-1">
+<p class="text-label-md font-label-md text-on-surface font-medium flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-base text-primary" data-icon="support_agent">support_agent</span>
+        Precisa de suporte? Contate a equipe de TI da Secretaria Municipal.
+      </p>
+<div class="flex items-center justify-center space-x-3 text-label-sm font-label-sm text-outline">
+<span>SUS Brasil 360 v2.4.1 (Build 2025)</span>
+<span>•</span>
+<span>SISAB / e-SUS APS</span>
+</div>
+</div>
+</footer>
+<!-- Light Vanilla Script for Profile Tabs and Password Visibility -->
+<script>
+    function switchTab(profile) {
+      const tabAcs = document.getElementById('tab-acs');
+      const tabGestor = document.getElementById('tab-gestor');
+      const label = document.getElementById('label-credential');
+      const input = document.getElementById('credential-input');
+      const icon = document.getElementById('icon-credential');
+      const helper = document.getElementById('helper-credential');
+
+      if (profile === 'acs') {
+        tabAcs.className = "flex-1 py-2 px-3 rounded-lg text-label-md font-label-md font-semibold transition-all duration-150 flex items-center justify-center gap-1.5 bg-surface-container-lowest text-primary shadow-sm ring-1 ring-black/5";
+        tabAcs.setAttribute('aria-selected', 'true');
+        
+        tabGestor.className = "flex-1 py-2 px-3 rounded-lg text-label-md font-label-md font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all duration-150 flex items-center justify-center gap-1.5";
+        tabGestor.setAttribute('aria-selected', 'false');
+
+        label.textContent = "CPF ou CNS";
+        input.placeholder = "000.000.000-00 ou Cartão SUS";
+        icon.textContent = "person";
+        helper.innerHTML = '<span class="material-symbols-outlined text-sm" data-icon="info">info</span> Informe os 11 dígitos do CPF ou 15 dígitos do Cartão Nacional de Saúde';
+      } else {
+        tabGestor.className = "flex-1 py-2 px-3 rounded-lg text-label-md font-label-md font-semibold transition-all duration-150 flex items-center justify-center gap-1.5 bg-surface-container-lowest text-primary shadow-sm ring-1 ring-black/5";
+        tabGestor.setAttribute('aria-selected', 'true');
+        
+        tabAcs.className = "flex-1 py-2 px-3 rounded-lg text-label-md font-label-md font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all duration-150 flex items-center justify-center gap-1.5";
+        tabAcs.setAttribute('aria-selected', 'false');
+
+        label.textContent = "E-mail Institucional ou CPF";
+        input.placeholder = "coordenacao@saude.gov.br";
+        icon.textContent = "mail";
+        helper.innerHTML = '<span class="material-symbols-outlined text-sm" data-icon="info">info</span> Use o e-mail cadastrado na Gestão Municipal de Saúde';
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const passwordField = document.getElementById('password-input');
+      const eyeIcon = document.getElementById('eye-icon');
+      
+      if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        eyeIcon.textContent = 'visibility_off';
+      } else {
+        passwordField.type = 'password';
+        eyeIcon.textContent = 'visibility';
+      }
+    }
+  </script>
+</body></html>
