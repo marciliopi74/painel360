@@ -35,8 +35,12 @@ BEGIN
     INSERT INTO alertas (id, profissional_id, indicador_id, mensagem, enviado_sms, criado_em)
     VALUES (
       gen_random_uuid(), r.profissional_id, r.indicador_id,
-      format('Indicador %s ficou classificado como %s (%.2f) em %s/%s.',
-             r.indicador_nome, r.classificacao, r.valor_calculado, p_quadrimestre, p_ano),
+      -- format() do Postgres só suporta %s/%I/%L/%% — não aceita especificadores estilo C como
+      -- %.2f (bug real: toda vez que esta linha rodava com uma vírgula/valor casando, a função
+      -- inteira lançava "unrecognized format() type specifier" e abortava, então nenhum alerta
+      -- de indicador jamais foi criado até este fix, 2026-09-13).
+      format('Indicador %s ficou classificado como %s (%s) em %s/%s.',
+             r.indicador_nome, r.classificacao, round(r.valor_calculado, 2), p_quadrimestre, p_ano),
       false, now()
     );
     v_criados := v_criados + 1;

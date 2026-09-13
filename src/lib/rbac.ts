@@ -22,10 +22,6 @@ export function podeDispararSincronizacao(usuario: UsuarioSessao): boolean {
   return usuario.papel === "gestor_local" || usuario.papel === "secretario" || usuario.papel === "coordenador";
 }
 
-export function podeVincularEquipeReferencia(usuario: UsuarioSessao): boolean {
-  return usuario.papel === "gestor_local" || usuario.papel === "coordenador";
-}
-
 const ROTULOS_PAPEL: Record<Papel, string> = {
   gestor_local: "Gestor local",
   secretario: "Secretário",

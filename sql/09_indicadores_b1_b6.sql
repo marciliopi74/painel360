@@ -23,13 +23,27 @@
 -- ===================== helpers =====================
 
 -- valor_calculado = numerador/denominador SEM multiplicar por 100 (B1, B4 — ver nota 1 acima).
+-- Mesmo redirecionamento de modo_calculo_atual() que upsert_resultado_indicador() tem, em
+-- sql/04_indicadores_motor_calculo.sql — ver comentário lá para o porquê.
 CREATE OR REPLACE PROCEDURE upsert_resultado_indicador_razao(
   p_equipe_id uuid, p_indicador_id uuid, p_quadrimestre "Quadrimestre", p_ano int,
   p_numerador numeric, p_denominador numeric
 ) LANGUAGE plpgsql AS $$
 DECLARE
   v_valor numeric;
+  v_modo text := modo_calculo_atual();
 BEGIN
+  IF v_modo = 'so_pontuacao' THEN RETURN; END IF;
+
+  IF v_modo = 'mensal' THEN
+    CALL upsert_resultado_indicador_mensal(
+      p_equipe_id, p_indicador_id,
+      current_setting('app.calculo_mes_ano')::int, current_setting('app.calculo_mes_numero')::int,
+      p_numerador, p_denominador, true
+    );
+    RETURN;
+  END IF;
+
   v_valor := CASE WHEN p_denominador = 0 THEN 0 ELSE round(p_numerador / p_denominador, 4) END;
 
   INSERT INTO resultados_indicadores

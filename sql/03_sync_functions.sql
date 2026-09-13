@@ -116,15 +116,24 @@ BEGIN
 
   -- Etapa 4: cadastros individuais. tb_cds_cad_individual não tem equipe_id direto — resolve via
   -- co_cds_prof_cadastrante -> tb_cds_prof.nu_ine -> equipes.ine (mesmo profissional cadastrante).
+  -- Nome do cidadão: tb_cds_cad_individual já traz no_cidadao/no_social_cidadao diretamente na
+  -- própria linha (confirmado populado contra e-SUS real) — não precisa (nem dá: nu_cns_cidadao
+  -- aqui costuma ser um hash de 32 caracteres, não o CNS de 15 dígitos de tb_cidadao.nu_cns, então
+  -- um join por CNS não bate) de join com tb_cidadao. Nome social primeiro, como o e-SUS faz.
   CALL sp_atualizar_progresso(p_sincronizacao_id, 'cadastros_individuais', 0);
 
-  INSERT INTO cadastros_individuais (id, profissional_id, equipe_id, cidadao_cns, data_cadastro, fonte_id)
+  -- fora_de_area vem direto de st_fora_area (real, sincronizado); beneficiario_bpc_pbf NÃO
+  -- aparece aqui de propósito — é um campo manual (Nota Técnica 30, sem fonte no e-SUS) e nunca
+  -- deve ser sobrescrito por uma sincronização.
+  INSERT INTO cadastros_individuais (id, profissional_id, equipe_id, cidadao_cns, cidadao_nome, data_cadastro, fora_de_area, fonte_id)
   SELECT
     gen_random_uuid(),
     prof.id,
     prof.equipe_id,
     ci.nu_cns_cidadao,
+    COALESCE(NULLIF(ci.no_social_cidadao, ''), ci.no_cidadao),
     ci.dt_cad_individual::date,
+    coalesce(ci.st_fora_area, 0) = 1,
     ci.co_seq_cds_cad_individual
   FROM esus.tb_cds_cad_individual ci
   JOIN esus.tb_cds_prof cp ON cp.co_seq_cds_prof = ci.co_cds_prof_cadastrante
@@ -134,7 +143,9 @@ BEGIN
     SET profissional_id = EXCLUDED.profissional_id,
         equipe_id        = EXCLUDED.equipe_id,
         cidadao_cns      = EXCLUDED.cidadao_cns,
+        cidadao_nome     = EXCLUDED.cidadao_nome,
         data_cadastro    = EXCLUDED.data_cadastro,
+        fora_de_area     = EXCLUDED.fora_de_area,
         atualizado_em    = now();
   GET DIAGNOSTICS v_count = ROW_COUNT;
   CALL sp_atualizar_progresso(p_sincronizacao_id, 'cadastros_individuais', v_count);
@@ -170,6 +181,34 @@ BEGIN
         atualizado_em        = now();
   GET DIAGNOSTICS v_count = ROW_COUNT;
   CALL sp_atualizar_progresso(p_sincronizacao_id, 'cadastros_domiciliares', v_count);
+
+  -- Etapa 6: recalcula C1-C7/B1-B6/M1-M2 para o quadrimestre corrente. Bug real encontrado em
+  -- 2026-09-13: nada disparava recalcular_indicadores_qualidade() automaticamente (só existia
+  -- cron para sincronizar_esus, verificar_alertas e detectar_erros_*) — um atendimento novo
+  -- sincronizava normalmente em `atendimentos`, mas o indicador de qualidade correspondente
+  -- (ex.: C5/C6 para hipertensão/diabetes) nunca era recalculado, então o usuário nunca via a
+  -- mudança refletida em Indicadores de Qualidade. recalcular_indicadores_qualidade() não faz
+  -- COMMIT interno (cada calculadora também não), então é seguro chamar aqui dentro, antes do
+  -- COMMIT final desta procedure.
+  CALL sp_atualizar_progresso(p_sincronizacao_id, 'indicadores_qualidade', 0);
+  CALL recalcular_indicadores_qualidade(
+    (CASE WHEN extract(month FROM now()) <= 4 THEN 'Q1' WHEN extract(month FROM now()) <= 8 THEN 'Q2' ELSE 'Q3' END)::"Quadrimestre",
+    extract(year FROM now())::int
+  );
+
+  -- Etapa 7: recalcula o componente Vínculo e Acompanhamento Territorial (Nota Técnica 30).
+  -- Diferente de recalcular_indicadores_qualidade(), calcular_vinculo_acompanhamento() não tem
+  -- proteção interna por calculadora — por isso o BEGIN/EXCEPTION aqui, pra uma falha nele (ex.:
+  -- população do município ainda não configurada) nunca quebrar a sincronização do e-SUS em si.
+  CALL sp_atualizar_progresso(p_sincronizacao_id, 'vinculo_acompanhamento', 0);
+  BEGIN
+    CALL calcular_vinculo_acompanhamento(
+      (CASE WHEN extract(month FROM now()) <= 4 THEN 'Q1' WHEN extract(month FROM now()) <= 8 THEN 'Q2' ELSE 'Q3' END)::"Quadrimestre",
+      extract(year FROM now())::int
+    );
+  EXCEPTION WHEN OTHERS THEN
+    RAISE WARNING 'sincronizar_esus: falha em calcular_vinculo_acompanhamento — %', SQLERRM;
+  END;
 
   UPDATE sincronizacoes
      SET status = 'concluida',

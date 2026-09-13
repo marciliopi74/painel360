@@ -5,11 +5,29 @@
 CREATE OR REPLACE FUNCTION detectar_erros_cadastros() RETURNS void LANGUAGE plpgsql AS $$
 BEGIN
   -- cadastros individuais
+  --
+  -- Bug real corrigido em 2026-09-13 (reportado pelo usuário: nenhum cadastro individual "sem
+  -- erro" aparecia na tela de Cadastros — só domiciliares): esta checagem validava
+  -- cidadao_cns como se fosse sempre um CNS real de 15 dígitos, mas nesta instalação
+  -- tb_cds_cad_individual.nu_cns_cidadao vem preenchido com um HASH de 32 caracteres hex (ver
+  -- comentário em CadastroIndividual no schema.prisma e em sql/03_sync_functions.sql) — ou seja,
+  -- depois de tirar os não-dígitos, NUNCA dava exatamente 15, e os 15 cadastros individuais reais
+  -- desta instalação ficavam 100% flagados como cns_invalido, sempre. Corrigido para aceitar os
+  -- dois formatos observados na prática (CNS real de 15 dígitos OU o hash de 32 caracteres desta
+  -- instalação) — só sinaliza erro quando não bate com nenhum dos dois, ou está vazio.
   UPDATE cadastros_individuais
      SET tem_erro = true,
          tipo_erro = 'cns_invalido'
    WHERE tem_erro IS DISTINCT FROM true
-     AND (cidadao_cns IS NULL OR length(regexp_replace(cidadao_cns, '\D', '', 'g')) <> 15);
+     AND (cidadao_cns IS NULL OR NOT (cidadao_cns ~ '^[0-9]{15}$' OR cidadao_cns ~ '^[0-9a-f]{32}$'));
+
+  -- reverte cadastros que foram flagados cns_invalido antes desta correção mas que, pelo
+  -- critério novo, são válidos (hash de 32 caracteres) — sem isso continuariam presos com
+  -- tem_erro=true indefinidamente, já que a checagem acima só ADICIONA a flag, nunca remove.
+  UPDATE cadastros_individuais
+     SET tem_erro = false, tipo_erro = NULL
+   WHERE tipo_erro = 'cns_invalido'
+     AND (cidadao_cns ~ '^[0-9]{15}$' OR cidadao_cns ~ '^[0-9a-f]{32}$');
 
   UPDATE cadastros_individuais
      SET tem_erro = true,

@@ -3,9 +3,13 @@
 // arquivos de relatório (requisitos 22-23). A detecção de alertas em si e a sincronização
 // periódica com o e-SUS continuam no pg_cron (ver sql/05_alertas_relatorios.sql) — este worker
 // só drena o trabalho que sobrou para o lado da aplicação.
-import { prisma } from "@/lib/prisma";
-import { enviarSms } from "@/lib/sms";
-import { gerarRelatorioDiario, gerarRelatorioSemanal, gerarAvaliacaoQuadrimestral } from "@/lib/relatorios";
+// Imports relativos (não "@/...") de propósito: `tsx` não resolve o path alias `@/` do
+// tsconfig.json — só o bundler do Next.js faz isso. Usar o alias aqui derrubava o worker em
+// crash loop silencioso (MODULE_NOT_FOUND) desde sempre; nenhum SMS ou relatório automático
+// chegou a rodar até este fix (2026-09-13).
+import { prisma } from "../src/lib/prisma";
+import { enviarSms } from "../src/lib/sms";
+import { gerarRelatorioDiario, gerarRelatorioSemanal, gerarAvaliacaoQuadrimestral } from "../src/lib/relatorios";
 
 const INTERVALO_MS = 60_000;
 

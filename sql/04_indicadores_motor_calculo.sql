@@ -7,19 +7,43 @@
 -- sql/09_indicadores_b1_b6.sql, M1-M2 em sql/10_indicadores_m1_m2.sql. Ver
 -- docs/indicadores-qualidade.md para simplificações de escopo documentadas em cada um.
 
+-- lê o "modo de cálculo" corrente (ver sql/12_calculo_mensal.sql) — '' (normal, default),
+-- 'mensal' (uma calculadora rodando só sobre um mês, dentro de recalcular_indicadores_qualidade)
+-- ou 'so_pontuacao' (passada final só pra atualizar boas_praticas_pontuacao_pessoa). Usado por
+-- periodo_quadrimestre()/upsert_resultado_indicador()/upsert_resultado_indicador_razao() pra
+-- redirecionar o comportamento SEM precisar mudar a assinatura de nenhuma das 17 calculadoras
+-- (calcular_c1..c7/b1..b6/m1..m2) nem duplicar a lógica de elegibilidade de cada uma.
+CREATE OR REPLACE FUNCTION modo_calculo_atual() RETURNS text LANGUAGE sql STABLE AS $$
+  SELECT coalesce(current_setting('app.modo_calculo', true), '');
+$$;
+
+-- Nota Técnica nº 6/2025-DEAPS/SAPS/MS, item 4.1: "o resultado do quadrimestre por indicador
+-- será obtido pela média dos meses monitorados" — não mais uma janela única de 4 meses. Em modo
+-- 'mensal', devolve o mês corrente (setado por recalcular_indicadores_qualidade via
+-- set_config) em vez do quadrimestre inteiro — toda calculadora que já chama
+-- periodo_quadrimestre() automaticamente passa a operar sobre 1 mês, sem saber disso.
 CREATE OR REPLACE FUNCTION periodo_quadrimestre(p_quadrimestre "Quadrimestre", p_ano int)
-RETURNS TABLE(inicio date, fim date) LANGUAGE sql IMMUTABLE AS $$
-  SELECT
-    CASE p_quadrimestre
-      WHEN 'Q1' THEN make_date(p_ano, 1, 1)
-      WHEN 'Q2' THEN make_date(p_ano, 5, 1)
-      WHEN 'Q3' THEN make_date(p_ano, 9, 1)
-    END,
-    CASE p_quadrimestre
-      WHEN 'Q1' THEN make_date(p_ano, 4, 30)
-      WHEN 'Q2' THEN make_date(p_ano, 8, 31)
-      WHEN 'Q3' THEN make_date(p_ano, 12, 31)
-    END;
+RETURNS TABLE(inicio date, fim date) LANGUAGE plpgsql STABLE AS $$
+BEGIN
+  IF modo_calculo_atual() = 'mensal' THEN
+    inicio := current_setting('app.calculo_mes_inicio')::date;
+    fim := current_setting('app.calculo_mes_fim')::date;
+    RETURN NEXT;
+    RETURN;
+  END IF;
+
+  inicio := CASE p_quadrimestre
+    WHEN 'Q1' THEN make_date(p_ano, 1, 1)
+    WHEN 'Q2' THEN make_date(p_ano, 5, 1)
+    WHEN 'Q3' THEN make_date(p_ano, 9, 1)
+  END;
+  fim := CASE p_quadrimestre
+    WHEN 'Q1' THEN make_date(p_ano, 4, 30)
+    WHEN 'Q2' THEN make_date(p_ano, 8, 31)
+    WHEN 'Q3' THEN make_date(p_ano, 12, 31)
+  END;
+  RETURN NEXT;
+END;
 $$;
 
 CREATE OR REPLACE FUNCTION classificar_indicador(p_indicador_id uuid, p_valor numeric)
@@ -47,24 +71,46 @@ BEGIN
       ELSE 'regular'
     END::"Classificacao";
   ELSE
-    -- polaridade neutra: usado por C1 (regular tanto abaixo do mínimo quanto acima do máximo).
+    -- polaridade neutra: usado por C1/B3/B5 (regular tanto abaixo do mínimo quanto acima do
+    -- máximo). Limite inferior EXCLUSIVO / superior INCLUSIVO (ex.: C1 "Ótimo: > 50 e ≤ 70"),
+    -- batendo com a notação das Notas Metodológicas oficiais — corrigido em 2026-09-13: a versão
+    -- anterior usava BETWEEN (inclusivo nos dois lados), o que classificava um valor bem na
+    -- fronteira (ex. exatamente 50% ou 10% no C1) uma faixa acima do que a nota oficial define.
     RETURN CASE
-      WHEN p_valor BETWEEN v.parametro_otimo_min AND v.parametro_otimo_max THEN 'otimo'
-      WHEN p_valor BETWEEN v.parametro_bom_min AND v.parametro_bom_max THEN 'bom'
-      WHEN p_valor BETWEEN v.parametro_suficiente_min AND v.parametro_suficiente_max THEN 'suficiente'
+      WHEN p_valor > v.parametro_otimo_min AND p_valor <= v.parametro_otimo_max THEN 'otimo'
+      WHEN p_valor > v.parametro_bom_min AND p_valor <= v.parametro_bom_max THEN 'bom'
+      WHEN p_valor > v.parametro_suficiente_min AND p_valor <= v.parametro_suficiente_max THEN 'suficiente'
       ELSE 'regular'
     END::"Classificacao";
   END IF;
 END;
 $$;
 
+-- Redireciona pra resultados_indicadores_mensal em modo 'mensal' (ver
+-- sql/12_calculo_mensal.sql/modo_calculo_atual() acima) — nenhuma das 17 calculadoras que já
+-- chamam este procedure precisa saber disso. Em modo 'so_pontuacao' (passada final que só
+-- reconstrói boas_praticas_pontuacao_pessoa), não escreve nada aqui de propósito: o resultado
+-- quadrimestral já foi gravado por agregar_resultados_mensais() e não pode ser sobrescrito por
+-- uma calculadora rodando de novo com a janela cheia só pra atualizar a pontuação por pessoa.
 CREATE OR REPLACE PROCEDURE upsert_resultado_indicador(
   p_equipe_id uuid, p_indicador_id uuid, p_quadrimestre "Quadrimestre", p_ano int,
   p_numerador numeric, p_denominador numeric
 ) LANGUAGE plpgsql AS $$
 DECLARE
   v_valor numeric;
+  v_modo text := modo_calculo_atual();
 BEGIN
+  IF v_modo = 'so_pontuacao' THEN RETURN; END IF;
+
+  IF v_modo = 'mensal' THEN
+    CALL upsert_resultado_indicador_mensal(
+      p_equipe_id, p_indicador_id,
+      current_setting('app.calculo_mes_ano')::int, current_setting('app.calculo_mes_numero')::int,
+      p_numerador, p_denominador, false
+    );
+    RETURN;
+  END IF;
+
   v_valor := CASE WHEN p_denominador = 0 THEN 0 ELSE round(100.0 * p_numerador / p_denominador, 2) END;
 
   INSERT INTO resultados_indicadores
@@ -135,6 +181,16 @@ $$;
 
 -- Condição/problema ativo (CID-10 e/ou CIAP-2) para um cidadão, usado pelos critérios de
 -- elegibilidade de C3 (gestação/puerpério), C4 (diabetes) e C5 (hipertensão).
+--
+-- Bug real corrigido em 2026-09-13 (reportado pelo usuário: atendimentos novos com condição de
+-- hipertensão/diabetes registrada não refletiam em C4/C5): `p.co_dim_situacao_problema` é a
+-- CHAVE SUBSTITUTA da dimensão (`co_seq_dim_situacao` — 1=Ativo, 2=Latente, 3=Resolvido), não o
+-- código de negócio do e-SUS (`nu_identificador` — '0'=Ativo, '1'=Latente, '2'=Resolvido). A
+-- versão anterior comparava a chave substituta direto com o código de negócio
+-- (`co_dim_situacao_problema = 0`), que nunca é verdadeiro para uma condição realmente Ativa
+-- (situação=1) — só "batia" por acidente via COALESCE nas linhas com situação NULA. Corrigido
+-- para fazer o join até a dimensão e comparar pelo `nu_identificador`, do mesmo jeito que o
+-- resto do schema resolve outras dimensões (ex.: tb_tipo_equipe em sql/03_sync_functions.sql).
 CREATE OR REPLACE FUNCTION tem_condicao_ativa(p_co_cidadao bigint, p_cids text[], p_ciaps text[])
 RETURNS boolean LANGUAGE sql STABLE AS $$
   SELECT EXISTS (
@@ -142,8 +198,9 @@ RETURNS boolean LANGUAGE sql STABLE AS $$
     FROM esus.tb_fat_atd_ind_problemas p
     LEFT JOIN esus.tb_cid10 cid ON cid.co_cid10 = p.co_dim_cid
     LEFT JOIN esus.tb_dim_ciap ciap ON ciap.co_seq_dim_ciap = p.co_dim_ciap
+    LEFT JOIN esus.tb_dim_situacao_problema sit ON sit.co_seq_dim_situacao = p.co_dim_situacao_problema
     WHERE p.co_fat_cidadao_pec = p_co_cidadao
-      AND COALESCE(p.co_dim_situacao_problema, 0) = 0 -- 0 = Ativo (tb_dim_situacao_problema)
+      AND COALESCE(sit.nu_identificador, '0') = '0' -- 0 = Ativo (tb_dim_situacao_problema.nu_identificador)
       AND ((p_cids IS NOT NULL AND cid.nu_cid10 = ANY(p_cids)) OR (p_ciaps IS NOT NULL AND ciap.nu_ciap = ANY(p_ciaps)))
   );
 $$;
@@ -197,22 +254,60 @@ $$;
 -- calcular_c2..c7, calcular_b1..b6 e calcular_m1..m2 são definidas em
 -- sql/08_indicadores_c2_c7.sql, sql/09_indicadores_b1_b6.sql e sql/10_indicadores_m1_m2.sql
 -- respectivamente (CREATE OR REPLACE — a lista abaixo já referencia os nomes finais).
+-- Nota Técnica nº 6/2025-DEAPS/SAPS/MS, item 4.1: o resultado quadrimestral de cada indicador
+-- é a MÉDIA dos resultados mensais monitorados, não mais um cálculo direto sobre a janela dos 4
+-- meses inteira (bug de metodologia real corrigido em 2026-09-13 — o comportamento antigo
+-- ainda existe e continua correto para quem chamar as calculadoras diretamente, ver
+-- modo_calculo_atual() acima). Fluxo:
+--   1) roda as 17 calculadoras 1x por mês (modo 'mensal' — cada uma grava em
+--      resultados_indicadores_mensal via upsert_resultado_indicador[_razao] redirecionado, sem
+--      mudar nada da lógica de elegibilidade de cada calculadora);
+--   2) agrega os meses em resultados_indicadores (média simples dos meses com denominador>0 —
+--      isso já aplica de graça a regra especial do item 4.1.1 pra C2/C3 "só conta mês com
+--      coorte de fechamento", porque toda calculadora já só grava um mês quando population
+--      elegível > 0);
+--   3) passada final (modo 'so_pontuacao', só C2-C7) pra reconstruir
+--      boas_praticas_pontuacao_pessoa com a janela cheia do quadrimestre — sem sobrescrever o
+--      resultado médio calculado no passo 2 (upsert_resultado_indicador não escreve nada nesse
+--      modo, ver comentário lá).
 CREATE OR REPLACE PROCEDURE recalcular_indicadores_qualidade(p_quadrimestre "Quadrimestre", p_ano int)
 LANGUAGE plpgsql AS $$
 DECLARE
   v_proc text;
+  v_mes record;
 BEGIN
-  FOREACH v_proc IN ARRAY ARRAY[
-    'calcular_c1', 'calcular_c2', 'calcular_c3', 'calcular_c4', 'calcular_c5', 'calcular_c6', 'calcular_c7',
-    'calcular_b1', 'calcular_b2', 'calcular_b3', 'calcular_b4', 'calcular_b5', 'calcular_b6',
-    'calcular_m1', 'calcular_m2'
-  ]
-  LOOP
+  FOR v_mes IN SELECT * FROM meses_do_quadrimestre(p_quadrimestre, p_ano) LOOP
+    PERFORM set_config('app.modo_calculo', 'mensal', true);
+    PERFORM set_config('app.calculo_mes_inicio', v_mes.inicio::text, true);
+    PERFORM set_config('app.calculo_mes_fim', v_mes.fim::text, true);
+    PERFORM set_config('app.calculo_mes_ano', v_mes.ano::text, true);
+    PERFORM set_config('app.calculo_mes_numero', v_mes.mes::text, true);
+
+    FOREACH v_proc IN ARRAY ARRAY[
+      'calcular_c1', 'calcular_c2', 'calcular_c3', 'calcular_c4', 'calcular_c5', 'calcular_c6', 'calcular_c7',
+      'calcular_b1', 'calcular_b2', 'calcular_b3', 'calcular_b4', 'calcular_b5', 'calcular_b6',
+      'calcular_m1', 'calcular_m2'
+    ]
+    LOOP
+      BEGIN
+        EXECUTE format('CALL %I($1, $2)', v_proc) USING p_quadrimestre, p_ano;
+      EXCEPTION WHEN OTHERS THEN
+        RAISE WARNING 'recalcular_indicadores_qualidade: falha em % (mês %/%) — %', v_proc, v_mes.mes, v_mes.ano, SQLERRM;
+      END;
+    END LOOP;
+  END LOOP;
+
+  PERFORM set_config('app.modo_calculo', '', true);
+  CALL agregar_resultados_mensais(p_quadrimestre, p_ano);
+
+  PERFORM set_config('app.modo_calculo', 'so_pontuacao', true);
+  FOREACH v_proc IN ARRAY ARRAY['calcular_c2', 'calcular_c3', 'calcular_c4', 'calcular_c5', 'calcular_c6', 'calcular_c7'] LOOP
     BEGIN
       EXECUTE format('CALL %I($1, $2)', v_proc) USING p_quadrimestre, p_ano;
     EXCEPTION WHEN OTHERS THEN
-      RAISE WARNING 'recalcular_indicadores_qualidade: falha em % — %', v_proc, SQLERRM;
+      RAISE WARNING 'recalcular_indicadores_qualidade: falha na passada de pontuação em % — %', v_proc, SQLERRM;
     END;
   END LOOP;
+  PERFORM set_config('app.modo_calculo', '', true);
 END;
 $$;

@@ -27,6 +27,21 @@ Cadastros individuais/domiciliares agora sincronizam de verdade:
   `no_logradouro`, `nu_domicilio`, `ds_complemento`, `no_bairro`, concatenados em
   `sql/03_sync_functions.sql` para preencher `cadastros_domiciliares.endereco_referencia`.
 
+## Nome do cidadão (2026-09-13) e uma pegadinha real com `nu_cns_cidadao`
+
+`tb_cds_cad_individual` já traz `no_cidadao`/`no_social_cidadao` diretamente na própria linha —
+confirmado populado (nomes reais) contra a instalação real. Não precisa (e não dá certo) juntar
+com `tb_cidadao` por CNS: nesta instalação, **100% dos `nu_cns_cidadao` reais sincronizados são
+hashes de 32 caracteres hexadecimais**, não o CNS de 15 dígitos que `tb_cidadao.nu_cns` usa — um
+join por igualdade de CNS não retorna nenhuma linha (testado: 15 de 15 sem match). Isso também
+explica por que **100% dos cadastros individuais reais sincronizados hoje aparecem com
+`tipo_erro = 'cns_invalido'`** no painel: a regra em `sql/06_deteccao_erros.sql` espera 15 dígitos
+numéricos, e um hash não bate. Pode ser um comportamento real do e-SUS (CNS pendente de validação
+CADSUS vira um identificador provisório) ou uma particularidade desta base de
+teste/homologação — não dá pra saber sem comparar com uma segunda instalação. Enquanto isso não
+for confirmado, tratar o indicador "cadastros com CNS inválido" no painel como potencialmente
+superestimado nesta instalação.
+
 ## O que ainda pode variar entre instalações
 
 O teste foi contra uma única instalação (versão 9.6.13-4, dataset pequeno/de teste —

@@ -121,6 +121,8 @@ model Equipe {
   atendimentos                Atendimento[]
   resultadosIndicadores       ResultadoIndicador[]
   boasPraticasPontuacaoPessoa BoaPraticaPontuacaoPessoa[]
+  satisfacoes                 SatisfacaoEquipe[]
+  resultadosVinculoAcompanhamento ResultadoVinculoAcompanhamento[]
 
   @@map("equipes")
 }
@@ -153,10 +155,22 @@ model CadastroIndividual {
   profissional   Profissional @relation(fields: [profissionalId], references: [id])
   equipeId       String       @map("equipe_id") @db.Uuid
   equipe         Equipe       @relation(fields: [equipeId], references: [id])
+  // ATENÇÃO: vem de tb_cds_cad_individual.nu_cns_cidadao, que nesta instalação costuma ser um
+  // hash de 32 caracteres, NÃO o CNS real de 15 dígitos de tb_cidadao.nu_cns/cidadaos_vinculados_
+  // equipe() (ver docs/esus-fdw.md). Os dois espaços de identificador NÃO são joináveis entre si
+  // — não usar este campo para cruzar com boas_praticas_pontuacao_pessoa.cidadao_cns ou qualquer
+  // dado que venha de cidadaos_vinculados_equipe()/tb_cidadao (esses usam o CNS real).
   cidadaoCns     String       @map("cidadao_cns")
+  // nome do cidadão (prioriza nome social) — vem de tb_cidadao via join por nu_cns na
+  // sincronização; pode ser nulo em registros sincronizados antes desta coluna existir, até a
+  // próxima sincronização atualizá-los.
+  cidadaoNome    String?      @map("cidadao_nome")
   dataCadastro   DateTime     @map("data_cadastro") @db.Date
   temErro        Boolean      @default(false) @map("tem_erro")
   tipoErro       String?      @map("tipo_erro")
+  // "Fora de área (FA)" — Nota Técnica 30, item 3.4.b: exclui a pessoa da Dimensão Cadastro.
+  // Sincronizado direto de esus.tb_cds_cad_individual.st_fora_area (flag real do e-SUS).
+  foraDeArea     Boolean      @default(false) @map("fora_de_area")
   atualizadoEm   DateTime     @default(now()) @map("atualizado_em") @db.Timestamptz(6)
   fonteId        BigInt?      @unique @map("fonte_id")
 
@@ -218,6 +232,12 @@ model IndicadorCatalogo {
   parametroBomMax        Decimal?           @map("parametro_bom_max")
   parametroSuficienteMin Decimal?           @map("parametro_suficiente_min")
   parametroSuficienteMax Decimal?           @map("parametro_suficiente_max")
+  // Fórmula de Cálculo, no formato padronizado das Notas Metodológicas oficiais — descrição
+  // textual do que é contado (não o numerador/denominador numérico de um resultado específico,
+  // que fica em ResultadoIndicador). Preenchido a partir da lógica já implementada em
+  // sql/04, 08, 09 e 10 (que por sua vez reflete as Notas oficiais lidas nesta sessão).
+  formulaNumerador       String?            @map("formula_numerador")
+  formulaDenominador     String?            @map("formula_denominador")
   anoReferencia          Int                @map("ano_referencia")
 
   criterios        BoaPraticaCriterio[]
@@ -319,4 +339,92 @@ model Sincronizacao {
   erroMensagem  String?             @map("erro_mensagem")
 
   @@map("sincronizacoes")
+}
+
+// -------------------- VÍNCULO E ACOMPANHAMENTO TERRITORIAL --------------------
+// Componente de financiamento descrito na Nota Técnica nº 30/2025-CGESCO/DESCO/SAPS/MS —
+// metodologia diferente dos indicadores de qualidade C1-C7/B1-B6/M1-M2 (não usa
+// IndicadorCatalogo/ResultadoIndicador: tem 2 dimensões com pesos próprios, parâmetro por porte
+// populacional do município, e dados externos ao e-SUS que precisam ser preenchidos
+// manualmente — ver ConfiguracaoSistema e SatisfacaoEquipe abaixo).
+
+// Beneficiário Bolsa Família/BPC (Nota Técnica 30, item 2.2.a e Passo 2 da Dimensão
+// Acompanhamento) — dado do CadÚnico, sistema federal sem integração com esta instalação;
+// preenchido manualmente. Chaveado pelo CNS REAL (tb_cidadao.nu_cns / cidadaos_vinculados_
+// equipe()), de propósito — NÃO pelo cidadao_cns de CadastroIndividual, que nesta instalação é
+// um hash não joinável com o CNS real (ver comentário em CadastroIndividual acima). Sem essa
+// distinção o cálculo da Dimensão Acompanhamento nunca encontraria nenhum beneficiário.
+model BeneficiarioVulneravel {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  cidadaoCns   String   @unique @map("cidadao_cns")
+  cidadaoNome  String?  @map("cidadao_nome")
+  atualizadoEm DateTime @default(now()) @updatedAt @map("atualizado_em") @db.Timestamptz(6)
+
+  @@map("beneficiarios_vulneraveis")
+}
+
+// Singleton (sempre id=1) — só guarda a população do município (IBGE), usada exclusivamente
+// para achar a faixa de porte populacional do Anexo da Portaria SAPS/MS nº 161/2024 (parâmetro
+// de pessoas vinculadas por equipe). Não vem do e-SUS.
+model ConfiguracaoSistema {
+  id                 Int      @id @default(1)
+  populacaoMunicipio Int?     @map("populacao_municipio")
+  atualizadoEm       DateTime @default(now()) @updatedAt @map("atualizado_em") @db.Timestamptz(6)
+
+  @@map("configuracao_sistema")
+}
+
+// % de atendimentos avaliados pelo usuário no app "Meu SUS Digital" no quadrimestre — usado só
+// para o bônus da Dimensão Acompanhamento (item 3.13 da Nota Técnica 30). Não vem do e-SUS (é
+// dado do app federal do cidadão, sem integração com esta instalação) — preenchido manualmente
+// pelo coordenador por equipe/quadrimestre.
+model SatisfacaoEquipe {
+  id                   String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  equipeId             String       @map("equipe_id") @db.Uuid
+  equipe               Equipe       @relation(fields: [equipeId], references: [id])
+  quadrimestre         Quadrimestre
+  ano                  Int
+  percentualAvaliacoes Decimal      @map("percentual_avaliacoes")
+  atualizadoEm         DateTime     @default(now()) @updatedAt @map("atualizado_em") @db.Timestamptz(6)
+
+  @@unique([equipeId, quadrimestre, ano])
+  @@map("satisfacao_equipe")
+}
+
+model ResultadoVinculoAcompanhamento {
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  equipeId String @map("equipe_id") @db.Uuid
+  equipe   Equipe @relation(fields: [equipeId], references: [id])
+
+  quadrimestre Quadrimestre
+  ano          Int
+
+  // Dimensão Cadastro (30% do escore final, até 3,00 pontos — Passos 1-3, itens 3.4-3.7)
+  pessoasCadastroValido   Int           @map("pessoas_cadastro_valido")
+  indicePonderadoCadastro Decimal       @map("indice_ponderado_cadastro")
+  parametroPorte          Int           @map("parametro_porte")
+  resultadoCadastro       Decimal       @map("resultado_cadastro")
+  escoreCadastro          Decimal       @map("escore_cadastro")
+  classificacaoCadastro   Classificacao @map("classificacao_cadastro")
+
+  // Dimensão Acompanhamento (70% do escore final, até 7,00 pontos + bônus — Passos 1-4, item 3.13)
+  acompanhadosSemCriterio       Int           @map("acompanhados_sem_criterio")
+  acompanhadosIdosoOuCrianca    Int           @map("acompanhados_idoso_ou_crianca")
+  acompanhadosBpcPbf            Int           @map("acompanhados_bpc_pbf")
+  acompanhadosIdosoCriancaBpcPbf Int          @map("acompanhados_idoso_crianca_bpc_pbf")
+  indicePonderadoAcompanhamento Decimal       @map("indice_ponderado_acompanhamento")
+  resultadoAcompanhamento       Decimal       @map("resultado_acompanhamento")
+  escoreAcompanhamentoBase      Decimal       @map("escore_acompanhamento_base")
+  bonusSatisfacao               Decimal       @map("bonus_satisfacao")
+  escoreAcompanhamento          Decimal       @map("escore_acompanhamento")
+  classificacaoAcompanhamento   Classificacao @map("classificacao_acompanhamento")
+
+  // Resultado final (item 3.14)
+  escoreFinal        Decimal       @map("escore_final")
+  classificacaoFinal Classificacao @map("classificacao_final")
+
+  calculadoEm DateTime @default(now()) @map("calculado_em") @db.Timestamptz(6)
+
+  @@unique([equipeId, quadrimestre, ano])
+  @@map("resultados_vinculo_acompanhamento")
 }

@@ -529,7 +529,7 @@ $$;
 CREATE OR REPLACE PROCEDURE calcular_c7(p_quadrimestre "Quadrimestre", p_ano int) LANGUAGE plpgsql AS $$
 DECLARE
   v_indicador_id uuid;
-  v_inicio date; v_fim date;
+  v_inicio date; v_fim date; v_desde_12m date; v_desde_24m date; v_desde_36m date; v_desde_60m date;
   v_cbo_consulta text[] := ARRAY['2235','2231','2251','2252','2253'];
   v_codigos_colo text[] := ARRAY['0201020033','0203010086','0203010019','0201020076','0201020084'];
   v_codigos_hpv_molecular text[] := ARRAY['0202100251'];
@@ -545,6 +545,16 @@ BEGIN
   SELECT id INTO v_indicador_id FROM indicadores_catalogo WHERE codigo = 'C7';
   IF v_indicador_id IS NULL THEN RETURN; END IF;
   SELECT inicio, fim INTO v_inicio, v_fim FROM periodo_quadrimestre(p_quadrimestre, p_ano);
+  -- `v_fim - interval '...'` inline dá timestamp (não date), quebrando a assinatura date/date de
+  -- contar_atendimentos/tem_procedimento — bug real encontrado em 2026-09-13 (C7 falhando
+  -- silenciosamente em todo recalcular_indicadores_qualidade(), só não em toda execução porque
+  -- depende de existir alguém na faixa etária do critério que dispara a chamada). Atribuir a uma
+  -- variável `date` força o cast implícito, igual já é feito em v_desde_12m/v_desde_6m nos
+  -- cálculos de C4-C6 acima.
+  v_desde_12m := v_fim - interval '12 months';
+  v_desde_24m := v_fim - interval '24 months';
+  v_desde_36m := v_fim - interval '36 months';
+  v_desde_60m := v_fim - interval '60 months';
 
   FOR v_eq IN SELECT id FROM equipes WHERE tipo IN ('ESF', 'EAP') AND ativo LOOP
     DELETE FROM boas_praticas_pontuacao_pessoa
@@ -565,8 +575,8 @@ BEGIN
       -- (A) colo do útero, 25-64 anos
       IF v_idade BETWEEN 25 AND 64 THEN
         v_den_a := v_den_a + 1;
-        v_a := tem_procedimento(v_p.co_cidadao, v_codigos_colo, v_fim - interval '36 months', v_fim)
-            OR tem_procedimento(v_p.co_cidadao, v_codigos_hpv_molecular, v_fim - interval '60 months', v_fim);
+        v_a := tem_procedimento(v_p.co_cidadao, v_codigos_colo, v_desde_36m, v_fim)
+            OR tem_procedimento(v_p.co_cidadao, v_codigos_hpv_molecular, v_desde_60m, v_fim);
         IF v_a THEN v_num_a := v_num_a + 1; END IF;
         CALL registrar_pontuacao_pessoa_segura(v_eq.id, v_indicador_id, v_p.cns, criterio_id(v_indicador_id, 'A'), v_a, p_quadrimestre, p_ano);
       END IF;
@@ -582,7 +592,7 @@ BEGIN
       -- (C) saúde sexual e reprodutiva, 14-69 anos
       IF v_idade BETWEEN 14 AND 69 THEN
         v_den_c := v_den_c + 1;
-        v_c := contar_atendimentos(v_p.co_cidadao, v_cbo_consulta, v_fim - interval '12 months', v_fim) > 0;
+        v_c := contar_atendimentos(v_p.co_cidadao, v_cbo_consulta, v_desde_12m, v_fim) > 0;
         IF v_c THEN v_num_c := v_num_c + 1; END IF;
         CALL registrar_pontuacao_pessoa_segura(v_eq.id, v_indicador_id, v_p.cns, criterio_id(v_indicador_id, 'C'), v_c, p_quadrimestre, p_ano);
       END IF;
@@ -590,7 +600,7 @@ BEGIN
       -- (D) mama, 50-69 anos
       IF v_idade BETWEEN 50 AND 69 THEN
         v_den_d := v_den_d + 1;
-        v_d := tem_procedimento(v_p.co_cidadao, v_codigos_mama, v_fim - interval '24 months', v_fim);
+        v_d := tem_procedimento(v_p.co_cidadao, v_codigos_mama, v_desde_24m, v_fim);
         IF v_d THEN v_num_d := v_num_d + 1; END IF;
         CALL registrar_pontuacao_pessoa_segura(v_eq.id, v_indicador_id, v_p.cns, criterio_id(v_indicador_id, 'D'), v_d, p_quadrimestre, p_ano);
       END IF;

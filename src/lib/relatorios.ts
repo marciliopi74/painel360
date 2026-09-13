@@ -1,14 +1,16 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
-import { prisma } from "@/lib/prisma";
+// Import relativo de propósito: este módulo também é carregado via `tsx` pelo worker
+// (scripts/worker.ts), que não resolve o path alias `@/` do tsconfig.json.
+import { prisma } from "./prisma";
 import type { Quadrimestre } from "@prisma/client";
 
 // requisitos 22-23: relatórios automáticos diário/semanal e avaliação quadrimestral.
 // Gerados como HTML simples (sem dependência externa) e gravados em disco — ver
 // RELATORIOS_DIR (volume docker `relatorios_gerados`), servidos por
 // src/app/api/relatorios-arquivo/[arquivo]/route.ts.
-const RELATORIOS_DIR = process.env.RELATORIOS_DIR ?? join(process.cwd(), "relatorios-gerados");
+export const RELATORIOS_DIR = process.env.RELATORIOS_DIR ?? join(process.cwd(), "relatorios-gerados");
 
 async function salvarRelatorio(tipo: "diario" | "semanal" | "quadrimestral", periodoReferencia: string, html: string) {
   await mkdir(RELATORIOS_DIR, { recursive: true });
