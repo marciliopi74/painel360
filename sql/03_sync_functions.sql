@@ -177,14 +177,11 @@ BEGIN
          concluido_em = now()
    WHERE id = p_sincronizacao_id;
   COMMIT;
-
-EXCEPTION WHEN OTHERS THEN
-  UPDATE sincronizacoes
-     SET status = 'erro',
-         erro_mensagem = SQLERRM,
-         concluido_em = now()
-   WHERE id = p_sincronizacao_id;
-  COMMIT;
-  RAISE;
 END;
 $$;
+-- Sem bloco EXCEPTION de propósito: um handler EXCEPTION cria uma subtransação implícita que
+-- envolve TODO o corpo da procedure (não só o que vem depois dele), e uma procedure chamada de
+-- dentro de uma subtransação não pode fazer COMMIT — quebraria os commits incrementais de
+-- sp_atualizar_progresso já na primeira etapa. Por isso quem chama (route.ts para sincronização
+-- manual; a própria falha do job para a automática, visível em cron.job_run_details) é
+-- responsável por marcar status = 'erro' em sincronizacoes se o CALL lançar exceção.

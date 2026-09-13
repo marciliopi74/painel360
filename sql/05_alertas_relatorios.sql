@@ -48,7 +48,14 @@ $$;
 
 -- Usuário de sistema (necessário porque sincronizacoes.disparada_por é NOT NULL) — criado pelo
 -- prisma/seed.ts com este mesmo UUID fixo.
-CREATE OR REPLACE FUNCTION disparar_sincronizacao_automatica() RETURNS void LANGUAGE plpgsql AS $$
+--
+-- PROCEDURE, não FUNCTION: sincronizar_esus faz COMMIT interno (progresso incremental), e o
+-- Postgres só permite controle de transação em CALLs encadeados de procedure para procedure —
+-- dentro de uma FUNCTION o COMMIT falharia com "invalid transaction termination".
+-- DROP explícito porque CREATE OR REPLACE não troca o tipo de rotina (function -> procedure).
+-- DROP ROUTINE (não DROP FUNCTION) para ser idempotente mesmo depois de já ter virado procedure.
+DROP ROUTINE IF EXISTS disparar_sincronizacao_automatica();
+CREATE OR REPLACE PROCEDURE disparar_sincronizacao_automatica() LANGUAGE plpgsql AS $$
 DECLARE
   v_id uuid := gen_random_uuid();
 BEGIN
@@ -61,7 +68,7 @@ $$;
 
 -- requisito 6: tabelas materializadas atualizadas a cada 5-15 minutos.
 SELECT cron.schedule('sincronizacao-automatica-esus', '*/10 * * * *',
-  $$ SELECT disparar_sincronizacao_automatica(); $$);
+  $$ CALL disparar_sincronizacao_automatica(); $$);
 
 -- requisito 24: verifica alertas para o quadrimestre corrente, a cada hora.
 SELECT cron.schedule('verificar-alertas-qualidade', '0 * * * *', $$

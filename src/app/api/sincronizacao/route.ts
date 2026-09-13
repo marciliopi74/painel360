@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Client } from "pg";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { podeDispararSincronizacao } from "@/lib/rbac";
@@ -18,9 +19,26 @@ export async function POST() {
   // dispara em segundo plano — o servidor Next.js roda como processo persistente no
   // docker-compose (next start), não como função serverless, então isto continua
   // executando após a resposta ser enviada.
-  prisma
-    .$executeRawUnsafe(`CALL sincronizar_esus($1::uuid)`, sincronizacao.id)
-    .catch((erro) => console.error("Falha na sincronização manual:", erro));
+  //
+  // sincronizar_esus faz COMMIT interno (progresso incremental), o que o Postgres só permite
+  // quando o CALL roda via protocolo simples (uma única mensagem "Query", sem Parse/Bind) — o
+  // client do Prisma sempre usa o protocolo estendido, mesmo sem parâmetros, e falha com "invalid
+  // transaction termination". Por isso este CALL usa `pg` diretamente (client.query com uma
+  // string pura), não o Prisma.
+  // sincronizar_esus não tem bloco EXCEPTION próprio (ver comentário em sql/03_sync_functions.sql)
+  // — se o CALL lançar, marcamos o erro aqui.
+  const clienteSync = new Client({ connectionString: process.env.DATABASE_URL });
+  clienteSync
+    .connect()
+    .then(() => clienteSync.query(`CALL sincronizar_esus('${sincronizacao.id}'::uuid)`))
+    .catch(async (erro) => {
+      console.error("Falha na sincronização manual:", erro);
+      await prisma.sincronizacao.update({
+        where: { id: sincronizacao.id },
+        data: { status: "erro", erroMensagem: String(erro?.message ?? erro), concluidoEm: new Date() },
+      });
+    })
+    .finally(() => clienteSync.end());
 
   return NextResponse.json({ id: sincronizacao.id });
 }
