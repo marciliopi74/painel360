@@ -141,7 +141,7 @@ BEGIN
   -- fora_de_area vem direto de st_fora_area (real, sincronizado); beneficiario_bpc_pbf NÃO
   -- aparece aqui de propósito — é um campo manual (Nota Técnica 30, sem fonte no e-SUS) e nunca
   -- deve ser sobrescrito por uma sincronização.
-  INSERT INTO cadastros_individuais (id, profissional_id, equipe_id, cidadao_cns, cidadao_cns_real, cidadao_cpf, cidadao_dnv, cidadao_nome, data_cadastro, fora_de_area, fonte_id)
+  INSERT INTO cadastros_individuais (id, profissional_id, equipe_id, cidadao_cns, cidadao_cns_real, cidadao_cpf, cidadao_dnv, cidadao_nome, micro_area, data_cadastro, fora_de_area, fonte_id)
   SELECT
     gen_random_uuid(),
     prof.id,
@@ -151,6 +151,7 @@ BEGIN
     ci.nu_cpf_cidadao,
     ci.nu_dnv_cidadao,
     COALESCE(NULLIF(ci.no_social_cidadao, ''), ci.no_cidadao),
+    ci.nu_micro_area,
     ci.dt_cad_individual::date,
     coalesce(ci.st_fora_area, 0) = 1,
     ci.co_seq_cds_cad_individual
@@ -172,6 +173,7 @@ BEGIN
         cidadao_cns_real = EXCLUDED.cidadao_cns_real,
         cidadao_cpf      = EXCLUDED.cidadao_cpf,
         cidadao_dnv      = EXCLUDED.cidadao_dnv,
+        micro_area       = EXCLUDED.micro_area,
         cidadao_nome     = EXCLUDED.cidadao_nome,
         data_cadastro    = EXCLUDED.data_cadastro,
         fora_de_area     = EXCLUDED.fora_de_area,

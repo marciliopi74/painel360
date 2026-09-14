@@ -24,32 +24,51 @@ export async function obterCidadao(usuario: UsuarioSessao, identificador: string
   });
 }
 
+export type CadastroEmOutraEquipe = {
+  equipeNome: string;
+  equipeTipo: string;
+  equipeIne: string | null;
+  microArea: string | null;
+  dataCadastro: Date;
+};
+
 export type ResumoAtualizacaoCadastro = {
   totalCadastros: number;
   ultimaAtualizacao: Date;
+  // outros cadastros do mesmo grupo que ficam em uma equipe DIFERENTE da do registro aberto —
+  // só preenchido pra quem pode ver todas as equipes (gestor_local); um profissional restrito à
+  // própria equipe recebe sempre [] aqui, mesmo que a checagem em sql/06 tenha encontrado
+  // duplicados em outra equipe (requisito 3: não vazar dado de outra equipe pra um profissional).
+  outrasEquipes: CadastroEmOutraEquipe[];
 };
 
 // Nota Técnica 30, item sobre "cadastro atualizado": uma pessoa pode ter mais de um cadastro
-// individual na mesma equipe (ACS cadastrando a mesma pessoa 2x — às vezes uma ficha só com CPF,
-// outra só com Cartão SUS/DNV, ver requisito de detecção de duplicados pedido pelo usuário em
-// 2026-09-14). A "última atualização" de verdade dessa pessoa é a mais recente entre TODOS os
-// cadastros dela, não só o registro que a página abriu. Usa a MESMA regra de "mesma pessoa" que
+// individual — às vezes na mesma equipe, às vezes em equipes diferentes (ex.: mudança de área,
+// recadastrada sem desativar o registro antigo), e às vezes com uma ficha só com CPF e outra só
+// com Cartão SUS/DNV. A "última atualização" de verdade dessa pessoa é a mais recente entre TODOS
+// os cadastros dela, não só o registro que a página abriu. Usa a MESMA regra de "mesma pessoa" que
 // detectar_erros_cadastros() (sql/06) usa pra achar duplicados: identificador exato em comum
-// (CNS, CPF ou DNV) OU nome idêntico na mesma equipe — uma heurística por nome quando não há
-// identificador em comum, não uma certeza. Só lê e agrega; não funde nem altera nenhum registro.
+// (CNS, CPF ou DNV) OU nome idêntico — checado no município inteiro desde 2026-09-14, não só numa
+// equipe — uma heurística por nome quando não há identificador em comum, não uma certeza. Só lê e
+// agrega; não funde nem altera nenhum registro.
 //
 // Cadastro DOMICILIAR/territorial deliberadamente NÃO entra aqui: não existe, nesta instalação,
 // nenhum vínculo entre um cadastro individual e o domicílio da pessoa (tb_cds_cad_individual não
 // referencia o domicílio — mesma limitação já documentada em sql/11_vinculo_acompanhamento.sql),
 // então não há como saber qual cadastro domiciliar pertence a esta pessoa especificamente.
-export async function obterAtualizacaoCadastroIndividual(cadastro: {
-  equipeId: string;
-  dataCadastro: Date;
-  cidadaoCns: string | null;
-  cidadaoCpf: string | null;
-  cidadaoDnv: string | null;
-  cidadaoNome: string | null;
-}): Promise<ResumoAtualizacaoCadastro> {
+export async function obterAtualizacaoCadastroIndividual(
+  usuario: UsuarioSessao,
+  cadastro: {
+    equipeId: string;
+    dataCadastro: Date;
+    cidadaoCns: string | null;
+    cidadaoCpf: string | null;
+    cidadaoDnv: string | null;
+    cidadaoNome: string | null;
+  },
+): Promise<ResumoAtualizacaoCadastro> {
+  const equipeIdRestrito = await equipeIdPermitido(usuario);
+
   const condicoes: Prisma.CadastroIndividualWhereInput[] = [];
   if (cadastro.cidadaoCns) condicoes.push({ cidadaoCns: cadastro.cidadaoCns });
   if (cadastro.cidadaoCpf) condicoes.push({ cidadaoCpf: cadastro.cidadaoCpf });
@@ -58,17 +77,26 @@ export async function obterAtualizacaoCadastroIndividual(cadastro: {
 
   // todo cadastro sincronizado tem ao menos um identificador (ver WHERE em sql/03_sync_functions.sql),
   // então `condicoes` nunca fica vazio na prática — se ficasse (dado malformado), evita uma busca
-  // sem filtro nenhum (que traria a equipe inteira) e devolve só o próprio registro.
-  if (condicoes.length === 0) return { totalCadastros: 1, ultimaAtualizacao: cadastro.dataCadastro };
+  // sem filtro nenhum (que traria a equipe inteira, ou o município inteiro pro gestor_local) e
+  // devolve só o próprio registro.
+  if (condicoes.length === 0) return { totalCadastros: 1, ultimaAtualizacao: cadastro.dataCadastro, outrasEquipes: [] };
 
   const relacionados = await prisma.cadastroIndividual.findMany({
-    where: { equipeId: cadastro.equipeId, OR: condicoes },
-    select: { dataCadastro: true },
+    where: {
+      OR: condicoes,
+      // profissional restrito: só compara dentro da própria equipe, igual antes. gestor_local
+      // (equipeIdRestrito null): compara o município inteiro, igual a detectar_erros_cadastros().
+      ...(equipeIdRestrito ? { equipeId: equipeIdRestrito } : {}),
+    },
+    select: { equipeId: true, dataCadastro: true, microArea: true, equipe: { select: { nome: true, tipo: true, ine: true } } },
   });
 
   return {
     totalCadastros: relacionados.length,
     ultimaAtualizacao: relacionados.map((r) => r.dataCadastro).reduce((max, d) => (d > max ? d : max)),
+    outrasEquipes: relacionados
+      .filter((r) => r.equipeId !== cadastro.equipeId)
+      .map((r) => ({ equipeNome: r.equipe.nome, equipeTipo: r.equipe.tipo, equipeIne: r.equipe.ine, microArea: r.microArea, dataCadastro: r.dataCadastro })),
   };
 }
 

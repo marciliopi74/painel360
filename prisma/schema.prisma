@@ -185,6 +185,11 @@ model CadastroIndividual {
   // sincronização; pode ser nulo em registros sincronizados antes desta coluna existir, até a
   // próxima sincronização atualizá-los.
   cidadaoNome    String?      @map("cidadao_nome")
+  // Microárea do ACS (tb_cds_cad_individual.nu_micro_area) — usada junto com a equipe/INE pra dar
+  // contexto quando um cadastro duplicado é encontrado em OUTRA equipe (ver detectar_erros_
+  // cadastros() em sql/06 e obterAtualizacaoCadastroIndividual em src/lib/data/cidadao.ts),
+  // pedido explícito do usuário em 2026-09-14.
+  microArea      String?      @map("micro_area")
   dataCadastro   DateTime     @map("data_cadastro") @db.Date
   temErro        Boolean      @default(false) @map("tem_erro")
   tipoErro       String?      @map("tipo_erro")

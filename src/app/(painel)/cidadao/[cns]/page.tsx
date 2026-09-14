@@ -36,7 +36,7 @@ export default async function CidadaoPage({
   const [criterios, periodosDisponiveis, atualizacaoIndividual] = await Promise.all([
     cadastro.cidadaoCnsReal ? listarCriteriosPrevine(cadastro.cidadaoCnsReal, periodo.quadrimestre, periodo.ano) : Promise.resolve([]),
     listarPeriodosDisponiveis(),
-    obterAtualizacaoCadastroIndividual(cadastro),
+    obterAtualizacaoCadastroIndividual(usuario, cadastro),
   ]);
 
   const porIndicador = new Map<string, { codigo: string; nome: string; criterios: typeof criterios }>();
@@ -120,11 +120,24 @@ export default async function CidadaoPage({
         {atualizacaoIndividual.totalCadastros > 1 && (
           <div className="flex items-start gap-2 pt-2 border-t border-outline-variant/20 text-body-sm text-[#B25E16]">
             <Icon name="content_copy" className="text-[16px] shrink-0 mt-0.5" />
-            <span>
-              Encontrados {atualizacaoIndividual.totalCadastros} cadastros individuais para esta pessoa nesta equipe (mesmo documento ou nome
-              idêntico) — a data acima é a mais recente entre eles. Veja "Cadastro duplicado" em Pendências para revisar e desativar os
-              registros repetidos no e-SUS PEC.
-            </span>
+            <div>
+              <span>
+                Encontrados {atualizacaoIndividual.totalCadastros} cadastros individuais para esta pessoa (mesmo documento ou nome idêntico) —
+                a data acima é a mais recente entre eles. Veja "Cadastro duplicado" em Pendências para revisar e desativar os registros
+                repetidos no e-SUS PEC.
+              </span>
+              {atualizacaoIndividual.outrasEquipes.length > 0 && (
+                <ul className="mt-1.5 space-y-0.5">
+                  {atualizacaoIndividual.outrasEquipes.map((oe, i) => (
+                    <li key={i} className="text-label-sm">
+                      • Também cadastrado na equipe <strong>{oe.equipeNome}</strong> ({oe.equipeTipo}
+                      {oe.equipeIne ? `, INE ${oe.equipeIne}` : ""}
+                      {oe.microArea ? `, microárea ${oe.microArea}` : ""}) — atualizado em {oe.dataCadastro.toLocaleDateString("pt-BR")}.
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         )}
         <p className="text-label-sm text-on-surface-variant/70 pt-1">

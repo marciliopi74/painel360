@@ -52,21 +52,25 @@ BEGIN
      SET tem_erro = false, tipo_erro = NULL
    WHERE tipo_erro IN ('duplicado', 'duplicado_provavel');
 
-  -- duplicado exato: mesmo CNS, CPF ou DNV usado em mais de uma ficha na mesma equipe (checado
-  -- independentemente por coluna — mesmo CNS já basta, não precisa também bater CPF/DNV).
+  -- duplicado exato: mesmo CNS, CPF ou DNV usado em mais de uma ficha — checado no MUNICÍPIO
+  -- INTEIRO, não só dentro da mesma equipe (pedido explícito do usuário 2026-09-14: pessoa
+  -- recadastrada por outra equipe, ex. mudança de área, sem desativar o registro antigo — mesmo
+  -- identificador em 2 equipes diferentes é ainda mais claramente um erro/duplicidade do que
+  -- dentro da mesma equipe). Checado independentemente por coluna — mesmo CNS já basta, não
+  -- precisa também bater CPF/DNV.
   WITH duplicados AS (
     SELECT id FROM (
-      SELECT id, row_number() OVER (PARTITION BY equipe_id, cidadao_cns ORDER BY atualizado_em DESC) AS rn
+      SELECT id, row_number() OVER (PARTITION BY cidadao_cns ORDER BY atualizado_em DESC) AS rn
       FROM cadastros_individuais WHERE cidadao_cns IS NOT NULL
     ) t WHERE rn > 1
     UNION
     SELECT id FROM (
-      SELECT id, row_number() OVER (PARTITION BY equipe_id, cidadao_cpf ORDER BY atualizado_em DESC) AS rn
+      SELECT id, row_number() OVER (PARTITION BY cidadao_cpf ORDER BY atualizado_em DESC) AS rn
       FROM cadastros_individuais WHERE cidadao_cpf IS NOT NULL
     ) t WHERE rn > 1
     UNION
     SELECT id FROM (
-      SELECT id, row_number() OVER (PARTITION BY equipe_id, cidadao_dnv ORDER BY atualizado_em DESC) AS rn
+      SELECT id, row_number() OVER (PARTITION BY cidadao_dnv ORDER BY atualizado_em DESC) AS rn
       FROM cadastros_individuais WHERE cidadao_dnv IS NOT NULL
     ) t WHERE rn > 1
   )
@@ -77,14 +81,18 @@ BEGIN
    WHERE ci.id = d.id
      AND (ci.tipo_erro IS NULL OR ci.tipo_erro NOT IN ('cns_invalido', 'data_futura'));
 
-  -- duplicado provável: mesmo nome na mesma equipe, mas SEM nenhum identificador em comum (senão
-  -- já teria caído no exato acima) — o caso relatado pelo usuário, uma ficha só com CPF e outra
-  -- só com Cartão SUS/DNV pra mesma pessoa. É uma HEURÍSTICA por nome, não uma certeza (nomes
-  -- iguais também podem ser pessoas diferentes) — por isso um tipo_erro separado, nunca fundido
-  -- automaticamente; o texto de sugestão (SUGESTOES_ERRO) deixa essa ressalva explícita.
+  -- duplicado provável: mesmo nome no MUNICÍPIO INTEIRO (não só na mesma equipe — mesmo motivo do
+  -- exato acima), mas SEM nenhum identificador em comum (senão já teria caído no exato acima) — o
+  -- caso relatado pelo usuário, uma ficha só com CPF e outra só com Cartão SUS/DNV pra mesma
+  -- pessoa, possivelmente em equipes/microáreas diferentes. É uma HEURÍSTICA por nome, não uma
+  -- certeza (nomes iguais também podem ser pessoas diferentes) — por isso um tipo_erro separado,
+  -- nunca fundido automaticamente; o texto de sugestão (SUGESTOES_ERRO) deixa essa ressalva
+  -- explícita. A tela mostra equipe/INE/microárea de cada registro encontrado só pra quem pode
+  -- ver todas as equipes (gestor_local) — ver obterAtualizacaoCadastroIndividual em
+  -- src/lib/data/cidadao.ts.
   WITH duplicados_nome AS (
     SELECT id FROM (
-      SELECT id, row_number() OVER (PARTITION BY equipe_id, upper(cidadao_nome) ORDER BY atualizado_em DESC) AS rn
+      SELECT id, row_number() OVER (PARTITION BY upper(cidadao_nome) ORDER BY atualizado_em DESC) AS rn
       FROM cadastros_individuais
       WHERE cidadao_nome IS NOT NULL AND trim(cidadao_nome) <> ''
     ) t WHERE rn > 1
