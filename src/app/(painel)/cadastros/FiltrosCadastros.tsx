@@ -28,7 +28,12 @@ export function FiltrosCadastros({
       if (valor) params.set(chave, valor);
       else params.delete(chave);
     }
-    params.delete("pagina");
+    // Esta tela pagina as listas de individuais/domiciliares separadamente (paginaInd/paginaDom),
+    // não um único "pagina" como outras telas — sem isso, mudar o filtro enquanto numa página > 1
+    // deixa o skip/offset antigo valendo pro novo resultado (menor), retornando vazio mesmo
+    // havendo registros na página 1 do filtro novo (bug real reportado pelo usuário 2026-09-13).
+    params.delete("paginaInd");
+    params.delete("paginaDom");
     router.push(`${pathname}?${params.toString()}`);
   }
 
