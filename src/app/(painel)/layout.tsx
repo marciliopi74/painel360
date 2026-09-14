@@ -16,7 +16,6 @@ const NAV_PRINCIPAL = [
 const NAV_SECUNDARIA = [
   { href: "/equipe", label: "Visão da Equipe", icon: "groups" },
   { href: "/pendencias", label: "Pendências", icon: "pending_actions" },
-  { href: "/alertas", label: "Alertas", icon: "notifications" },
   { href: "/relatorios", label: "Relatórios", icon: "description" },
   { href: "/avaliacao-quadrimestral", label: "Avaliação Quadrimestral", icon: "fact_check" },
   { href: "/vinculo-acompanhamento", label: "Vínculo e Acompanhamento", icon: "location_on" },

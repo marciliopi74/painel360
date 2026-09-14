@@ -15,7 +15,7 @@ sem dependência de nuvem), rodando na mesma máquina/rede do e-SUS da prefeitur
 
 ```bash
 cp .env.example .env
-# edite .env: ESUS_FDW_HOST/PORT/DBNAME/USER/PASSWORD, AUTH_SECRET, e opcionalmente SMS_*
+# edite .env: ESUS_FDW_HOST/PORT/DBNAME/USER/PASSWORD, AUTH_SECRET
 
 docker compose up -d --build
 ```
@@ -25,9 +25,9 @@ Isso sobe 4 serviços:
 - `db`: Postgres 16 + `postgres_fdw` + `pg_cron`, dados persistidos no volume `painel_db_data`.
 - `app`: aplicação Next.js (porta 3000). No primeiro start, roda `prisma migrate deploy` (cria as
   tabelas), o seed (usuário `gestor_local` inicial — ver `SEED_ADMIN_EMAIL`/`SEED_ADMIN_PASSWORD`
-  em `.env`) e os scripts em `sql/` (FDW, motor de cálculo, alertas, agendamentos pg_cron).
-- `worker`: processo separado para envio de SMS de alertas e geração de relatórios/avaliação
-  quadrimestral (o que o Postgres não consegue fazer sozinho — ver `sql/05_alertas_relatorios.sql`).
+  em `.env`) e os scripts em `sql/` (FDW, motor de cálculo, agendamentos pg_cron).
+- `worker`: processo separado para geração de relatórios/avaliação quadrimestral (o que o Postgres
+  não consegue fazer sozinho — ver `sql/05_sincronizacao_automatica.sql`).
 - `avahi`: publica `previne.local` via mDNS na rede local (requisito 27); roda com
   `network_mode: host`, então só funciona em Linux.
 
@@ -36,9 +36,9 @@ gestor_local semeado no primeiro deploy.
 
 ## Funcionamento sem internet
 
-O único ponto de acesso externo é o envio de SMS de alertas (`worker`, requisito 25/28) — todo o
-resto (dashboard, sincronização com o e-SUS, cálculo de indicadores, relatórios) funciona
-inteiramente na rede local.
+O sistema funciona inteiramente na rede local, sem nenhum ponto de acesso externo (dashboard,
+sincronização com o e-SUS, cálculo de indicadores, relatórios) — a funcionalidade de Alertas por
+SMS (que era o único acesso externo permitido) foi removida do sistema.
 
 ## O que ainda precisa de atenção antes de produção
 

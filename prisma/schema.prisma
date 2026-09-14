@@ -142,7 +142,6 @@ model Profissional {
   cadastrosIndividuais  CadastroIndividual[]
   cadastrosDomiciliares CadastroDomiciliar[]
   atendimentos          Atendimento[]
-  alertas               Alerta[]
 
   @@map("profissionais")
 }
@@ -252,7 +251,6 @@ model IndicadorCatalogo {
   criterios        BoaPraticaCriterio[]
   resultados       ResultadoIndicador[]
   pontuacoesPessoa BoaPraticaPontuacaoPessoa[]
-  alertas          Alerta[]
 
   @@map("indicadores_catalogo")
 }
@@ -306,21 +304,7 @@ model BoaPraticaPontuacaoPessoa {
   @@map("boas_praticas_pontuacao_pessoa")
 }
 
-// -------------------- ALERTAS E RELATORIOS --------------------
-
-model Alerta {
-  id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  profissionalId String            @map("profissional_id") @db.Uuid
-  profissional   Profissional      @relation(fields: [profissionalId], references: [id])
-  indicadorId    String            @map("indicador_id") @db.Uuid
-  indicador      IndicadorCatalogo @relation(fields: [indicadorId], references: [id])
-  mensagem       String
-  enviadoSms     Boolean           @default(false) @map("enviado_sms")
-  enviadoEm      DateTime?         @map("enviado_em") @db.Timestamptz(6)
-  criadoEm       DateTime          @default(now()) @map("criado_em") @db.Timestamptz(6)
-
-  @@map("alertas")
-}
+// -------------------- RELATORIOS --------------------
 
 model RelatorioGerado {
   id                String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid

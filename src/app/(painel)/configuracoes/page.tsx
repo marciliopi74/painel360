@@ -9,12 +9,10 @@ import { formatarDataHora } from "@/lib/ui/data";
 const ROTULO_SCHEDULE: Record<string, string> = {
   "*/10 * * * *": "a cada 10 minutos",
   "*/15 * * * *": "a cada 15 minutos",
-  "0 * * * *": "a cada hora",
 };
 
 const ROTULO_JOB: Record<string, string> = {
   "sincronizacao-automatica-esus": "Sincronização automática com o e-SUS",
-  "verificar-alertas-qualidade": "Verificação de alertas de indicadores",
   "detectar-erros-cadastros": "Detecção de erros em cadastros",
   "detectar-erros-atendimentos": "Detecção de erros em atendimentos",
 };

@@ -1,5 +1,5 @@
 // Aplica os scripts SQL complementares (extensões, FDW do e-SUS, motor de cálculo dos
-// Indicadores de Qualidade, alertas e agendamentos pg_cron) depois que `prisma migrate deploy`
+// Indicadores de Qualidade e agendamentos pg_cron) depois que `prisma migrate deploy`
 // já criou as tabelas base. Reexecutável: todo arquivo em sql/ usa CREATE OR REPLACE / DROP IF
 // EXISTS / cron.schedule (que já faz upsert por nome de job), então rodar de novo em cada
 // deploy é seguro e idempotente.

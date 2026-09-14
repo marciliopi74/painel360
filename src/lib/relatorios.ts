@@ -36,18 +36,16 @@ export async function gerarRelatorioDiario(dataReferencia = new Date()) {
   const fimDia = new Date(inicioDia);
   fimDia.setDate(fimDia.getDate() + 1);
 
-  const [cadastros, atendimentos, alertasNovos] = await Promise.all([
+  const [cadastros, atendimentos] = await Promise.all([
     prisma.cadastroIndividual.count({ where: { atualizadoEm: { gte: inicioDia, lt: fimDia } } }),
     prisma.atendimento.count({ where: { dataAtendimento: { gte: inicioDia, lt: fimDia } } }),
-    prisma.alerta.count({ where: { criadoEm: { gte: inicioDia, lt: fimDia } } }),
   ]);
 
   const periodo = inicioDia.toISOString().slice(0, 10);
   const html = envolverHtml(
     `Relatório diário — ${periodo}`,
     `<table><tr><th>Cadastros individuais atualizados</th><td>${cadastros}</td></tr>
-     <tr><th>Atendimentos no dia</th><td>${atendimentos}</td></tr>
-     <tr><th>Alertas novos</th><td>${alertasNovos}</td></tr></table>`,
+     <tr><th>Atendimentos no dia</th><td>${atendimentos}</td></tr></table>`,
   );
   return salvarRelatorio("diario", periodo, html);
 }
@@ -59,18 +57,16 @@ export async function gerarRelatorioSemanal(dataReferencia = new Date()) {
   const fimSemana = new Date(inicioSemana);
   fimSemana.setDate(fimSemana.getDate() + 7);
 
-  const [cadastros, atendimentos, alertasNovos] = await Promise.all([
+  const [cadastros, atendimentos] = await Promise.all([
     prisma.cadastroIndividual.count({ where: { atualizadoEm: { gte: inicioSemana, lt: fimSemana } } }),
     prisma.atendimento.count({ where: { dataAtendimento: { gte: inicioSemana, lt: fimSemana } } }),
-    prisma.alerta.count({ where: { criadoEm: { gte: inicioSemana, lt: fimSemana } } }),
   ]);
 
   const periodo = `${inicioSemana.toISOString().slice(0, 10)}_a_${fimSemana.toISOString().slice(0, 10)}`;
   const html = envolverHtml(
     `Relatório semanal — ${periodo}`,
     `<table><tr><th>Cadastros individuais atualizados</th><td>${cadastros}</td></tr>
-     <tr><th>Atendimentos na semana</th><td>${atendimentos}</td></tr>
-     <tr><th>Alertas novos</th><td>${alertasNovos}</td></tr></table>`,
+     <tr><th>Atendimentos na semana</th><td>${atendimentos}</td></tr></table>`,
   );
   return salvarRelatorio("semanal", periodo, html);
 }
@@ -78,7 +74,6 @@ export async function gerarRelatorioSemanal(dataReferencia = new Date()) {
 // requisito 23: avaliação automática ao final de cada quadrimestre.
 export async function gerarAvaliacaoQuadrimestral(quadrimestre: Quadrimestre, ano: number) {
   await prisma.$executeRawUnsafe(`CALL recalcular_indicadores_qualidade($1::"Quadrimestre", $2::int)`, quadrimestre, ano);
-  await prisma.$executeRawUnsafe(`SELECT verificar_alertas($1::"Quadrimestre", $2::int)`, quadrimestre, ano);
 
   const resultados = await prisma.resultadoIndicador.findMany({
     where: { quadrimestre, ano },

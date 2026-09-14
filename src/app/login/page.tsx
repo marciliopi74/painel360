@@ -104,7 +104,7 @@ export default async function LoginPage({
             <div className="text-body-sm">
               <p className="font-semibold text-on-surface text-label-sm uppercase tracking-wide">Ambiente local e offline</p>
               <p className="mt-0.5 text-label-sm leading-relaxed">
-                Conexão direta com o banco de dados PostgreSQL local — os dados não saem da rede municipal, exceto o envio de SMS de alerta.
+                Conexão direta com o banco de dados PostgreSQL local — os dados não saem da rede municipal.
               </p>
             </div>
           </div>

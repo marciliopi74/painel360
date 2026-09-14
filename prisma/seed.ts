@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-// UUID fixo referenciado por sql/05_alertas_relatorios.sql (disparar_sincronizacao_automatica)
+// UUID fixo referenciado por sql/05_sincronizacao_automatica.sql (disparar_sincronizacao_automatica)
 // como "disparada_por" das sincronizações automáticas do pg_cron.
 const USUARIO_SISTEMA_ID = "00000000-0000-0000-0000-000000000001";
 
