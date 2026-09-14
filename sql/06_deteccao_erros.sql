@@ -42,14 +42,33 @@ BEGIN
    WHERE (tipo_erro IS NULL OR tipo_erro <> 'cns_invalido')
      AND data_cadastro > current_date;
 
+  -- Duplicados (requisito pedido pelo usuário 2026-09-14): ACS frequentemente cadastram a mesma
+  -- pessoa mais de uma vez no e-SUS — às vezes com o MESMO identificador (2 fichas com o mesmo
+  -- CNS), às vezes com identificadores DIFERENTES (uma ficha só com CPF, outra só com Cartão
+  -- SUS/DNV pra a mesma pessoa). Limpa as duas flags antes de recalcular, senão um cadastro que
+  -- deixou de ser duplicado (ex.: um dos registros foi desativado no e-SUS) ficaria preso com a
+  -- flag pra sempre — as checagens abaixo só ADICIONAM a flag a quem ainda é duplicado agora.
+  UPDATE cadastros_individuais
+     SET tem_erro = false, tipo_erro = NULL
+   WHERE tipo_erro IN ('duplicado', 'duplicado_provavel');
+
+  -- duplicado exato: mesmo CNS, CPF ou DNV usado em mais de uma ficha na mesma equipe (checado
+  -- independentemente por coluna — mesmo CNS já basta, não precisa também bater CPF/DNV).
   WITH duplicados AS (
-    SELECT id
-    FROM (
+    SELECT id FROM (
       SELECT id, row_number() OVER (PARTITION BY equipe_id, cidadao_cns ORDER BY atualizado_em DESC) AS rn
-      FROM cadastros_individuais
-      WHERE cidadao_cns IS NOT NULL
-    ) t
-    WHERE rn > 1
+      FROM cadastros_individuais WHERE cidadao_cns IS NOT NULL
+    ) t WHERE rn > 1
+    UNION
+    SELECT id FROM (
+      SELECT id, row_number() OVER (PARTITION BY equipe_id, cidadao_cpf ORDER BY atualizado_em DESC) AS rn
+      FROM cadastros_individuais WHERE cidadao_cpf IS NOT NULL
+    ) t WHERE rn > 1
+    UNION
+    SELECT id FROM (
+      SELECT id, row_number() OVER (PARTITION BY equipe_id, cidadao_dnv ORDER BY atualizado_em DESC) AS rn
+      FROM cadastros_individuais WHERE cidadao_dnv IS NOT NULL
+    ) t WHERE rn > 1
   )
   UPDATE cadastros_individuais ci
      SET tem_erro = true,
@@ -58,10 +77,29 @@ BEGIN
    WHERE ci.id = d.id
      AND (ci.tipo_erro IS NULL OR ci.tipo_erro NOT IN ('cns_invalido', 'data_futura'));
 
+  -- duplicado provável: mesmo nome na mesma equipe, mas SEM nenhum identificador em comum (senão
+  -- já teria caído no exato acima) — o caso relatado pelo usuário, uma ficha só com CPF e outra
+  -- só com Cartão SUS/DNV pra mesma pessoa. É uma HEURÍSTICA por nome, não uma certeza (nomes
+  -- iguais também podem ser pessoas diferentes) — por isso um tipo_erro separado, nunca fundido
+  -- automaticamente; o texto de sugestão (SUGESTOES_ERRO) deixa essa ressalva explícita.
+  WITH duplicados_nome AS (
+    SELECT id FROM (
+      SELECT id, row_number() OVER (PARTITION BY equipe_id, upper(cidadao_nome) ORDER BY atualizado_em DESC) AS rn
+      FROM cadastros_individuais
+      WHERE cidadao_nome IS NOT NULL AND trim(cidadao_nome) <> ''
+    ) t WHERE rn > 1
+  )
+  UPDATE cadastros_individuais ci
+     SET tem_erro = true,
+         tipo_erro = 'duplicado_provavel'
+    FROM duplicados_nome d
+   WHERE ci.id = d.id
+     AND (ci.tipo_erro IS NULL OR ci.tipo_erro NOT IN ('cns_invalido', 'data_futura', 'duplicado'));
+
   UPDATE cadastros_individuais
      SET tem_erro = false, tipo_erro = NULL
    WHERE tem_erro = true
-     AND tipo_erro NOT IN ('cns_invalido', 'data_futura', 'duplicado');
+     AND tipo_erro NOT IN ('cns_invalido', 'data_futura', 'duplicado', 'duplicado_provavel');
 
   -- cadastros domiciliares
   UPDATE cadastros_domiciliares

@@ -36,7 +36,7 @@ export async function GET(req: Request) {
     }),
   ]);
 
-  const cabecalho = ["Tipo", "Identificação", "ACS", "Equipe", "Tipo de Equipe", "Data de Cadastro", "Situação", "Tipo de Erro"];
+  const cabecalho = ["Tipo", "Identificação", "ACS", "Equipe", "Tipo de Equipe", "Última Atualização no e-SUS", "Situação", "Tipo de Erro"];
   const linhas = [
     cabecalho,
     ...individuais.map((c) => {

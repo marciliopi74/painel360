@@ -1,4 +1,4 @@
-import type { Quadrimestre } from "@prisma/client";
+import { Prisma, type Quadrimestre } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { UsuarioSessao } from "@/lib/rbac";
 import { equipeIdPermitido } from "@/lib/data/escopo";
@@ -22,6 +22,54 @@ export async function obterCidadao(usuario: UsuarioSessao, identificador: string
     },
     orderBy: { atualizadoEm: "desc" },
   });
+}
+
+export type ResumoAtualizacaoCadastro = {
+  totalCadastros: number;
+  ultimaAtualizacao: Date;
+};
+
+// Nota Técnica 30, item sobre "cadastro atualizado": uma pessoa pode ter mais de um cadastro
+// individual na mesma equipe (ACS cadastrando a mesma pessoa 2x — às vezes uma ficha só com CPF,
+// outra só com Cartão SUS/DNV, ver requisito de detecção de duplicados pedido pelo usuário em
+// 2026-09-14). A "última atualização" de verdade dessa pessoa é a mais recente entre TODOS os
+// cadastros dela, não só o registro que a página abriu. Usa a MESMA regra de "mesma pessoa" que
+// detectar_erros_cadastros() (sql/06) usa pra achar duplicados: identificador exato em comum
+// (CNS, CPF ou DNV) OU nome idêntico na mesma equipe — uma heurística por nome quando não há
+// identificador em comum, não uma certeza. Só lê e agrega; não funde nem altera nenhum registro.
+//
+// Cadastro DOMICILIAR/territorial deliberadamente NÃO entra aqui: não existe, nesta instalação,
+// nenhum vínculo entre um cadastro individual e o domicílio da pessoa (tb_cds_cad_individual não
+// referencia o domicílio — mesma limitação já documentada em sql/11_vinculo_acompanhamento.sql),
+// então não há como saber qual cadastro domiciliar pertence a esta pessoa especificamente.
+export async function obterAtualizacaoCadastroIndividual(cadastro: {
+  equipeId: string;
+  dataCadastro: Date;
+  cidadaoCns: string | null;
+  cidadaoCpf: string | null;
+  cidadaoDnv: string | null;
+  cidadaoNome: string | null;
+}): Promise<ResumoAtualizacaoCadastro> {
+  const condicoes: Prisma.CadastroIndividualWhereInput[] = [];
+  if (cadastro.cidadaoCns) condicoes.push({ cidadaoCns: cadastro.cidadaoCns });
+  if (cadastro.cidadaoCpf) condicoes.push({ cidadaoCpf: cadastro.cidadaoCpf });
+  if (cadastro.cidadaoDnv) condicoes.push({ cidadaoDnv: cadastro.cidadaoDnv });
+  if (cadastro.cidadaoNome) condicoes.push({ cidadaoNome: { equals: cadastro.cidadaoNome, mode: "insensitive" } });
+
+  // todo cadastro sincronizado tem ao menos um identificador (ver WHERE em sql/03_sync_functions.sql),
+  // então `condicoes` nunca fica vazio na prática — se ficasse (dado malformado), evita uma busca
+  // sem filtro nenhum (que traria a equipe inteira) e devolve só o próprio registro.
+  if (condicoes.length === 0) return { totalCadastros: 1, ultimaAtualizacao: cadastro.dataCadastro };
+
+  const relacionados = await prisma.cadastroIndividual.findMany({
+    where: { equipeId: cadastro.equipeId, OR: condicoes },
+    select: { dataCadastro: true },
+  });
+
+  return {
+    totalCadastros: relacionados.length,
+    ultimaAtualizacao: relacionados.map((r) => r.dataCadastro).reduce((max, d) => (d > max ? d : max)),
+  };
 }
 
 export type CriterioPrevine = {

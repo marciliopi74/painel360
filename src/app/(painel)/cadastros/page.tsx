@@ -148,7 +148,7 @@ export default async function CadastrosPage({
               iconeOk="check_circle"
               titulo={c.cidadaoNome ?? identificadorExibido}
               linkCns={identificador?.bruto}
-              detalhe={`${identificadorExibido} • Tipo: Cadastro Individual • Data de Registro: ${c.dataCadastro.toLocaleDateString("pt-BR")}`}
+              detalhe={`${identificadorExibido} • Tipo: Cadastro Individual • Última atualização no e-SUS: ${c.dataCadastro.toLocaleDateString("pt-BR")}`}
               acs={c.profissional.nome}
               equipe={`${c.equipe.nome} (${c.equipe.tipo})`}
               temErro={c.temErro}
@@ -183,7 +183,7 @@ export default async function CadastrosPage({
             icone="home_work"
             iconeOk="home"
             titulo={c.enderecoReferencia}
-            detalhe={`Tipo: Cadastro Domiciliar e Territorial • Data de Registro: ${c.dataCadastro.toLocaleDateString("pt-BR")}`}
+            detalhe={`Tipo: Cadastro Domiciliar e Territorial • Última atualização no e-SUS: ${c.dataCadastro.toLocaleDateString("pt-BR")}`}
             acs={c.profissional.nome}
             equipe={`${c.equipe.nome} (${c.equipe.tipo})`}
             temErro={c.temErro}

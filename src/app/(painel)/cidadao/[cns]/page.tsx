@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Quadrimestre } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { Icon } from "@/components/Icon";
-import { obterCidadao, listarCriteriosPrevine } from "@/lib/data/cidadao";
+import { obterCidadao, listarCriteriosPrevine, obterAtualizacaoCadastroIndividual } from "@/lib/data/cidadao";
 import { ROTULO_ERRO, SUGESTOES_ERRO } from "@/lib/data/erros";
 import { quadrimestreAtual, rotuloQuadrimestre, listarPeriodosDisponiveis } from "@/lib/data/periodo";
 import { identificadorCidadao } from "@/lib/ui/identificadorCidadao";
@@ -33,9 +33,10 @@ export default async function CidadaoPage({
   const periodo: { quadrimestre: Quadrimestre; ano: number } =
     quadParam && ["Q1", "Q2", "Q3"].includes(quadParam) ? { quadrimestre: quadParam as Quadrimestre, ano: Number(anoParam) } : quadrimestreAtual();
 
-  const [criterios, periodosDisponiveis] = await Promise.all([
+  const [criterios, periodosDisponiveis, atualizacaoIndividual] = await Promise.all([
     cadastro.cidadaoCnsReal ? listarCriteriosPrevine(cadastro.cidadaoCnsReal, periodo.quadrimestre, periodo.ano) : Promise.resolve([]),
     listarPeriodosDisponiveis(),
+    obterAtualizacaoCadastroIndividual(cadastro),
   ]);
 
   const porIndicador = new Map<string, { codigo: string; nome: string; criterios: typeof criterios }>();
@@ -98,8 +99,8 @@ export default async function CidadaoPage({
             </span>
           </div>
           <div className="flex items-center justify-between py-0.5">
-            <span className="text-on-surface-variant text-label-md">Data de cadastro:</span>
-            <span className="font-medium text-on-surface text-label-md">{cadastro.dataCadastro.toLocaleDateString("pt-BR")}</span>
+            <span className="text-on-surface-variant text-label-md">Última atualização no e-SUS (cadastro individual):</span>
+            <span className="font-medium text-on-surface text-label-md">{atualizacaoIndividual.ultimaAtualizacao.toLocaleDateString("pt-BR")}</span>
           </div>
           <div className="flex items-center justify-between py-0.5">
             <span className="text-on-surface-variant text-label-md">Status e-SUS:</span>
@@ -116,6 +117,20 @@ export default async function CidadaoPage({
             )}
           </div>
         </div>
+        {atualizacaoIndividual.totalCadastros > 1 && (
+          <div className="flex items-start gap-2 pt-2 border-t border-outline-variant/20 text-body-sm text-[#B25E16]">
+            <Icon name="content_copy" className="text-[16px] shrink-0 mt-0.5" />
+            <span>
+              Encontrados {atualizacaoIndividual.totalCadastros} cadastros individuais para esta pessoa nesta equipe (mesmo documento ou nome
+              idêntico) — a data acima é a mais recente entre eles. Veja "Cadastro duplicado" em Pendências para revisar e desativar os
+              registros repetidos no e-SUS PEC.
+            </span>
+          </div>
+        )}
+        <p className="text-label-sm text-on-surface-variant/70 pt-1">
+          Cadastro domiciliar/territorial não é mostrado aqui: esta instalação do e-SUS não vincula o cadastro individual ao domicílio da
+          pessoa, então não é possível saber qual cadastro domiciliar é o dela.
+        </p>
       </section>
 
       {/* Previne Brasil */}
