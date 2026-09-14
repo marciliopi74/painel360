@@ -8,6 +8,7 @@ import {
   type StatusCadastro,
 } from "@/lib/data/cadastros";
 import { listarEquipesVisiveis } from "@/lib/data/equipes";
+import { formatarCpf } from "@/lib/ui/cpf";
 import { FiltrosCadastros } from "./FiltrosCadastros";
 import { FichaCard } from "./FichaCard";
 import { Paginacao } from "./Paginacao";
@@ -135,20 +136,25 @@ export default async function CadastrosPage({
             Nenhum cadastro individual encontrado para esse filtro.
           </div>
         )}
-        {individuais.registros.map((c) => (
-          <FichaCard
-            key={c.id}
-            icone="person_alert"
-            iconeOk="check_circle"
-            titulo={c.cidadaoNome ?? `CNS ${c.cidadaoCns}`}
-            linkCns={c.cidadaoCns}
-            detalhe={`CNS: ${c.cidadaoCns} • Tipo: Cadastro Individual • Data de Registro: ${c.dataCadastro.toLocaleDateString("pt-BR")}`}
-            acs={c.profissional.nome}
-            equipe={`${c.equipe.nome} (${c.equipe.tipo})`}
-            temErro={c.temErro}
-            tipoErro={c.tipoErro}
-          />
-        ))}
+        {individuais.registros.map((c) => {
+          // desde 2026-09-14 um cadastro pode ter só CPF, sem CNS ainda (ver comentário no
+          // schema/sync) — /cidadao/[x] aceita os dois, então usa o que existir aqui também.
+          const identificadorExibido = c.cidadaoCns ? `CNS: ${c.cidadaoCns}` : `CPF: ${formatarCpf(c.cidadaoCpf!)}`;
+          return (
+            <FichaCard
+              key={c.id}
+              icone="person_alert"
+              iconeOk="check_circle"
+              titulo={c.cidadaoNome ?? identificadorExibido}
+              linkCns={c.cidadaoCns ?? c.cidadaoCpf ?? undefined}
+              detalhe={`${identificadorExibido} • Tipo: Cadastro Individual • Data de Registro: ${c.dataCadastro.toLocaleDateString("pt-BR")}`}
+              acs={c.profissional.nome}
+              equipe={`${c.equipe.nome} (${c.equipe.tipo})`}
+              temErro={c.temErro}
+              tipoErro={c.tipoErro}
+            />
+          );
+        })}
         <Paginacao
           pagina={individuais.pagina}
           totalPaginas={individuais.totalPaginas}

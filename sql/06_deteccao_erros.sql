@@ -14,12 +14,19 @@ BEGIN
   -- depois de tirar os não-dígitos, NUNCA dava exatamente 15, e os 15 cadastros individuais reais
   -- desta instalação ficavam 100% flagados como cns_invalido, sempre. Corrigido para aceitar os
   -- dois formatos observados na prática (CNS real de 15 dígitos OU o hash de 32 caracteres desta
-  -- instalação) — só sinaliza erro quando não bate com nenhum dos dois, ou está vazio.
+  -- instalação) — só sinaliza erro quando está preenchido mas não bate com nenhum dos dois.
+  --
+  -- Bug real corrigido em 2026-09-14 (reportado pelo usuário: cadastro feito com CPF não aparecia
+  -- em Cadastros): cidadao_cns virou nullable — um cidadão pode legitimamente não ter CNS ainda
+  -- (só CPF, ver sql/03_sync_functions.sql). cidadao_cns IS NULL sozinho NÃO é mais erro (antes
+  -- era, e teria reintroduzido o mesmo falso-positivo em massa do bug de 2026-09-13 assim que
+  -- esses cadastros passassem a ser sincronizados) — só é erro quando preenchido e mal-formado.
   UPDATE cadastros_individuais
      SET tem_erro = true,
          tipo_erro = 'cns_invalido'
    WHERE tem_erro IS DISTINCT FROM true
-     AND (cidadao_cns IS NULL OR NOT (cidadao_cns ~ '^[0-9]{15}$' OR cidadao_cns ~ '^[0-9a-f]{32}$'));
+     AND cidadao_cns IS NOT NULL
+     AND NOT (cidadao_cns ~ '^[0-9]{15}$' OR cidadao_cns ~ '^[0-9a-f]{32}$');
 
   -- reverte cadastros que foram flagados cns_invalido antes desta correção mas que, pelo
   -- critério novo, são válidos (hash de 32 caracteres) — sem isso continuariam presos com

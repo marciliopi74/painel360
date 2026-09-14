@@ -159,7 +159,14 @@ model CadastroIndividual {
   // equipe() (ver docs/esus-fdw.md). Os dois espaços de identificador NÃO são joináveis entre si
   // — não usar este campo para cruzar com boas_praticas_pontuacao_pessoa.cidadao_cns ou qualquer
   // dado que venha de cidadaos_vinculados_equipe()/tb_cidadao (esses usam o CNS real).
-  cidadaoCns     String       @map("cidadao_cns")
+  // NULLABLE desde 2026-09-14: um cadastro individual pode existir no e-SUS sem CNS ainda (só
+  // CPF) — ver `cidadaoCpf` abaixo. A sincronização passou a importar esses casos também (antes
+  // ficavam completamente de fora do painel, bug real reportado pelo usuário).
+  cidadaoCns     String?      @map("cidadao_cns")
+  // CPF do cidadão (tb_cds_cad_individual.nu_cpf_cidadao) — usado como identificador alternativo
+  // (busca, link para /cidadao/[x], exibição) quando cidadaoCns é NULL. Também pode coexistir com
+  // um cidadaoCns preenchido.
+  cidadaoCpf     String?      @map("cidadao_cpf")
   // CNS REAL do cidadão (tb_cidadao.nu_cns), resolvido via tb_cds_cad_individual.co_unico_ficha
   // == tb_cidadao.co_unico_ultima_ficha — o GUID interno do e-SUS que identifica qual ficha
   // atualizou por último aquele registro de cidadão. Isso NÃO é o mesmo join (impossível) por

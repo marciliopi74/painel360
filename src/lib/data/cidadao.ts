@@ -5,11 +5,16 @@ import { equipeIdPermitido } from "@/lib/data/escopo";
 
 // requisito 3: um cidadão só é visível se o cadastro mais recente dele pertence a uma equipe que
 // o usuário pode ver — evita vazar CNS/nome de gente de outra equipe pra um profissional.
-export async function obterCidadao(usuario: UsuarioSessao, cns: string) {
+// `identificador` casa com cidadaoCns OU cidadaoCpf: desde 2026-09-14 um cadastro pode ter só CPF
+// (sem CNS ainda emitido/vinculado no e-SUS) — ver comentário em CadastroIndividual no schema.
+export async function obterCidadao(usuario: UsuarioSessao, identificador: string) {
   const equipeIdRestrito = await equipeIdPermitido(usuario);
 
   return prisma.cadastroIndividual.findFirst({
-    where: { cidadaoCns: cns, ...(equipeIdRestrito ? { equipeId: equipeIdRestrito } : {}) },
+    where: {
+      OR: [{ cidadaoCns: identificador }, { cidadaoCpf: identificador }],
+      ...(equipeIdRestrito ? { equipeId: equipeIdRestrito } : {}),
+    },
     include: {
       profissional: { select: { nome: true, ehAcs: true } },
       equipe: { select: { id: true, nome: true, tipo: true } },

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { construirWhereIndividual, construirWhereDomiciliar, ROTULO_ERRO, type StatusCadastro } from "@/lib/data/cadastros";
+import { formatarCpf } from "@/lib/ui/cpf";
 
 const LIMITE_LINHAS = 5000;
 
@@ -40,7 +41,8 @@ export async function GET(req: Request) {
     cabecalho,
     ...individuais.map((c) => [
       "Cadastro Individual",
-      `${c.cidadaoNome ?? "—"} (CNS ${c.cidadaoCns})`,
+      // desde 2026-09-14 um cadastro pode ter só CPF, sem CNS ainda (ver comentário no schema).
+      `${c.cidadaoNome ?? "—"} (${c.cidadaoCns ? `CNS ${c.cidadaoCns}` : `CPF ${formatarCpf(c.cidadaoCpf!)}`})`,
       c.profissional.nome,
       c.equipe.nome,
       c.equipe.tipo,

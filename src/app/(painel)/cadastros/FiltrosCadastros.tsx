@@ -74,7 +74,7 @@ export function FiltrosCadastros({
             type="text"
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
-            placeholder="Buscar por cidadão, endereço, CNS ou nome do ACS..."
+            placeholder="Buscar por cidadão, endereço, CNS, CPF ou nome do ACS..."
             className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-outline-variant/60 bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary-container focus:border-transparent text-body-sm transition"
           />
         </div>

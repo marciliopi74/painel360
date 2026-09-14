@@ -127,18 +127,26 @@ BEGIN
   -- corretamente NULL para quem ainda não tem CNS validado. Também tenta co_unico_ficha_origem
   -- (ficha de origem, caso esta seja uma versão/correção) como segunda opção via LATERAL, que
   -- garante no máximo 1 linha por cadastro mesmo que os dois GUIDs batessem em pessoas diferentes.
+  --
+  -- Bug real corrigido em 2026-09-14 (reportado pelo usuário: cadastro feito com CPF não aparecia
+  -- na tela de Cadastros): o WHERE abaixo exigia nu_cns_cidadao (CNS/hash) sempre presente, mas um
+  -- cidadão pode ter sido cadastrado no e-SUS só com CPF, sem CNS ainda emitido/vinculado — esses
+  -- cadastros ficavam 100% fora da sincronização, invisíveis no painel inteiro. Agora sincroniza
+  -- quando há CNS OU CPF (cidadao_cns virou nullable no schema), guardando o CPF em cidadao_cpf
+  -- pra servir de identificador alternativo (busca, link /cidadao/[x]) quando não há CNS.
   CALL sp_atualizar_progresso(p_sincronizacao_id, 'cadastros_individuais', 0);
 
   -- fora_de_area vem direto de st_fora_area (real, sincronizado); beneficiario_bpc_pbf NÃO
   -- aparece aqui de propósito — é um campo manual (Nota Técnica 30, sem fonte no e-SUS) e nunca
   -- deve ser sobrescrito por uma sincronização.
-  INSERT INTO cadastros_individuais (id, profissional_id, equipe_id, cidadao_cns, cidadao_cns_real, cidadao_nome, data_cadastro, fora_de_area, fonte_id)
+  INSERT INTO cadastros_individuais (id, profissional_id, equipe_id, cidadao_cns, cidadao_cns_real, cidadao_cpf, cidadao_nome, data_cadastro, fora_de_area, fonte_id)
   SELECT
     gen_random_uuid(),
     prof.id,
     prof.equipe_id,
     ci.nu_cns_cidadao,
     tc.nu_cns,
+    ci.nu_cpf_cidadao,
     COALESCE(NULLIF(ci.no_social_cidadao, ''), ci.no_cidadao),
     ci.dt_cad_individual::date,
     coalesce(ci.st_fora_area, 0) = 1,
@@ -153,12 +161,13 @@ BEGIN
        OR c.co_unico_ultima_ficha = ci.co_unico_ficha_origem
     LIMIT 1
   ) tc ON true
-  WHERE ci.nu_cns_cidadao IS NOT NULL
+  WHERE ci.nu_cns_cidadao IS NOT NULL OR ci.nu_cpf_cidadao IS NOT NULL
   ON CONFLICT (fonte_id) DO UPDATE
     SET profissional_id  = EXCLUDED.profissional_id,
         equipe_id        = EXCLUDED.equipe_id,
         cidadao_cns      = EXCLUDED.cidadao_cns,
         cidadao_cns_real = EXCLUDED.cidadao_cns_real,
+        cidadao_cpf      = EXCLUDED.cidadao_cpf,
         cidadao_nome     = EXCLUDED.cidadao_nome,
         data_cadastro    = EXCLUDED.data_cadastro,
         fora_de_area     = EXCLUDED.fora_de_area,

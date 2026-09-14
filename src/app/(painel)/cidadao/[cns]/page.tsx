@@ -5,6 +5,7 @@ import { Icon } from "@/components/Icon";
 import { obterCidadao, listarCriteriosPrevine } from "@/lib/data/cidadao";
 import { ROTULO_ERRO, SUGESTOES_ERRO } from "@/lib/data/erros";
 import { quadrimestreAtual, rotuloQuadrimestre, listarPeriodosDisponiveis } from "@/lib/data/periodo";
+import { formatarCpf } from "@/lib/ui/cpf";
 import { CopiarBotao } from "../CopiarBotao";
 import { SeletorPeriodo } from "../../SeletorPeriodo";
 
@@ -44,7 +45,9 @@ export default async function CidadaoPage({
     porIndicador.set(c.indicadorId, entrada);
   }
   const gruposIndicador = [...porIndicador.values()];
-  const nome = cadastro.cidadaoNome ?? `CNS ${cadastro.cidadaoCns}`;
+  // desde 2026-09-14 um cadastro pode ter só CPF, sem CNS ainda (ver comentário no schema).
+  const identificador = cadastro.cidadaoCns ? { rotulo: "CNS", valor: cadastro.cidadaoCns } : { rotulo: "CPF", valor: formatarCpf(cadastro.cidadaoCpf!) };
+  const nome = cadastro.cidadaoNome ?? `${identificador.rotulo} ${identificador.valor}`;
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-4">
@@ -72,8 +75,10 @@ export default async function CidadaoPage({
           <div className="flex-1 min-w-0">
             <h2 className="text-headline-sm text-on-surface font-bold truncate">{nome}</h2>
             <div className="mt-1 flex items-center gap-1.5">
-              <span className="text-label-sm bg-surface-container-low text-primary px-2 py-0.5 rounded font-mono font-semibold">CNS: {cadastro.cidadaoCns}</span>
-              <CopiarBotao valor={cadastro.cidadaoCns} />
+              <span className="text-label-sm bg-surface-container-low text-primary px-2 py-0.5 rounded font-mono font-semibold">
+                {identificador.rotulo}: {identificador.valor}
+              </span>
+              <CopiarBotao valor={identificador.valor} />
             </div>
           </div>
         </div>

@@ -3,21 +3,13 @@ import { Icon } from "@/components/Icon";
 import { ROTULO_ERRO, SUGESTOES_ERRO } from "@/lib/data/erros";
 import type { Pendencia } from "@/lib/data/pendencias";
 import { formatarData } from "@/lib/ui/data";
+import { formatarCpf } from "@/lib/ui/cpf";
 
 const CONFIG_ORIGEM: Record<Pendencia["origem"], { icone: string; rotulo: string; href: string }> = {
   individual: { icone: "person_alert", rotulo: "Cadastro Individual", href: "/cadastros" },
   domiciliar: { icone: "home_work", rotulo: "Cadastro Domiciliar", href: "/cadastros" },
   atendimento: { icone: "event_busy", rotulo: "Atendimento", href: "/atendimentos" },
 };
-
-// nu_cpf no e-SUS vem só com os 11 dígitos, sem máscara — formata ###.###.###-##. Se por algum
-// motivo não vier com exatamente 11 dígitos (dado incompleto/malformado), mostra cru em vez de
-// aplicar uma máscara errada.
-function formatarCpf(cpf: string): string {
-  const digitos = cpf.replace(/\D/g, "");
-  if (digitos.length !== 11) return cpf;
-  return `${digitos.slice(0, 3)}.${digitos.slice(3, 6)}.${digitos.slice(6, 9)}-${digitos.slice(9)}`;
-}
 
 export function PendenciaCard({ pendencia }: { pendencia: Pendencia }) {
   const origem = CONFIG_ORIGEM[pendencia.origem];
