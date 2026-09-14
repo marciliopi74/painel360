@@ -11,6 +11,12 @@ const CONFIG_ORIGEM: Record<Pendencia["origem"], { icone: string; rotulo: string
   atendimento: { icone: "event_busy", rotulo: "Atendimento", href: "/atendimentos" },
 };
 
+const ROTULO_TIPO_IDENTIFICADOR: Record<NonNullable<Pendencia["tipoIdentificador"]>, string> = {
+  cpf: "CPF",
+  cns: "CNS",
+  dnv: "DNV",
+};
+
 export function PendenciaCard({ pendencia }: { pendencia: Pendencia }) {
   const origem = CONFIG_ORIGEM[pendencia.origem];
   const rotuloErro = ROTULO_ERRO[pendencia.tipoErro] ?? pendencia.tipoErro;
@@ -38,9 +44,10 @@ export function PendenciaCard({ pendencia }: { pendencia: Pendencia }) {
               </span>
               <span className="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant text-label-sm shrink-0">{origem.rotulo}</span>
             </div>
-            {pendencia.identificador && (
+            {pendencia.identificador && pendencia.tipoIdentificador && (
               <p className="text-body-sm text-on-surface-variant mt-1 font-mono">
-                {pendencia.usaCpf ? "CPF" : "CNS"}: {pendencia.usaCpf ? formatarCpf(pendencia.identificador) : pendencia.identificador}
+                {ROTULO_TIPO_IDENTIFICADOR[pendencia.tipoIdentificador]}:{" "}
+                {pendencia.tipoIdentificador === "cpf" ? formatarCpf(pendencia.identificador) : pendencia.identificador}
               </p>
             )}
             <div className="flex items-center gap-2 mt-2 text-label-md text-on-surface-variant flex-wrap">

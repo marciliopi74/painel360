@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { construirWhereIndividual, construirWhereDomiciliar, ROTULO_ERRO, type StatusCadastro } from "@/lib/data/cadastros";
-import { formatarCpf } from "@/lib/ui/cpf";
+import { identificadorCidadao } from "@/lib/ui/identificadorCidadao";
 
 const LIMITE_LINHAS = 5000;
 
@@ -39,17 +39,20 @@ export async function GET(req: Request) {
   const cabecalho = ["Tipo", "Identificação", "ACS", "Equipe", "Tipo de Equipe", "Data de Cadastro", "Situação", "Tipo de Erro"];
   const linhas = [
     cabecalho,
-    ...individuais.map((c) => [
-      "Cadastro Individual",
-      // desde 2026-09-14 um cadastro pode ter só CPF, sem CNS ainda (ver comentário no schema).
-      `${c.cidadaoNome ?? "—"} (${c.cidadaoCns ? `CNS ${c.cidadaoCns}` : `CPF ${formatarCpf(c.cidadaoCpf!)}`})`,
-      c.profissional.nome,
-      c.equipe.nome,
-      c.equipe.tipo,
-      c.dataCadastro.toLocaleDateString("pt-BR"),
-      c.temErro ? "Com pendência" : "Conforme",
-      c.tipoErro ? (ROTULO_ERRO[c.tipoErro] ?? c.tipoErro) : "",
-    ]),
+    ...individuais.map((c) => {
+      // desde 2026-09-14 um cadastro pode ter só CPF ou só DNV, sem CNS ainda (ver schema/sync).
+      const identificador = identificadorCidadao(c);
+      return [
+        "Cadastro Individual",
+        `${c.cidadaoNome ?? "—"} (${identificador ? `${identificador.rotulo} ${identificador.exibicao}` : "sem identificador"})`,
+        c.profissional.nome,
+        c.equipe.nome,
+        c.equipe.tipo,
+        c.dataCadastro.toLocaleDateString("pt-BR"),
+        c.temErro ? "Com pendência" : "Conforme",
+        c.tipoErro ? (ROTULO_ERRO[c.tipoErro] ?? c.tipoErro) : "",
+      ];
+    }),
     ...domiciliares.map((c) => [
       "Cadastro Domiciliar",
       c.enderecoReferencia,

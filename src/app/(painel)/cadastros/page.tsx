@@ -8,7 +8,7 @@ import {
   type StatusCadastro,
 } from "@/lib/data/cadastros";
 import { listarEquipesVisiveis } from "@/lib/data/equipes";
-import { formatarCpf } from "@/lib/ui/cpf";
+import { identificadorCidadao } from "@/lib/ui/identificadorCidadao";
 import { FiltrosCadastros } from "./FiltrosCadastros";
 import { FichaCard } from "./FichaCard";
 import { Paginacao } from "./Paginacao";
@@ -137,16 +137,17 @@ export default async function CadastrosPage({
           </div>
         )}
         {individuais.registros.map((c) => {
-          // desde 2026-09-14 um cadastro pode ter só CPF, sem CNS ainda (ver comentário no
-          // schema/sync) — /cidadao/[x] aceita os dois, então usa o que existir aqui também.
-          const identificadorExibido = c.cidadaoCns ? `CNS: ${c.cidadaoCns}` : `CPF: ${formatarCpf(c.cidadaoCpf!)}`;
+          // desde 2026-09-14 um cadastro pode ter só CPF ou só DNV, sem CNS ainda (ver comentário
+          // no schema/sync) — /cidadao/[x] aceita os três, então usa o que existir aqui também.
+          const identificador = identificadorCidadao(c);
+          const identificadorExibido = identificador ? `${identificador.rotulo}: ${identificador.exibicao}` : "sem identificador";
           return (
             <FichaCard
               key={c.id}
               icone="person_alert"
               iconeOk="check_circle"
               titulo={c.cidadaoNome ?? identificadorExibido}
-              linkCns={c.cidadaoCns ?? c.cidadaoCpf ?? undefined}
+              linkCns={identificador?.bruto}
               detalhe={`${identificadorExibido} • Tipo: Cadastro Individual • Data de Registro: ${c.dataCadastro.toLocaleDateString("pt-BR")}`}
               acs={c.profissional.nome}
               equipe={`${c.equipe.nome} (${c.equipe.tipo})`}

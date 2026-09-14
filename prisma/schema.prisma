@@ -167,6 +167,11 @@ model CadastroIndividual {
   // (busca, link para /cidadao/[x], exibição) quando cidadaoCns é NULL. Também pode coexistir com
   // um cidadaoCns preenchido.
   cidadaoCpf     String?      @map("cidadao_cpf")
+  // DNV (Declaração de Nascido Vivo, tb_cds_cad_individual.nu_dnv_cidadao) — identificador usado
+  // pelo e-SUS pra recém-nascidos cadastrados antes de terem CPF ou CNS. Mesmo tratamento de
+  // cidadaoCpf: alternativa quando os outros dois são NULL (ver src/lib/ui/identificadorCidadao.ts
+  // pra ordem de prioridade CNS > CPF > DNV usada em toda exibição/navegação).
+  cidadaoDnv     String?      @map("cidadao_dnv")
   // CNS REAL do cidadão (tb_cidadao.nu_cns), resolvido via tb_cds_cad_individual.co_unico_ficha
   // == tb_cidadao.co_unico_ultima_ficha — o GUID interno do e-SUS que identifica qual ficha
   // atualizou por último aquele registro de cidadão. Isso NÃO é o mesmo join (impossível) por

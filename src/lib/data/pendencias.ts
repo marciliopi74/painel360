@@ -13,10 +13,12 @@ export type Pendencia = {
   id: string;
   titulo: string;
   identificador: string | null;
-  usaCpf: boolean;
-  // valor pra navegar até /cidadao/[x] — CNS (hash) quando existir, senão CPF (a rota aceita os
-  // dois desde 2026-09-14). Separado de `identificador` porque este último prioriza CPF pra
-  // exibição, mas a navegação deve preferir o CNS quando ambos existirem (mesmo valor que
+  // que tipo de documento `identificador` contém — decide o rótulo e se aplica máscara de CPF na
+  // exibição (PendenciaCard.tsx). null só ocorre pra domiciliar (não é pessoa, sem identificador).
+  tipoIdentificador: "cpf" | "cns" | "dnv" | null;
+  // valor pra navegar até /cidadao/[x] — CNS (hash) quando existir, senão CPF, senão DNV (a rota
+  // aceita os três desde 2026-09-14). Separado de `identificador` porque este último prioriza CPF
+  // pra exibição, mas a navegação deve preferir o CNS quando houver mais de um (mesmo valor que
   // Cadastros/Detalhe do Cidadão já usam em todo o resto do app).
   cidadaoCnsLink: string | null;
   tipoErro: string;
@@ -49,25 +51,28 @@ async function construirFiltro(usuario: UsuarioSessao, filtros: FiltrosPendencia
   return condicoes.length > 0 ? Prisma.sql`WHERE ${Prisma.join(condicoes, " AND ")}` : Prisma.empty;
 }
 
-// identificador: prioriza CPF (real) sobre Cartão SUS, como pedido pelo usuário em 2026-09-13.
+// identificador: prioriza documentos "reais" (CPF, depois DNV) sobre Cartão SUS, como pedido pelo
+// usuário em 2026-09-13.
 //  - individual: cadastros_individuais.cidadao_cns vem de tb_cds_cad_individual.nu_cns_cidadao,
 //    que nesta instalação costuma ser um hash de 32 caracteres, NÃO o CNS real de 15 dígitos —
-//    mas essa mesma linha do e-SUS tem nu_cpf_cidadao (CPF de verdade), guardado localmente em
-//    cadastros_individuais.cidadao_cpf desde 2026-09-14 (join ao vivo com o FDW aqui não é mais
-//    necessário). Sem CPF, cai pro cidadao_cns (mesmo valor já exibido em Cadastros/Detalhe do
-//    Cidadão em todo o resto do app) — cidadao_cns_link usa qualquer um dos dois que exista,
-//    pois desde 2026-09-14 um cadastro pode ter só CPF (sem CNS ainda) e /cidadao/[x] aceita
-//    ambos os identificadores.
+//    mas essa mesma linha do e-SUS tem nu_cpf_cidadao/nu_dnv_cidadao (CPF/DNV de verdade),
+//    guardados localmente em cadastros_individuais.cidadao_cpf/cidadao_dnv desde 2026-09-14 (join
+//    ao vivo com o FDW aqui não é mais necessário). Sem CPF nem DNV, cai pro cidadao_cns (mesmo
+//    valor já exibido em Cadastros/Detalhe do Cidadão em todo o resto do app) —
+//    cidadao_cns_link usa CNS > CPF > DNV (o que existir), pois um cadastro pode ter só um dos
+//    três e /cidadao/[x] aceita qualquer um.
 //  - atendimento: a tabela local não guarda o cidadão do atendimento (só o e-SUS via FDW sabe
 //    disso) — antes exibia o CBO do profissional aqui, que não é um identificador de pessoa
 //    (bug real corrigido em 2026-09-13). Resolvido via fonte_id = co_seq_fat_atd_ind ->
-//    co_fat_cidadao_pec -> tb_cidadao, que aqui SIM tem CPF/CNS reais (não hash).
+//    co_fat_cidadao_pec -> tb_cidadao, que aqui SIM tem CPF/CNS reais (não hash; tb_cidadao não
+//    tem um DNV equivalente exposto por esse caminho, então esse branch continua só CPF/CNS).
 //  - domiciliar: é um domicílio, não uma pessoa — sem identificador, como já era.
 const CTE_PENDENCIAS = Prisma.sql`
   WITH pendencias AS (
     SELECT 'individual' AS origem, ci.id, ci.cidadao_nome AS titulo,
-           COALESCE(ci.cidadao_cpf, ci.cidadao_cns) AS identificador, ci.cidadao_cpf IS NOT NULL AS usa_cpf,
-           COALESCE(ci.cidadao_cns, ci.cidadao_cpf) AS cidadao_cns_link,
+           COALESCE(ci.cidadao_cpf, ci.cidadao_dnv, ci.cidadao_cns) AS identificador,
+           CASE WHEN ci.cidadao_cpf IS NOT NULL THEN 'cpf' WHEN ci.cidadao_dnv IS NOT NULL THEN 'dnv' WHEN ci.cidadao_cns IS NOT NULL THEN 'cns' END AS tipo_identificador,
+           COALESCE(ci.cidadao_cns, ci.cidadao_cpf, ci.cidadao_dnv) AS cidadao_cns_link,
            ci.tipo_erro, p.nome AS profissional_nome, eq.nome AS equipe_nome, eq.tipo::text AS equipe_tipo,
            ci.equipe_id, ci.atualizado_em AS data
     FROM cadastros_individuais ci
@@ -77,7 +82,7 @@ const CTE_PENDENCIAS = Prisma.sql`
 
     UNION ALL
 
-    SELECT 'domiciliar', cd.id, cd.endereco_referencia, NULL, false, NULL,
+    SELECT 'domiciliar', cd.id, cd.endereco_referencia, NULL, NULL, NULL,
            cd.tipo_erro, p.nome, eq.nome, eq.tipo::text,
            cd.equipe_id, cd.atualizado_em
     FROM cadastros_domiciliares cd
@@ -88,7 +93,7 @@ const CTE_PENDENCIAS = Prisma.sql`
     UNION ALL
 
     SELECT 'atendimento', a.id, a.tipo_atendimento,
-           COALESCE(c.nu_cpf, c.nu_cns), c.nu_cpf IS NOT NULL, NULL,
+           COALESCE(c.nu_cpf, c.nu_cns), CASE WHEN c.nu_cpf IS NOT NULL THEN 'cpf' WHEN c.nu_cns IS NOT NULL THEN 'cns' END, NULL,
            a.tipo_erro, p.nome, eq.nome, eq.tipo::text,
            a.equipe_id, a.atualizado_em
     FROM atendimentos a
@@ -105,7 +110,7 @@ type LinhaPendencia = {
   id: string;
   titulo: string;
   identificador: string | null;
-  usa_cpf: boolean;
+  tipo_identificador: "cpf" | "cns" | "dnv" | null;
   cidadao_cns_link: string | null;
   tipo_erro: string;
   profissional_nome: string | null;
@@ -143,7 +148,7 @@ export async function listarPendencias(
       id: l.id,
       titulo: l.titulo,
       identificador: l.identificador,
-      usaCpf: l.usa_cpf,
+      tipoIdentificador: l.tipo_identificador,
       cidadaoCnsLink: l.cidadao_cns_link,
       tipoErro: l.tipo_erro,
       profissionalNome: l.profissional_nome,

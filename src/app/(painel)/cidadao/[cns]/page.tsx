@@ -5,7 +5,7 @@ import { Icon } from "@/components/Icon";
 import { obterCidadao, listarCriteriosPrevine } from "@/lib/data/cidadao";
 import { ROTULO_ERRO, SUGESTOES_ERRO } from "@/lib/data/erros";
 import { quadrimestreAtual, rotuloQuadrimestre, listarPeriodosDisponiveis } from "@/lib/data/periodo";
-import { formatarCpf } from "@/lib/ui/cpf";
+import { identificadorCidadao } from "@/lib/ui/identificadorCidadao";
 import { CopiarBotao } from "../CopiarBotao";
 import { SeletorPeriodo } from "../../SeletorPeriodo";
 
@@ -45,9 +45,10 @@ export default async function CidadaoPage({
     porIndicador.set(c.indicadorId, entrada);
   }
   const gruposIndicador = [...porIndicador.values()];
-  // desde 2026-09-14 um cadastro pode ter só CPF, sem CNS ainda (ver comentário no schema).
-  const identificador = cadastro.cidadaoCns ? { rotulo: "CNS", valor: cadastro.cidadaoCns } : { rotulo: "CPF", valor: formatarCpf(cadastro.cidadaoCpf!) };
-  const nome = cadastro.cidadaoNome ?? `${identificador.rotulo} ${identificador.valor}`;
+  // desde 2026-09-14 um cadastro pode ter só CPF ou só DNV, sem CNS ainda (ver schema/sync) — a
+  // sincronização garante que pelo menos um dos três sempre existe, daí o "!" abaixo.
+  const identificador = identificadorCidadao(cadastro)!;
+  const nome = cadastro.cidadaoNome ?? `${identificador.rotulo} ${identificador.exibicao}`;
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-4">
@@ -76,9 +77,9 @@ export default async function CidadaoPage({
             <h2 className="text-headline-sm text-on-surface font-bold truncate">{nome}</h2>
             <div className="mt-1 flex items-center gap-1.5">
               <span className="text-label-sm bg-surface-container-low text-primary px-2 py-0.5 rounded font-mono font-semibold">
-                {identificador.rotulo}: {identificador.valor}
+                {identificador.rotulo}: {identificador.exibicao}
               </span>
-              <CopiarBotao valor={identificador.valor} />
+              <CopiarBotao valor={identificador.exibicao} />
             </div>
           </div>
         </div>

@@ -43,6 +43,7 @@ export async function construirWhereIndividual(
             { cidadaoNome: { contains: filtros.busca, mode: "insensitive" } },
             { cidadaoCns: { contains: filtros.busca, mode: "insensitive" } },
             { cidadaoCpf: { contains: filtros.busca, mode: "insensitive" } },
+            { cidadaoDnv: { contains: filtros.busca, mode: "insensitive" } },
             { profissional: { nome: { contains: filtros.busca, mode: "insensitive" } } },
           ],
         }
